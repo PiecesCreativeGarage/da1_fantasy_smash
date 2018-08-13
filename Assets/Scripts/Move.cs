@@ -9,7 +9,9 @@ public class Move : MonoBehaviour {
     float x;
     float z;
 
-	void Start () {
+
+
+    void Start () {
 		
 	}
 	

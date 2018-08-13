@@ -9,7 +9,8 @@ public class Rotation : MonoBehaviour {
     float x;
     float z;
 
-    Vector3 angle;
+    Vector3 angle_this;
+    Vector3 angle_camera;
 
 	void Start () {
 		
@@ -20,19 +21,20 @@ public class Rotation : MonoBehaviour {
         x = Input.GetAxisRaw("Horizontal");
         z = Input.GetAxisRaw("Vertical");
 
-        angle = transform.eulerAngles;
+        angle_this = transform.eulerAngles;
 
+        angle_camera = camera.transform.eulerAngles;
         if(Input.GetKey("up"))
         {
-            this.transform.eulerAngles = new Vector3(angle.x, (45 * x) + camera.transform.localRotation.y, angle.z);
+            this.transform.eulerAngles = new Vector3(angle_this.x, (45 * x) + angle_camera.y, angle_this.z);
         }
         else if (Input.GetKey("down"))
         {
-            this.transform.eulerAngles = new Vector3(angle.x, (180 * z - 45 * x) + camera.transform.localRotation.y, angle.z);
+            this.transform.eulerAngles = new Vector3(angle_this.x, (180 * z - 45 * x) + angle_camera.y, angle_this.z);
         }
         else if(Input.GetKey("right") || Input.GetKey("left"))
         {
-            this.transform.eulerAngles = new Vector3(angle.x, (90 * x) + camera.transform.localRotation.y, angle.z);
+            this.transform.eulerAngles = new Vector3(angle_this.x, (90 * x) + angle_camera.y, angle_this.z);
         }
         
        
