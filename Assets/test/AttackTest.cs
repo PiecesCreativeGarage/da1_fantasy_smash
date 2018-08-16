@@ -3,19 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class AttackTest : MonoBehaviour {
- 
     Collider collider;
-	void Start() {
+    void Start()
+    {
 
-        collider = GameObject.Find("Sword").GetComponent<CapsuleCollider>();
-    
-        
+        collider = GameObject.Find("Sword").GetComponent<BoxCollider>();
+
     }
-	
-	void Test() {
 
+
+    void Test()
+    {
 
         collider.enabled = true;
-    
+
     }
+
+
+
+
 }

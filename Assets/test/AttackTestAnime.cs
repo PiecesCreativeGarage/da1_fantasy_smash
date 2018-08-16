@@ -6,7 +6,7 @@ public class AttackTestAnime : MonoBehaviour {
 
     private Animator animator;
 
-    private const string attacktest = "AttackTestTrigger";
+    private const string test = "Test";
 	void Start () {
         animator = GetComponent<Animator>();
 	}
@@ -17,7 +17,11 @@ public class AttackTestAnime : MonoBehaviour {
 
         if (Input.GetKeyDown(KeyCode.A))
         {
-            this.animator.SetTrigger(attacktest);
+            this.animator.SetBool(test, true);
+        }
+        else
+        {
+            this.animator.SetBool(test, false);
         }
 	}
 }

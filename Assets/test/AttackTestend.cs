@@ -4,18 +4,20 @@ using UnityEngine;
 
 public class AttackTestend : MonoBehaviour
 {
-
-    GameObject h;
-
+    Collider collider;
     void Start()
     {
-        h = GameObject.Find("Sword");
+
+        collider = GameObject.Find("Sword").GetComponent<BoxCollider>();
+
     }
 
-    // Update is called once per frame
-    void Testend() { 
 
-            h.GetComponent<CapsuleCollider>().enabled = false;
-        
+    void Testend()
+    {
+
+        collider.enabled = false;
+
     }
+
 }
