@@ -6,8 +6,13 @@ using UnityEngine.SceneManagement;
 public class BattleScene : MonoBehaviour {
 
 	// Use this for initialization
-	void Start () {
-		SceneManager.LoadScene ("BgStage1", LoadSceneMode.Additive); 
+	IEnumerator Start () {
+		string bg_name = "BgStage1";
+		AsyncOperation sync = SceneManager.LoadSceneAsync (bg_name, LoadSceneMode.Additive);
+		while (!sync.isDone) {
+			yield return null;
+		}
+		SceneManager.SetActiveScene (SceneManager.GetSceneByName(bg_name));
 
 		Object prefab = Resources.Load ("Character/2HandedWarrior");
 		GameObject go = (GameObject)Instantiate (prefab);
