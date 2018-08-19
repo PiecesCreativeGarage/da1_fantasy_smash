@@ -12,6 +12,7 @@ public class AttackTeatSword : MonoBehaviour {
     private void OnTriggerEnter(Collider other)
     {
         Debug.Log("Test");
+        Destroy(other.gameObject);
     }
 
 }

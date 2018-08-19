@@ -3,13 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class AttackTest : MonoBehaviour {
+    [SerializeField]
     Collider collider;
-    void Start()
-    {
-
-        collider = GameObject.Find("Sword").GetComponent<BoxCollider>();
-
-    }
+ 
 
 
     void Test()
@@ -18,8 +14,7 @@ public class AttackTest : MonoBehaviour {
         collider.enabled = true;
 
     }
-
-
+  
 
 
 }
