@@ -199,18 +199,34 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.25096524
-        functionName: Test()
+      - time: 0.26640925
+        functionName: Attack_Start
         data: 
-        objectReferenceParameter: {fileID: 11500000, guid: a01d21a6b09bec44eafefadf0f676f96,
+        objectReferenceParameter: {fileID: 11500000, guid: 9ff22d0f3e25e8240950b4ed909a4777,
           type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.41825578
-        functionName: Testend()
+      - time: 0.44466582
+        functionName: Attack_End
         data: 
-        objectReferenceParameter: {fileID: 11500000, guid: fa391dd9a28ba1848a2b8a8978c6d60f,
+        objectReferenceParameter: {fileID: 11500000, guid: 9ff22d0f3e25e8240950b4ed909a4777,
+          type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0
+        functionName: Recovery_Start
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 51d42b2d32d52174f9f5ec2c9ffa3c97,
+          type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.99728024
+        functionName: Recovery_End
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 51d42b2d32d52174f9f5ec2c9ffa3c97,
           type: 3}
         floatParameter: 0
         intParameter: 0

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AttackTeatSword : MonoBehaviour {
+public class AttackSword : MonoBehaviour {
 
 	
 	void Start () {

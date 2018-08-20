@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Rotation : MonoBehaviour {
 
-    public GameObject camera;
+    public GameObject cam;
 
     float x;
     float z;
@@ -23,7 +23,7 @@ public class Rotation : MonoBehaviour {
 
         angle_this = transform.eulerAngles;
 
-        angle_camera = camera.transform.eulerAngles;
+        angle_camera = cam.transform.eulerAngles;
         if(Input.GetKey("up"))
         {
             this.transform.eulerAngles = new Vector3(angle_this.x, (45 * x) + angle_camera.y, angle_this.z);
