@@ -1,23 +1,34 @@
 ﻿using UnityEngine;
 
 public class Recovery : MonoBehaviour {
-
+    [SerializeField]
+    Anime anime;
     [SerializeField]
     Move move;
     [SerializeField]
     Rotation rotation;
-	
 
-    void Recovery_Start()
+
+    public void Recovery_Start()
     {
 
         move.enabled = false;
         rotation.enabled = false;
     }
-    void Recovery_End()
+    public void Recovery_End()
     {
-        Debug.Log("aaaa");
+        
         move.enabled = true;
         rotation.enabled = true;
+    }
+
+
+    public void Anime_Recovery_Start()
+    {
+        anime.enabled = false;
+    }
+    public void Anime_Recovery_End()
+    {
+        anime.enabled = true;
     }
 }

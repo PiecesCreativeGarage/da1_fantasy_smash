@@ -18,8 +18,5 @@ public class Status_Print : MonoBehaviour {
             HP_label.enabled = false;
         }
 	}
-    private void OnTriggerEnter(Collider other)
-    {
-        status.HP -= other.GetComponentInParent<Status>().Attack_Point;
-    }
+    
 }
