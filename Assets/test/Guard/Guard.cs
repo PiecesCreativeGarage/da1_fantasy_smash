@@ -17,14 +17,14 @@ public class Guard : MonoBehaviour {
 	void Update () {
         if (Input.GetKey(KeyCode.G))
         {
-            recovery.Anime_Recovery_Start();
+            //recovery.Anime_Recovery_Start();
 
             status.Guard = true;
             guard.SetActive(true);
         }
         else
         {
-            recovery.Anime_Recovery_End();
+            //recovery.Anime_Recovery_End();
 
             guard.SetActive(false);
             status.Guard = false;

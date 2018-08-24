@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Move : MonoBehaviour {
 
+	[SerializeField]
+	Status status;
+
     public float MoveSpeed;
 
     float x;
@@ -17,14 +20,14 @@ public class Move : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        x = Input.GetAxisRaw("Horizontal");
-        z = Input.GetAxisRaw("Vertical");
 
-        if(x != 0 || z != 0)
-        {
-            this.transform.position += MoveSpeed * this.transform.forward * Time.deltaTime;
-        }
- 
+		x = Input.GetAxisRaw ("Horizontal");
+		z = Input.GetAxisRaw ("Vertical");
 
+		if (!status.Guard) {
+			if (x != 0 || z != 0) {
+				this.transform.position += MoveSpeed * this.transform.forward * Time.deltaTime;
+			}
+		}
     }
 }

@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Anime : MonoBehaviour {
+	[SerializeField]
+	Status status;
+
     private Animator animator;
     private const string moving = "Moving";
     private const string attack1 = "Attack1Trigger";
@@ -16,21 +19,21 @@ public class Anime : MonoBehaviour {
 	
 	
 	void Update () {
-        x = Input.GetAxisRaw("Horizontal");
-        z = Input.GetAxisRaw("Vertical");
+		x = Input.GetAxisRaw ("Horizontal");
+		z = Input.GetAxisRaw ("Vertical");
 
-        if(x != 0 || z != 0)
-        {  
-            this.animator.SetBool(moving, true);
-        }
-        else
-        {
-            this.animator.SetBool(moving, false);
-        }
+		if (!status.Guard) {
+			if (x != 0 || z != 0) {  
+				this.animator.SetBool (moving, true);
+			} else {
+				this.animator.SetBool (moving, false);
+			}
 
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            this.animator.SetTrigger(attack1);
-        }
+			if (Input.GetKeyDown (KeyCode.Space)) {
+				this.animator.SetTrigger (attack1);
+			}
+		} else {
+			this.animator.SetBool (moving, false);
+		}
     }
 }
