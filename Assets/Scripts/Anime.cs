@@ -9,6 +9,7 @@ public class Anime : MonoBehaviour {
     private Animator animator;
     private const string moving = "Moving";
     private const string attack1 = "Attack1Trigger";
+    private const string guardbreak = "GuardBreakTrigger";
 
     float x;
     float z;
@@ -32,8 +33,13 @@ public class Anime : MonoBehaviour {
 			if (Input.GetKeyDown (KeyCode.Space)) {
 				this.animator.SetTrigger (attack1);
 			}
+            if (Input.GetKeyDown(KeyCode.B))
+            {
+                this.animator.SetTrigger(guardbreak);
+            }
 		} else {
 			this.animator.SetBool (moving, false);
 		}
+
     }
 }

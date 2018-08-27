@@ -6,13 +6,20 @@ public class Status_Caliculation : MonoBehaviour {
 
     [SerializeField]
     Status status;
-	
+
     private void OnTriggerEnter(Collider other)
     {
-        if (status.Guard == false)
+        if (!other.gameObject.CompareTag("ground"))
         {
-            Debug.Log("aaa");
-            status.HP -= other.GetComponentInParent<Status>().Attack_Point;
+
+            if (status.Guard == false)
+            {
+                status.HP -= other.GetComponentInParent<Status>().Attack_Point;
+            }
+        }
+        if (other.gameObject.CompareTag("guardbreaker"))
+        {
+            status.Guard = false;
         }
     }
 }
