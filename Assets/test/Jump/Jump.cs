@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Jump : MonoBehaviour {
+public class Jump : MonoBehaviour
+{
 
     [SerializeField]
     bool jump;
@@ -15,19 +16,22 @@ public class Jump : MonoBehaviour {
     float q;
 
     float x; //時間
-    
+
     Vector3 startPosition;
 
 
-    void Start () {
+    void Start()
+    {
         jump = false;
-	}
-	
-	// Update is called once per frame
-	void Update () {
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
 
 
-        if (jump == false) {
+        if (jump == false)
+        {
 
             if (Input.GetKeyDown(KeyCode.J))
             {
@@ -38,17 +42,20 @@ public class Jump : MonoBehaviour {
         }
 
 
-        if(jump == true)
-        {   
+        if (jump == true)
+        {
             //ジャンプ　ちょっとずつ　上にいく        (x - p) が　＋の値になったら下がる
             transform.position += new Vector3(0, -a * (x - p) + q * Time.deltaTime);
             x++;
 
-            if(transform.position.y <= startPosition.y)
+            if (transform.position.y <= startPosition.y)
             {
                 jump = false;
+                Vector3 pos = transform.position;
+                pos.y = startPosition.y;
+                transform.position = pos;
                 x = 0;
             }
         }
-	}
+    }
 }
