@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class bomb : MonoBehaviour
 {
+    public float LifeTime;
+
     public float gravity;
     public float mass;
     public float pow;
@@ -14,37 +16,44 @@ public class bomb : MonoBehaviour
 
     float Fs;
 
+    public GameObject GameObject;
 
+    public Vector3 coefficient;
+    
 
     public Vector3 posi;
 
 
-    float Ac;
+    public float Ac;
 
-    float Velo;
+    public float Velo;
+
 
     // Use this for initialization
     private void Start()
     {
+        Destroy(this.gameObject, LifeTime);
+
+        coefficient = GameObject.transform.forward;
+
         f1g = gravity * mass;
-        Fg = pow;
+
+        Fg = pow * coefficient.x;
 
         Fs = pow;
     }
     // Update is called once per frame
     void FixedUpdate()
     {
-
-
         Fg -= f1g;
 
         Ac = Fg / mass;
         Velo = Ac * Time.fixedDeltaTime;
-        posi += transform.up * Velo * Time.fixedDeltaTime;
+        posi += new Vector3(0, Velo * Time.fixedDeltaTime);
 
         Ac = Fs / mass;
         Velo = Ac * Time.fixedDeltaTime;
-        posi += transform.forward * Velo * Time.fixedDeltaTime;
+        posi += coefficient * Velo * Time.fixedDeltaTime;
 
 
         transform.position = posi;

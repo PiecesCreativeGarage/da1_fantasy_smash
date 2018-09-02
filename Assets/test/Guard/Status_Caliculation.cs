@@ -14,7 +14,11 @@ public class Status_Caliculation : MonoBehaviour {
 
             if (status.Guard == false)
             {
-                status.HP -= other.GetComponentInParent<Status>().Attack_Point;
+                if (other.GetComponentInParent<Status>() != null)
+                {
+                    status.HP -= other.GetComponentInParent<Status>().Attack_Point;
+                }
+
             }
         }
         if (other.gameObject.CompareTag("guardbreaker"))

@@ -17,7 +17,7 @@ public class TAIHOU : MonoBehaviour {
 	void Update () {
 		if(Fire == true)
         {
-            Instantiate(TAMA, this.transform.position, this.transform.rotation);
+            Instantiate(TAMA, this.transform.position, Quaternion.identity);
             Fire = false;
         }
 	}

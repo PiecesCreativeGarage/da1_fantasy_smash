@@ -22,7 +22,7 @@ public class Anime : MonoBehaviour {
 	void Update () {
 		x = Input.GetAxisRaw ("Horizontal");
 		z = Input.GetAxisRaw ("Vertical");
-
+        
 		if (!status.Guard) {
 			if (x != 0 || z != 0) {  
 				this.animator.SetBool (moving, true);
