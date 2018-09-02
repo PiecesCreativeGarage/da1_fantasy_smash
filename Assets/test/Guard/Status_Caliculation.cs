@@ -25,5 +25,10 @@ public class Status_Caliculation : MonoBehaviour {
         {
             status.Guard = false;
         }
+
+        if(other.gameObject.CompareTag("Weapon")) {
+            Anime anime = gameObject.GetComponent<Anime>();
+            anime.Hit(other.gameObject);
+        }
     }
 }

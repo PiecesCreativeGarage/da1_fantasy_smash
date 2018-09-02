@@ -32,6 +32,8 @@ public class bomb : MonoBehaviour
     // Use this for initialization
     private void Start()
     {
+        posi = transform.position;
+
         Destroy(this.gameObject, LifeTime);
 
         coefficient = GameObject.transform.forward;

@@ -42,4 +42,13 @@ public class Anime : MonoBehaviour {
 		}
 
     }
+
+    public void Hit(GameObject go)
+    {
+        // 当たった物体へのベクトルを得る
+        Vector3 diff = transform.position - go.transform.position;
+        Rigidbody rb = GetComponent<Rigidbody>();
+        float pow = 10000;
+        rb.AddForce(new Vector3(diff.x*pow, pow, diff.z*pow), ForceMode.Force);
+    }
 }
