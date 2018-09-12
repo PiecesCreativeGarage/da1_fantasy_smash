@@ -21,26 +21,23 @@ public class Mesh_sword : MonoBehaviour {
     void Start () {
         vertices = new Vector3[4];
         triangles = new int[6];
-        
-    }
-
-    // Update is called once per frame
-    void Update() {
-    
-        Mesh mesh = new Mesh();
-        mesh.Clear();
 
         vertices[0] = posi1.transform.position;
         vertices[1] = posi2.transform.position;
-        vertices[2] = posi1_1fbefore;
-        vertices[3] = posi2_1fbefore;
+        vertices[2] = posi1.transform.position + Vector3.up * 2;
+        vertices[3] = posi2.transform.position + Vector3.up * 2;
 
         triangles[0] = 0;
         triangles[1] = 1;
         triangles[2] = 2;
-        triangles[3] = 3;
-        triangles[4] = 2;
-        triangles[5] = 1;
+        triangles[3] = 1;
+        triangles[4] = 3;
+        triangles[5] = 2;
+
+    
+        Mesh mesh = new Mesh();
+        mesh.Clear();
+
 
         
 
