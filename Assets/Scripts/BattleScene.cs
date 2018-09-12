@@ -26,6 +26,7 @@ public class BattleScene : MonoBehaviour {
 		go.transform.localEulerAngles = new Vector3 (0, 180, 0);
 		go.transform.position = new Vector3 (10, 0, 10);
 
+        /*
 		// 2P用カメラを生成
 		Object camera_prefab = Resources.Load ("PlayerCamera");
 		GameObject go_cam = (GameObject)Instantiate (camera_prefab);
@@ -34,6 +35,6 @@ public class BattleScene : MonoBehaviour {
 		cam_sc.target = go;
 
 		Camera.main.rect = new Rect(0f, 0.5f, 1f, 0.5f);
-		cam.rect = new Rect (0f, 0f, 1f, 0.5f);
+		cam.rect = new Rect (0f, 0f, 1f, 0.5f);*/
 	}
 }

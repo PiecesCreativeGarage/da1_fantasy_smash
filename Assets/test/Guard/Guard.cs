@@ -11,10 +11,10 @@ public class Guard : MonoBehaviour {
     Status status;
     [SerializeField]
     GameObject guard;
-	
-	
-	// Update is called once per frame
-	void Update () {
+
+
+    // Update is called once per frame
+    void Update () {
         if (Input.GetKey(KeyCode.G))
         {
             //recovery.Anime_Recovery_Start();
