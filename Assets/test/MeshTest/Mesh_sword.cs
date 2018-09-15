@@ -18,7 +18,7 @@ public class Mesh_sword : MonoBehaviour {
     MeshFilter meshFilter;
     MeshRenderer meshRenderer;
     
-    void Start () {
+    void Update () {
         vertices = new Vector3[4];
         triangles = new int[6];
 
