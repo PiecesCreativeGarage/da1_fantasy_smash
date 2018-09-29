@@ -48,7 +48,7 @@ public class Jump : MonoBehaviour
             transform.position += new Vector3(0, -a * (x - p) + q * Time.deltaTime);
             x++;
 
-            if (transform.position.y <= startPosition.y)
+            if (transform.position.y <= startPosition.y && x > 0)
             {
                 jump = false;
                 Vector3 pos = transform.position;
