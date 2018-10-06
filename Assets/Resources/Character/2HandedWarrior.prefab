@@ -818,7 +818,6 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4975376788586314}
-  - component: {fileID: 114555045790817932}
   m_Layer: 0
   m_Name: 2HandedWarrior
   m_TagString: Untagged
@@ -1703,19 +1702,6 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
---- !u!114 &114555045790817932
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1941449701144916}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2177e08e74664704e9bdf9d1f7aed5b6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MoveSpeed: 3
-  turnTime: 2
 --- !u!137 &137298074769097982
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1
