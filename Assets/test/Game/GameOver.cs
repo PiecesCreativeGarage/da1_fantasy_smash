@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
+
 [System.Serializable]
 public class Player_Info
 {
@@ -7,8 +9,9 @@ public class Player_Info
     public bool wint_losef = true;
 
     public GameObject Camera;
-    
-    public UnityEngine.UI.Text label;
+
+    public GameObject canvas;
+    public Text label;
     public string Win_message;
     public string Lose_message;
     
@@ -18,10 +21,11 @@ public class Player_Info
 
 public class GameOver : MonoBehaviour
 {
-    public GameObject canvas;
+
 
     //
-    public UnityEngine.UI.Text GameSet_label;
+    public GameObject Gameset_canvas;
+    Text GameSet_label;
     public string GamesetMessage;
     public float wait_Time;
     //
@@ -34,6 +38,14 @@ public class GameOver : MonoBehaviour
     void Start()
     {
         num_of_player = player_Info.Length;
+
+        GameSet_label = Gameset_canvas.gameObject.GetComponentInChildren<Text>();
+
+        for(int i = 0; i < num_of_player; i++)
+        {
+            player_Info[i].label = player_Info[i].canvas.gameObject.GetComponentInChildren<Text>();
+        }
+
     }
 
 
@@ -57,15 +69,7 @@ public class GameOver : MonoBehaviour
         }
         if(gameset_ON == true)
         {
-            //
-            GameSet_label.enabled = true;
-            GameSet_label.text = GamesetMessage;
             StartCoroutine("Wait");
-            
-
-            //
-            Gameset();
-            Time.timeScale = 0;
             
         }
         
@@ -74,23 +78,40 @@ public class GameOver : MonoBehaviour
     {
         
 
+
+
+
+
+
         for (int i = 0; i < player_Info.Length; i++)
         {
            if(player_Info[i].wint_losef == true)
             {
                 player_Info[i].label.text = player_Info[i].Win_message;
+                player_Info[i].canvas.SetActive(true);
             }
             if (player_Info[i].wint_losef == false)
             {
                 player_Info[i].label.text = player_Info[i].Lose_message;
+                player_Info[i].canvas.SetActive(true);
             }
         }
+        Time.timeScale = 0;
+        Destroy(this.gameObject);
 
-        canvas.SetActive(true);
     }
     IEnumerator Wait()
     {
+        
+        GameSet_label.text = GamesetMessage;
+        Gameset_canvas.SetActive(true);
+
+        
         yield return new WaitForSeconds(wait_Time);
+        Gameset_canvas.SetActive(false);
+        Gameset();
+        
+
     }
 }
 
