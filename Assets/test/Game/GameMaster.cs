@@ -13,12 +13,18 @@ public class GameMaster : MonoBehaviour
         public Status status;
         public Camera cam;
         public Text text;
+        public Image image;
         public bool win_lose;
     };
 
     public Player_Info[] player_Info;
-    int num;
-    int nn = 0;
+    int num;　//人数　カウンタ
+
+    int nn = 0; //人数 かうんた
+   
+
+    float[] hp_maxs;
+    float[] hp1s_fil1s;
     bool GameSet = false;
    
     void Start()
@@ -38,12 +44,14 @@ public class GameMaster : MonoBehaviour
         {
             for (num = 0; num < player_Info.Length; num++)
             {
-                HP_show(num);
+
                 if (player_Info[num].status.Down == true)
                 {
                     player_Info[num].win_lose = false;
                     nn--;
+               
                 }
+                HP_show(num);
             }
         }
         if (GameSet == true && Input.anyKeyDown)
@@ -56,9 +64,13 @@ public class GameMaster : MonoBehaviour
     void Instance()
     {
         nn = player_Info.Length;
-
+        hp_maxs = new float[nn];
+        hp1s_fil1s = new float[hp_maxs.Length];
         for (num = 0; num < player_Info.Length; num++)
         {
+
+            hp_maxs[num] = player_Info[num].status.Hit_Point;
+            hp1s_fil1s[num] = 1 / hp_maxs[num];
             player_Info[num].win_lose = true;
             player_Info[num].text.text = "";
         }
@@ -67,8 +79,16 @@ public class GameMaster : MonoBehaviour
     void HP_show(int num)
     {
 
-        player_Info[num].text.text = player_Info[num].status.Hit_Point.ToString();
+        if (nn > 1)
+        {
+
+            player_Info[num].text.text = player_Info[num].status.Hit_Point.ToString();
+            player_Info[num].image.fillAmount = 1 - (hp1s_fil1s[num] * (hp_maxs[num] - player_Info[num].status.Hit_Point));
+        }
+
     }
+    
+
     void Game_Over()
     {
         for (int i = 0; i < player_Info.Length; i++)

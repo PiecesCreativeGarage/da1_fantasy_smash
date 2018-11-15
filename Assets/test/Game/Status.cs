@@ -1,14 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Status : MonoBehaviour {
 
     public float Hit_Point;
+
+    
     public float Attack_Point;
     public float Knock_Point;
     public bool NoDamage;
     public bool Down;
+
     //自作の指定
     public Attack[] Attacks;
 
@@ -17,14 +21,14 @@ public class Status : MonoBehaviour {
 
     void Start()
     {
-        Debug.Log(this.transform.parent);
+    
     }
-
     // Update is called once per frame
     void Update()
     {
         Attack_Mth();
         Guard_Mth();
+        
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -37,7 +41,7 @@ public class Status : MonoBehaviour {
                 HP_Cal(other_status_C.Attack_Point);
             }
         }
-
+        
 
     }
     void HP_Cal(float otherATP)
@@ -56,7 +60,9 @@ public class Status : MonoBehaviour {
         {
             Down = false;
         }
+
     }
+
     void Attack_Mth()　//自作　有り
     {
 
