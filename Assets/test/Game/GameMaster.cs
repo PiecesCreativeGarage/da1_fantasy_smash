@@ -18,6 +18,7 @@ public class GameMaster : MonoBehaviour
     };
 
     public Player_Info[] player_Info;
+    public Text GameSet_Label;
     int num;　//人数　カウンタ
 
     int nn = 0; //人数 かうんた
@@ -29,29 +30,32 @@ public class GameMaster : MonoBehaviour
    
     void Start()
     {
-        Instance();
+        Initialization();
     }
 
     // Update is called once per frame
     void Update()
     {
-
-        if (nn == 1)
+        if (GameSet == false)
         {
-            Game_Over();
-        }
-        else
-        {
-            for (num = 0; num < player_Info.Length; num++)
+            if (nn == 1)
             {
-
-                if (player_Info[num].status.Down == true)
+                StartCoroutine("Game_Over");
+            }
+            else
+            {
+                for (num = 0; num < player_Info.Length; num++)
                 {
-                    player_Info[num].win_lose = false;
-                    nn--;
-               
+
+                    if (player_Info[num].status.Down == true)
+                    {
+                        player_Info[num].win_lose = false;
+                        player_Info[num].image.fillAmount = 0;
+                        nn--;
+
+                    }
+                    HP_show(num);
                 }
-                HP_show(num);
             }
         }
         if (GameSet == true && Input.anyKeyDown)
@@ -61,7 +65,7 @@ public class GameMaster : MonoBehaviour
             ReroadScene();
         }
     }
-    void Instance()
+    void Initialization()
     {
         nn = player_Info.Length;
         hp_maxs = new float[nn];
@@ -74,6 +78,7 @@ public class GameMaster : MonoBehaviour
             player_Info[num].win_lose = true;
             player_Info[num].text.text = "";
         }
+        GameSet_Label.text = "";
 
     }
     void HP_show(int num)
@@ -89,19 +94,32 @@ public class GameMaster : MonoBehaviour
     }
     
 
-    void Game_Over()
+    IEnumerator Game_Over()
     {
+        Time.timeScale = 0;
+        GameSet_Label.text = "Game Set";
+        yield return new WaitForSecondsRealtime(1);
+        GameSet_Label.text = "";
         for (int i = 0; i < player_Info.Length; i++)
         {
+            yield return new WaitForSecondsRealtime(0.5f);
             Win_Lose(i);
         }
-
-        Time.timeScale = 0;
+        yield return new WaitForSecondsRealtime(2f);
+        for(int i = 0; i < player_Info.Length; i++)
+        {
+            player_Info[i].text.enabled = false;
+        }
+        GameSet_Label.fontSize = 30;
+        GameSet_Label.text = "続行するには何かキーを押してください...";
         GameSet = true;
     }
     void Win_Lose(int i)
     {
-
+        player_Info[i].image.enabled = false;
+        player_Info[i].text.rectTransform.localPosition = new Vector3(0, 0, 0);
+        player_Info[i].text.fontSize = 20;
+        player_Info[i].player.SetActive(false);
         if (player_Info[i].win_lose == true)
         {
             player_Info[i].text.text = "Win";
@@ -120,5 +138,7 @@ public class GameMaster : MonoBehaviour
         int sceneIndex = SceneManager.GetActiveScene().buildIndex;
         SceneManager.LoadScene(sceneIndex);
     }
+
+   
 }
 
