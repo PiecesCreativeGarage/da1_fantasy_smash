@@ -265,6 +265,27 @@ GameObject:
   m_PrefabParentObject: {fileID: 1030536700763348, guid: 08f0d3070af6afa46a62727fbd25ca8d,
     type: 2}
   m_PrefabInternal: {fileID: 695448302}
+--- !u!114 &94136780
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 94136779}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0425e4557019704a9a676de53ea9341, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  side_fukitobi_point_value: 0
+  up_fukitobi_point_value: 0
+  dist: 0
+  gravity: -9.8
+  air_regist: -1
+  is_hit: 0
+  Names_Use_Recovery:
+  - Move
+  - Rotation
+  - Attack
 --- !u!114 &94136789 stripped
 MonoBehaviour:
   m_PrefabParentObject: {fileID: 114998397900568488, guid: 08f0d3070af6afa46a62727fbd25ca8d,
@@ -523,6 +544,21 @@ Prefab:
       propertyPath: image
       value: 
       objectReference: {fileID: 394538616}
+    - target: {fileID: 114020136775044060, guid: cbda99f4b9787e24cb439b1e2aa084ab,
+        type: 2}
+      propertyPath: Side_Fukitobi_Power
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 114020136775044060, guid: cbda99f4b9787e24cb439b1e2aa084ab,
+        type: 2}
+      propertyPath: Up_Fukitobi_Power
+      value: 500
+      objectReference: {fileID: 0}
+    - target: {fileID: 114425437371344852, guid: cbda99f4b9787e24cb439b1e2aa084ab,
+        type: 2}
+      propertyPath: KnockBack
+      value: 
+      objectReference: {fileID: 1181313620}
     m_RemovedComponents:
     - {fileID: 114005968698062114, guid: cbda99f4b9787e24cb439b1e2aa084ab, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: cbda99f4b9787e24cb439b1e2aa084ab, type: 2}
@@ -615,6 +651,16 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 114127678390605842, guid: 08f0d3070af6afa46a62727fbd25ca8d,
+        type: 2}
+      propertyPath: Names_Use_Recovery.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 114866727040317274, guid: 08f0d3070af6afa46a62727fbd25ca8d,
+        type: 2}
+      propertyPath: Names_Use_Recovery.Array.size
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 4177019349191066, guid: 08f0d3070af6afa46a62727fbd25ca8d, type: 2}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -697,6 +743,127 @@ Prefab:
       propertyPath: image
       value: 
       objectReference: {fileID: 735617370}
+    - target: {fileID: 114127678390605842, guid: 08f0d3070af6afa46a62727fbd25ca8d,
+        type: 2}
+      propertyPath: Names_Use_Recovery.Array.data[2]
+      value: Attack
+      objectReference: {fileID: 0}
+    - target: {fileID: 114127678390605842, guid: 08f0d3070af6afa46a62727fbd25ca8d,
+        type: 2}
+      propertyPath: Names_Use_Recovery.Array.data[3]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 114127678390605842, guid: 08f0d3070af6afa46a62727fbd25ca8d,
+        type: 2}
+      propertyPath: guard_Posi.y
+      value: 1.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 114127678390605842, guid: 08f0d3070af6afa46a62727fbd25ca8d,
+        type: 2}
+      propertyPath: guard_Scale.y
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 114127678390605842, guid: 08f0d3070af6afa46a62727fbd25ca8d,
+        type: 2}
+      propertyPath: guard_Scale.x
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 114127678390605842, guid: 08f0d3070af6afa46a62727fbd25ca8d,
+        type: 2}
+      propertyPath: guard_Scale.z
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 114069920429579448, guid: 08f0d3070af6afa46a62727fbd25ca8d,
+        type: 2}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114998397900568488, guid: 08f0d3070af6afa46a62727fbd25ca8d,
+        type: 2}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114866727040317274, guid: 08f0d3070af6afa46a62727fbd25ca8d,
+        type: 2}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114127678390605842, guid: 08f0d3070af6afa46a62727fbd25ca8d,
+        type: 2}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114605200724903494, guid: 08f0d3070af6afa46a62727fbd25ca8d,
+        type: 2}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4910293262576634, guid: 08f0d3070af6afa46a62727fbd25ca8d, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 4910293262576634, guid: 08f0d3070af6afa46a62727fbd25ca8d, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4910293262576634, guid: 08f0d3070af6afa46a62727fbd25ca8d, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 4910293262576634, guid: 08f0d3070af6afa46a62727fbd25ca8d, type: 2}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 114239938742908444, guid: 08f0d3070af6afa46a62727fbd25ca8d,
+        type: 2}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114127678390605842, guid: 08f0d3070af6afa46a62727fbd25ca8d,
+        type: 2}
+      propertyPath: Names_Use_Recovery.Array.data[0]
+      value: Move
+      objectReference: {fileID: 0}
+    - target: {fileID: 114127678390605842, guid: 08f0d3070af6afa46a62727fbd25ca8d,
+        type: 2}
+      propertyPath: Names_Use_Recovery.Array.data[1]
+      value: Rotation
+      objectReference: {fileID: 0}
+    - target: {fileID: 95274251726154374, guid: 08f0d3070af6afa46a62727fbd25ca8d,
+        type: 2}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114069920429579448, guid: 08f0d3070af6afa46a62727fbd25ca8d,
+        type: 2}
+      propertyPath: key_Guard
+      value: Guard
+      objectReference: {fileID: 0}
+    - target: {fileID: 114069920429579448, guid: 08f0d3070af6afa46a62727fbd25ca8d,
+        type: 2}
+      propertyPath: keycode_Guard
+      value: g
+      objectReference: {fileID: 0}
+    - target: {fileID: 114866727040317274, guid: 08f0d3070af6afa46a62727fbd25ca8d,
+        type: 2}
+      propertyPath: Names_Use_Recovery.Array.data[2]
+      value: Guard
+      objectReference: {fileID: 0}
+    - target: {fileID: 114998397900568488, guid: 08f0d3070af6afa46a62727fbd25ca8d,
+        type: 2}
+      propertyPath: KnockBack
+      value: 
+      objectReference: {fileID: 94136780}
+    - target: {fileID: 114866727040317274, guid: 08f0d3070af6afa46a62727fbd25ca8d,
+        type: 2}
+      propertyPath: Side_Fukitobi_Power
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 114866727040317274, guid: 08f0d3070af6afa46a62727fbd25ca8d,
+        type: 2}
+      propertyPath: Up_Fukitobi_Power
+      value: 200
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 08f0d3070af6afa46a62727fbd25ca8d, type: 2}
   m_IsPrefabParent: 0
@@ -788,7 +955,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 913887520}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.9054572, y: -0.47902486, z: -2.355232}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -1058,6 +1225,24 @@ MonoBehaviour:
     type: 2}
   m_PrefabInternal: {fileID: 467562794}
   m_Script: {fileID: 11500000, guid: d3633df08bc2a2e4a93a118d9e33e163, type: 3}
+--- !u!114 &1181313620
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1181313611}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0425e4557019704a9a676de53ea9341, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  side_fukitobi_point_value: 0
+  up_fukitobi_point_value: 0
+  dist: 0
+  gravity: -9.8
+  air_regist: -1
+  is_hit: 0
+  Names_Use_Recovery: []
 --- !u!114 &1257614513 stripped
 MonoBehaviour:
   m_PrefabParentObject: {fileID: 114428803640022230, guid: 1134ba56d6de7504ebc7b7fe02f1ac73,

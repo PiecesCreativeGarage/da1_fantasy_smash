@@ -13,8 +13,6 @@ public class Rotation : MonoBehaviour {
     Vector3 angle_this;
     Vector3 angle_camera;
 
-    bool error;
-
     void Start()
     {
      
@@ -25,10 +23,11 @@ public class Rotation : MonoBehaviour {
     {
         x = Input.GetAxisRaw("Horizontal");
         z = Input.GetAxisRaw("Vertical");
-
+        Debug.Log(angle_camera);
+        Debug.Log(angle_this);
 
             angle_this = transform.eulerAngles;
-
+        
             angle_camera = cam.transform.eulerAngles;
 
 
@@ -38,10 +37,13 @@ public class Rotation : MonoBehaviour {
             }
             else if (Input.GetKey("down"))
             {
+            Debug.Log("down");
                 this.transform.eulerAngles = new Vector3(angle_this.x, (180 * z - 45 * x) + angle_camera.y, angle_this.z);
             }
             else if (Input.GetKey("right") || Input.GetKey("left"))
             {
+            Debug.Log("side");
+
                 this.transform.eulerAngles = new Vector3(angle_this.x, (90 * x) + angle_camera.y, angle_this.z);
             }
 

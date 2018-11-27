@@ -6,7 +6,9 @@ public class AniCon : MonoBehaviour {
 
     public string key_Run = "Run";
     public string key_Attack1 = "Attack1";
-    public string keycode_Attack1;
+    public string keycode_Attack1 = "k";
+    public string key_Guard = "Guard";
+    public string keycode_Guard = "g";
     public Animator animator;
     Vector3 input;
 	void Start () {
@@ -29,6 +31,14 @@ public class AniCon : MonoBehaviour {
         {
             animator.SetTrigger(key_Attack1);
 
+        }
+        if (Input.GetKeyDown(keycode_Guard))
+        {
+            animator.SetBool(key_Guard, true);
+        }
+        else if(Input.GetKeyUp(keycode_Guard))
+        {
+            animator.SetBool(key_Guard, false);
         }
 	}
 }

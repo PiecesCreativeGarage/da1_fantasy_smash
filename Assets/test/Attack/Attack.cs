@@ -10,7 +10,8 @@ public class Attack : MonoBehaviour {
     public bool Existing;
 
     public float Attack_Point;
-    public float Knock_Point;
+    public float Side_Fukitobi_Power;
+    public float Up_Fukitobi_Power;
 
     public float Unguard_Seconds_B;
     public float Existing_Seconds;

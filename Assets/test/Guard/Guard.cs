@@ -7,6 +7,8 @@ public class Guard : MonoBehaviour {
     public bool guarding;
     public GameObject guardner;
     public string keycode;
+    public Vector3 guard_Posi;
+    public Vector3 guard_Scale;
 
     public string[] Names_Use_Recovery;
     Behaviour[] behaviours;
@@ -62,8 +64,8 @@ public class Guard : MonoBehaviour {
             Recovery(true);
 
             guardner.SetActive(true);
-          
-            guardner.transform.position = this.transform.position;
+            guardner.transform.localScale = guard_Scale;
+            guardner.transform.position = this.transform.position + guard_Posi;
             guardner.transform.eulerAngles = this.transform.eulerAngles;
 
         }
@@ -83,7 +85,7 @@ public class Guard : MonoBehaviour {
                 behaviours[i].enabled = false;
             }
         }
-        if (recovery_ON_OFF == true)
+        if (recovery_ON_OFF == false)
         {
             for (int i = 0; i < behaviours.Length; i++)
             {
