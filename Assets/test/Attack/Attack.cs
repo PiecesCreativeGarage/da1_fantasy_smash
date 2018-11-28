@@ -10,6 +10,7 @@ public class Attack : MonoBehaviour {
     public bool Existing;
 
     public float Attack_Point;
+    public Vector3 Fukitobi_Vector;
     public float Side_Fukitobi_Power;
     public float Up_Fukitobi_Power;
 
@@ -34,6 +35,7 @@ public class Attack : MonoBehaviour {
         {
             StartCoroutine("Attack_Mth");
         }
+        Fukitobi_Vector = this.transform.forward;
     }
 
 
@@ -56,7 +58,7 @@ public class Attack : MonoBehaviour {
         this.Attakking = true;
         this.Recovery(true);
         yield return new WaitForSeconds(Unguard_Seconds_B);
-
+        
         if (Coll != null)
         {
             Coll.enabled = true;
@@ -66,7 +68,7 @@ public class Attack : MonoBehaviour {
         {
             Instantiate(Gobj, this.transform.position, this.transform.rotation);
         }
-
+     
         yield return new WaitForSeconds(Existing_Seconds);
 
         if (Coll != null)
@@ -74,11 +76,11 @@ public class Attack : MonoBehaviour {
             Coll.enabled = false;
             this.Existing = false;
         }
-
+      
         yield return new WaitForSeconds(Unguard_Seconds_A);
         this.Recovery(false);
         this.Attakking = false;
-
+     
 
 
     }

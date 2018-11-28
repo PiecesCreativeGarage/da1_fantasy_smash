@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class KnockBack : MonoBehaviour {
-
+    public Vector3 Fukitobi_Vector;
     public float side_fukitobi_point_value;
     float side_fukitobi_point;
    
@@ -16,10 +16,12 @@ public class KnockBack : MonoBehaviour {
     public float gravity;
     public float air_regist;
 
-    public bool is_hit;
+    public bool is_Fukitobi;
    
     bool is_up_Fukitobi;
     bool is_side_Fukitobi;
+
+    bool is_Down;
 
     public const float GROUND_POSITION = 0;
     public const float FUKITOBI_MINIMUM_POWER = 0;
@@ -35,10 +37,16 @@ public class KnockBack : MonoBehaviour {
     void FixedUpdate()
     {
 
-        if (is_hit)
+        if (is_Fukitobi)
         {
             Damaged();
             this.Fukitobi();
+        }
+        if(is_Down && Input.anyKeyDown)
+        {
+            this.transform.eulerAngles = new Vector3(0, this.transform.eulerAngles.y, this.transform.eulerAngles.z);
+            Recovery(false);
+            is_Down = false;
         }
     }
     void Damaged()
@@ -49,6 +57,7 @@ public class KnockBack : MonoBehaviour {
             up_fukitobi_point = up_fukitobi_point_value;
             is_up_Fukitobi = true;
             Recovery(true);
+            this.transform.eulerAngles = new Vector3(-90, this.transform.eulerAngles.y, this.transform.eulerAngles.z);
         }
         
         
@@ -57,6 +66,7 @@ public class KnockBack : MonoBehaviour {
             side_fukitobi_point = side_fukitobi_point_value;
             is_side_Fukitobi = true;
             Recovery(true);
+            this.transform.eulerAngles = new Vector3(-90, this.transform.eulerAngles.y, this.transform.eulerAngles.z);
         }
         
     }
@@ -82,7 +92,7 @@ public class KnockBack : MonoBehaviour {
         if (is_side_Fukitobi)
         {
             side_fukitobi_point += air_regist;
-            this.transform.position += -transform.forward * side_fukitobi_point * Time.fixedDeltaTime;
+            this.transform.position += Fukitobi_Vector * side_fukitobi_point * Time.fixedDeltaTime;
         }
         if(side_fukitobi_point < FUKITOBI_MINIMUM_POWER)
         {
@@ -93,9 +103,8 @@ public class KnockBack : MonoBehaviour {
     
         if(is_up_Fukitobi == false && is_side_Fukitobi == false)
         {
-            Recovery(false);
-            is_hit = false;
-
+            is_Fukitobi = false;
+            is_Down = true;
         }
 
     }

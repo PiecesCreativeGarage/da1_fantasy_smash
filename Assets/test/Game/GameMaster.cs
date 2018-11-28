@@ -27,6 +27,7 @@ public class GameMaster : MonoBehaviour
     float[] hp_maxs;
     float[] hp1s_fil1s;
     bool GameSet = false;
+    bool is_deel_GameSet = false;
    
     void Start()
     {
@@ -36,10 +37,11 @@ public class GameMaster : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (GameSet == false)
+        if (is_deel_GameSet == false)
         {
             if (nn == 1)
             {
+                is_deel_GameSet = true;
                 StartCoroutine("Game_Over");
             }
             else
@@ -61,7 +63,6 @@ public class GameMaster : MonoBehaviour
         if (GameSet == true && Input.anyKeyDown)
         {
             Time.timeScale = 1;
-            Debug.Log(Time.timeScale);
             ReroadScene();
         }
     }

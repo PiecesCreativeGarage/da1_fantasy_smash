@@ -276,12 +276,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0425e4557019704a9a676de53ea9341, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Fukitobi_Vector: {x: 0, y: 0, z: 0}
   side_fukitobi_point_value: 0
   up_fukitobi_point_value: 0
   dist: 0
   gravity: -9.8
   air_regist: -1
-  is_hit: 0
+  is_Fukitobi: 0
   Names_Use_Recovery:
   - Move
   - Rotation
@@ -440,10 +441,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rotate_Speed: 2
   cam: {fileID: 913887520}
-  cam_posi: {x: 0, y: 1, z: -3}
+  cam_posi: {x: 0, y: 3, z: -5}
   player: {fileID: 94136779}
-  look_posi: {x: 5, y: 1, z: 0}
-  targetCam_ON_OFF: 0
+  look_posi: {x: 0, y: 1, z: 0}
+  targetCam_ON_OFF: 1
   target: {fileID: 1181313611}
 --- !u!4 &281212426
 Transform:
@@ -559,6 +560,14 @@ Prefab:
       propertyPath: KnockBack
       value: 
       objectReference: {fileID: 1181313620}
+    - target: {fileID: 4645883022405622, guid: cbda99f4b9787e24cb439b1e2aa084ab, type: 2}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4645883022405622, guid: cbda99f4b9787e24cb439b1e2aa084ab, type: 2}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 114005968698062114, guid: cbda99f4b9787e24cb439b1e2aa084ab, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: cbda99f4b9787e24cb439b1e2aa084ab, type: 2}
@@ -1236,12 +1245,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0425e4557019704a9a676de53ea9341, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Fukitobi_Vector: {x: 0, y: 0, z: 0}
   side_fukitobi_point_value: 0
   up_fukitobi_point_value: 0
   dist: 0
   gravity: -9.8
   air_regist: -1
-  is_hit: 0
+  is_Fukitobi: 0
   Names_Use_Recovery: []
 --- !u!114 &1257614513 stripped
 MonoBehaviour:

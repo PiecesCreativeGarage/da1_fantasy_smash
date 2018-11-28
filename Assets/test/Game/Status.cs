@@ -9,6 +9,7 @@ public class Status : MonoBehaviour {
 
     
     public float Attack_Point;
+    public Vector3 Fukitobi_Vector;
     public float Up_Fukitobi_Point;
     public float Side_Fukitobi_Point;
     public bool NoDamage;
@@ -40,23 +41,27 @@ public class Status : MonoBehaviour {
            
             if (other_status_C != null)
             {
-                HP_Cal(other_status_C.Attack_Point);
+               
+
+                if (NoDamage == false)
+                {
+                    HP_Cal(other_status_C.Attack_Point);
+                    this.KnockBack_Mth(other_status_C.Fukitobi_Vector, other_status_C.Up_Fukitobi_Point, other_status_C.Side_Fukitobi_Point);
+                }
             }
+           
+            
         }
-        if(other_status_C != null)
-        {
-            this.KnockBack_Mth(other_status_C.Up_Fukitobi_Point, other_status_C.Side_Fukitobi_Point);
-        }
+     
         
 
     }
     void HP_Cal(float otherATP)
     {
-        if (NoDamage == false)
-        {
+       
 
-            this.Hit_Point += -otherATP;
-        }
+        this.Hit_Point += -otherATP;
+        
         if (this.Hit_Point <= 0)
         {
 
@@ -78,12 +83,14 @@ public class Status : MonoBehaviour {
             {
                 ATP_Cal(Attacks[i].Attack_Point);
                 FUP_Cal(Attacks[i].Up_Fukitobi_Power, Attacks[i].Side_Fukitobi_Power);
+                FuVe_Cal(Attacks[i].Fukitobi_Vector);
                 break;
             }
             else
             {
                 ATP_Cal(0f);
                 FUP_Cal(0f, 0f);
+                FuVe_Cal(Vector3.zero);
             }
         }
     }
@@ -95,6 +102,10 @@ public class Status : MonoBehaviour {
     {
         this.Up_Fukitobi_Point = KnockBack_uFUP;
         this.Side_Fukitobi_Point = KnockBack_sFUP;
+    }
+    void FuVe_Cal(Vector3 Attack_Vector)
+    {
+        this.Fukitobi_Vector = Attack_Vector;
     }
     void Guard_Mth()//　自作　有り
     {
@@ -110,13 +121,14 @@ public class Status : MonoBehaviour {
             }
         }
     }
-    void KnockBack_Mth(float other_Up_Fukitobi_Point, float other_Side_Fukitobi_Point) //自作　有
+    void KnockBack_Mth(Vector3 other_Fukitobi_Vector, float other_Up_Fukitobi_Point, float other_Side_Fukitobi_Point) //自作　有
     {
         if(KnockBack != null)
         {
+            KnockBack.Fukitobi_Vector = other_Fukitobi_Vector;
             KnockBack.up_fukitobi_point_value = other_Up_Fukitobi_Point;
             KnockBack.side_fukitobi_point_value = other_Side_Fukitobi_Point;
-            KnockBack.is_hit = true;
+            KnockBack.is_Fukitobi = true;
             
         }
     }
