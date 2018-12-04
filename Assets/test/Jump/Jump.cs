@@ -4,58 +4,52 @@ using UnityEngine;
 
 public class Jump : MonoBehaviour
 {
-
-    [SerializeField]
-    bool jump;
-
-    [SerializeField]
-    float a;
-    [SerializeField]
-    float p;
-    [SerializeField]
-    float q;
-
-    float x; //時間
-
-    Vector3 startPosition;
+    public string keycode;
+    public float jumppower_value;
+    float ac;
+    float dist;
+    public float gravity;
 
 
-    void Start()
+    public bool is_ground;
+    public bool is_jumpping;
+    
+
+    private void Start()
     {
-        jump = false;
+        
     }
-
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-
-
-        if (jump == false)
+        if(Physics.CheckBox(this.transform.position + new Vector3(0, -1f, 0), new Vector3(0.5f, 0.25f, 0.5f)))
         {
-
-            if (Input.GetKeyDown(KeyCode.J))
-            {
-                jump = true;
-                startPosition = transform.position;
-            }
-
+            is_ground = true;
+        }
+        else
+        {
+            is_ground = false;
         }
 
-
-        if (jump == true)
+        if (is_ground)
         {
-            //ジャンプ　ちょっとずつ　上にいく        (x - p) が　＋の値になったら下がる
-            transform.position += new Vector3(0, -a * (x - p) + q * Time.deltaTime);
-            x++;
-
-            if (transform.position.y <= startPosition.y && x > 0)
+            if (Input.GetKeyDown(keycode))
             {
-                jump = false;
-                Vector3 pos = transform.position;
-                pos.y = startPosition.y;
-                transform.position = pos;
-                x = 0;
+                is_jumpping = true;
             }
+        }
+
+        if (is_jumpping)
+        {
+            ac = jumppower_value;
+            
+            is_ground = false;
+            is_jumpping = false;
+        }
+        if(is_ground == false)
+        {
+            ac += gravity;
+            dist -= ac * Time.deltaTime;
+            this.transform.position += new Vector3(0, dist * Time.deltaTime, 0);
         }
     }
 }

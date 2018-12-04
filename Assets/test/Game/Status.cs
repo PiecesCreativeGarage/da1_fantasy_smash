@@ -12,14 +12,23 @@ public class Status : MonoBehaviour {
     public Vector3 Fukitobi_Vector;
     public float Up_Fukitobi_Point;
     public float Side_Fukitobi_Point;
+
+
+    public bool is_Guarding;
+
+    float guard_recoT;
+
     public bool NoDamage;
+
     public bool Down;
 
     //自作の指定
+
+
     public Attack[] Attacks;
 
     public Guard Guard;
-
+    
     public KnockBack KnockBack;
 
     void Start()
@@ -29,21 +38,25 @@ public class Status : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
-        Attack_Mth();
-        Guard_Mth();
-        
+ 
+            Guard_Mth();
+
+            Attack_Mth();
+      
     }
     private void OnTriggerEnter(Collider other)
     {
         Status other_status_C = other.GetComponentInParent<Status>();
         if (other.transform.parent != null)
         {
-           
+
             if (other_status_C != null)
             {
-               
+                if (is_Guarding)
+                {
 
-                if (NoDamage == false)
+                }
+                else
                 {
                     HP_Cal(other_status_C.Attack_Point);
                     this.KnockBack_Mth(other_status_C.Fukitobi_Vector, other_status_C.Up_Fukitobi_Point, other_status_C.Side_Fukitobi_Point);
@@ -58,10 +71,17 @@ public class Status : MonoBehaviour {
     }
     void HP_Cal(float otherATP)
     {
-       
-
-        this.Hit_Point += -otherATP;
+        if (NoDamage == false)
+        {
+            if (is_Guarding)
+            {
+                otherATP /= 1000;
+            }
+            
         
+                this.Hit_Point -= otherATP;
+            
+        }
         if (this.Hit_Point <= 0)
         {
 
@@ -84,6 +104,7 @@ public class Status : MonoBehaviour {
                 ATP_Cal(Attacks[i].Attack_Point);
                 FUP_Cal(Attacks[i].Up_Fukitobi_Power, Attacks[i].Side_Fukitobi_Power);
                 FuVe_Cal(Attacks[i].Fukitobi_Vector);
+                
                 break;
             }
             else
@@ -91,6 +112,7 @@ public class Status : MonoBehaviour {
                 ATP_Cal(0f);
                 FUP_Cal(0f, 0f);
                 FuVe_Cal(Vector3.zero);
+        
             }
         }
     }
@@ -107,17 +129,20 @@ public class Status : MonoBehaviour {
     {
         this.Fukitobi_Vector = Attack_Vector;
     }
+
+
     void Guard_Mth()//　自作　有り
     {
         if (Guard != null)
         {
             if (Guard.guarding == true)
             {
-                this.NoDamage = true;
+                this.is_Guarding = true;
+             
             }
             if (Guard.guarding == false)
             {
-                this.NoDamage = false;
+                this.is_Guarding = false;
             }
         }
     }
@@ -125,11 +150,17 @@ public class Status : MonoBehaviour {
     {
         if(KnockBack != null)
         {
-            KnockBack.Fukitobi_Vector = other_Fukitobi_Vector;
-            KnockBack.up_fukitobi_point_value = other_Up_Fukitobi_Point;
-            KnockBack.side_fukitobi_point_value = other_Side_Fukitobi_Point;
-            KnockBack.is_Fukitobi = true;
-            
+            if (NoDamage == false)
+            {
+                
+                    KnockBack.Fukitobi_Vector = other_Fukitobi_Vector;
+                    KnockBack.up_fukitobi_point_value = other_Up_Fukitobi_Point;
+                    KnockBack.side_fukitobi_point_value = other_Side_Fukitobi_Point;
+                    KnockBack.is_Fukitobi = true;
+                
+            }
         }
     }
+
+
 }

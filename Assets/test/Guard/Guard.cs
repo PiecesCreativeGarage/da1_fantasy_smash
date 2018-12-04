@@ -5,6 +5,8 @@ using UnityEngine;
 public class Guard : MonoBehaviour {
  
     public bool guarding;
+    public float recovery_Time;
+    float default_recoT;
     public GameObject guardner;
     public string keycode;
     public Vector3 guard_Posi;
@@ -29,7 +31,11 @@ public class Guard : MonoBehaviour {
         {
             Guard_Mth(true);
         }
-        if (Input.GetKeyUp(keycode))
+        if (guarding)
+        {
+            recovery_Time--;
+        }
+        if (!Input.GetKey(keycode) && recovery_Time <= 0)
         {
 
             Guard_Mth(false);
@@ -38,6 +44,7 @@ public class Guard : MonoBehaviour {
     }
     void Guard_Reset()
     {
+        default_recoT = recovery_Time;
         guardner = Instantiate(guardner, this.transform.position, this.transform.rotation);
         guardner.SetActive(false);
 
@@ -55,6 +62,7 @@ public class Guard : MonoBehaviour {
             }
         }
     }
+
     void Guard_Mth(bool guard_ON_OFF)
     {
         if (guard_ON_OFF == true)
@@ -74,6 +82,7 @@ public class Guard : MonoBehaviour {
             guarding = false;
             Recovery(false);
             guardner.SetActive(false);
+            recovery_Time = default_recoT;
         }
     }
     void Recovery(bool recovery_ON_OFF)

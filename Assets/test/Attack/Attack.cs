@@ -10,6 +10,7 @@ public class Attack : MonoBehaviour {
     public bool Existing;
 
     public float Attack_Point;
+    public Vector3 Fukitobi_Vector_plus;
     public Vector3 Fukitobi_Vector;
     public float Side_Fukitobi_Power;
     public float Up_Fukitobi_Power;
@@ -35,7 +36,7 @@ public class Attack : MonoBehaviour {
         {
             StartCoroutine("Attack_Mth");
         }
-        Fukitobi_Vector = this.transform.forward;
+        Fukitobi_Vector = this.transform.forward + Fukitobi_Vector_plus;
     }
 
 

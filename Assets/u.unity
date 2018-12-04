@@ -257,6 +257,16 @@ Prefab:
       propertyPath: m_FillMethod
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114428803640022230, guid: 1134ba56d6de7504ebc7b7fe02f1ac73,
+        type: 2}
+      propertyPath: m_RaycastTarget
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 223028108343393018, guid: 1134ba56d6de7504ebc7b7fe02f1ac73,
+        type: 2}
+      propertyPath: m_PixelPerfect
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 1134ba56d6de7504ebc7b7fe02f1ac73, type: 2}
   m_IsPrefabParent: 0
@@ -287,6 +297,7 @@ MonoBehaviour:
   - Move
   - Rotation
   - Attack
+  - AniCon
 --- !u!114 &94136789 stripped
 MonoBehaviour:
   m_PrefabParentObject: {fileID: 114998397900568488, guid: 08f0d3070af6afa46a62727fbd25ca8d,
@@ -409,6 +420,21 @@ Prefab:
       propertyPath: m_AnchoredPosition.x
       value: 200
       objectReference: {fileID: 0}
+    - target: {fileID: 114513178648076360, guid: 1134ba56d6de7504ebc7b7fe02f1ac73,
+        type: 2}
+      propertyPath: m_IgnoreReversedGraphics
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114513178648076360, guid: 1134ba56d6de7504ebc7b7fe02f1ac73,
+        type: 2}
+      propertyPath: m_BlockingObjects
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114513178648076360, guid: 1134ba56d6de7504ebc7b7fe02f1ac73,
+        type: 2}
+      propertyPath: m_BlockingMask.m_Bits
+      value: 4294967295
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 1134ba56d6de7504ebc7b7fe02f1ac73, type: 2}
   m_IsPrefabParent: 0
@@ -466,6 +492,88 @@ MonoBehaviour:
     type: 2}
   m_PrefabInternal: {fileID: 98638927}
   m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+--- !u!1 &439363706
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 439363710}
+  - component: {fileID: 439363709}
+  - component: {fileID: 439363708}
+  - component: {fileID: 439363707}
+  m_Layer: 0
+  m_Name: Cube
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!23 &439363707
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 439363706}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_Materials:
+  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 1
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+--- !u!65 &439363708
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 439363706}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!33 &439363709
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 439363706}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &439363710
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 439363706}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -15, z: 0}
+  m_LocalScale: {x: 100, y: 1, z: 100}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &467562794
 Prefab:
   m_ObjectHideFlags: 0
@@ -548,12 +656,12 @@ Prefab:
     - target: {fileID: 114020136775044060, guid: cbda99f4b9787e24cb439b1e2aa084ab,
         type: 2}
       propertyPath: Side_Fukitobi_Power
-      value: 50
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 114020136775044060, guid: cbda99f4b9787e24cb439b1e2aa084ab,
         type: 2}
       propertyPath: Up_Fukitobi_Power
-      value: 500
+      value: 350
       objectReference: {fileID: 0}
     - target: {fileID: 114425437371344852, guid: cbda99f4b9787e24cb439b1e2aa084ab,
         type: 2}
@@ -567,6 +675,26 @@ Prefab:
     - target: {fileID: 4645883022405622, guid: cbda99f4b9787e24cb439b1e2aa084ab, type: 2}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114020136775044060, guid: cbda99f4b9787e24cb439b1e2aa084ab,
+        type: 2}
+      propertyPath: Fukitobi_Vector_plus.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114020136775044060, guid: cbda99f4b9787e24cb439b1e2aa084ab,
+        type: 2}
+      propertyPath: Cant_Guard
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114020136775044060, guid: cbda99f4b9787e24cb439b1e2aa084ab,
+        type: 2}
+      propertyPath: is_Cant_Guard_Attack
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114701194911918764, guid: cbda99f4b9787e24cb439b1e2aa084ab,
+        type: 2}
+      propertyPath: recovery_Time
+      value: 100
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 114005968698062114, guid: cbda99f4b9787e24cb439b1e2aa084ab, type: 2}
@@ -715,7 +843,7 @@ Prefab:
     - target: {fileID: 114866727040317274, guid: 08f0d3070af6afa46a62727fbd25ca8d,
         type: 2}
       propertyPath: Attack_Point
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 114866727040317274, guid: 08f0d3070af6afa46a62727fbd25ca8d,
         type: 2}
@@ -872,6 +1000,36 @@ Prefab:
         type: 2}
       propertyPath: Up_Fukitobi_Power
       value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 114605200724903494, guid: 08f0d3070af6afa46a62727fbd25ca8d,
+        type: 2}
+      propertyPath: MoveSpeed
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 114998397900568488, guid: 08f0d3070af6afa46a62727fbd25ca8d,
+        type: 2}
+      propertyPath: Gravity
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 114998397900568488, guid: 08f0d3070af6afa46a62727fbd25ca8d,
+        type: 2}
+      propertyPath: is_Ground
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114998397900568488, guid: 08f0d3070af6afa46a62727fbd25ca8d,
+        type: 2}
+      propertyPath: Jumpping
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114998397900568488, guid: 08f0d3070af6afa46a62727fbd25ca8d,
+        type: 2}
+      propertyPath: Jump
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 114127678390605842, guid: 08f0d3070af6afa46a62727fbd25ca8d,
+        type: 2}
+      propertyPath: recovery_Time
+      value: 100
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 08f0d3070af6afa46a62727fbd25ca8d, type: 2}
@@ -1250,9 +1408,25 @@ MonoBehaviour:
   up_fukitobi_point_value: 0
   dist: 0
   gravity: -9.8
-  air_regist: -1
+  air_regist: -5
   is_Fukitobi: 0
   Names_Use_Recovery: []
+--- !u!114 &1181313621
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1181313611}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c88fa79bd3041f4429ea4962047f78f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  is_use_Gravity: 1
+  is_Ground: 0
+  Gravity_Scale: -9.8
+  center_plus: {x: 0, y: -0.5, z: 0}
+  halfExtents: {x: 0.5, y: 0.25, z: 0.5}
 --- !u!114 &1257614513 stripped
 MonoBehaviour:
   m_PrefabParentObject: {fileID: 114428803640022230, guid: 1134ba56d6de7504ebc7b7fe02f1ac73,

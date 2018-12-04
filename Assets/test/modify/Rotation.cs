@@ -23,8 +23,7 @@ public class Rotation : MonoBehaviour {
     {
         x = Input.GetAxisRaw("Horizontal");
         z = Input.GetAxisRaw("Vertical");
-        Debug.Log(angle_camera);
-        Debug.Log(angle_this);
+
 
             angle_this = transform.eulerAngles;
         
