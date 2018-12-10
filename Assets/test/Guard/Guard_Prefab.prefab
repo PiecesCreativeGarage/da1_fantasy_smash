@@ -20,7 +20,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4809640646078688}
   - component: {fileID: 33762137559177236}
-  - component: {fileID: 135194409600048828}
   - component: {fileID: 23348315891477250}
   m_Layer: 0
   m_Name: Guard_Prefab
@@ -81,15 +80,3 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1410392178294790}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
---- !u!135 &135194409600048828
-SphereCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1410392178294790}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}

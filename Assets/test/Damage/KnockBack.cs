@@ -4,26 +4,16 @@ using UnityEngine;
 
 public class KnockBack : MonoBehaviour {
     public Vector3 Fukitobi_Vector;
-    public float side_fukitobi_point_value;
-    float side_fukitobi_point;
-   
-    public float up_fukitobi_point_value;
-    float up_fukitobi_point;
+    public float fukitobi_point_value;
+    public float fukitobi_point;
     public float dist;
 
-    Vector3 up_fukitobi_pos;
-
-    public float gravity;
     public float air_regist;
 
     public bool is_Fukitobi;
-   
-    bool is_up_Fukitobi;
-    bool is_side_Fukitobi;
-    bool is_can_ukemi;
-    
+    public bool is_CanUkemi;
+    bool is_Init = true;
 
-    public const float GROUND_POSITION = 0;
     public const float FUKITOBI_MINIMUM_POWER = 0;
 
     public string[] Names_Use_Recovery;
@@ -39,81 +29,39 @@ public class KnockBack : MonoBehaviour {
 
         if (is_Fukitobi)
         {
-            Damaged();
+            Init();
             this.Fukitobi();
         }
-        if(is_can_ukemi && Input.anyKeyDown)
-        {
-            this.transform.eulerAngles = new Vector3(0, this.transform.eulerAngles.y, this.transform.eulerAngles.z);
-            Recovery(false);
-            is_can_ukemi = false;
-        }
+      
     
     }
-    void Damaged()
+    void Init()
     {
-
-        if (is_up_Fukitobi == false)
+      
+        if (is_Init)
         {
-            up_fukitobi_point = up_fukitobi_point_value;
-            is_up_Fukitobi = true;
             Recovery(true);
-            if (up_fukitobi_point > 200)
-            {
-                this.transform.eulerAngles = new Vector3(-90, this.transform.eulerAngles.y, this.transform.eulerAngles.z);
-            }
-        }
-
-
-        if (is_side_Fukitobi == false && side_fukitobi_point_value > FUKITOBI_MINIMUM_POWER)
-        {
-            side_fukitobi_point = side_fukitobi_point_value;
-            is_side_Fukitobi = true;
-            Recovery(true);
-            if (side_fukitobi_point > 10)
-            {
-                this.transform.eulerAngles = new Vector3(-90, this.transform.eulerAngles.y, this.transform.eulerAngles.z);
-            }
+            fukitobi_point = fukitobi_point_value;
+            
+            is_Init = false;
         }
     }
     private void Fukitobi()
     {
-        
-        if (is_up_Fukitobi)
+       
+        if (fukitobi_point <= 0)
         {
-            up_fukitobi_point += gravity;
-            dist += up_fukitobi_point * Time.fixedDeltaTime;
-            up_fukitobi_pos = new Vector3(this.transform.position.x, dist * Time.fixedDeltaTime, this.transform.position.z);
-            this.transform.position = up_fukitobi_pos;//0にいるため
-
-            if (up_fukitobi_point < FUKITOBI_MINIMUM_POWER)
-            {
-                if (Physics.CheckBox(this.transform.position + new Vector3(0, -1f, 0), new Vector3(0.5f, 0.25f, 0.5f))) { 
-                    dist = 0;
-                up_fukitobi_point_value = 0;
-                is_up_Fukitobi = false;
-               }
-            }
-        }
-        
-        if (is_side_Fukitobi)
-        {
-            side_fukitobi_point += air_regist;
-            this.transform.position += Fukitobi_Vector * side_fukitobi_point * Time.fixedDeltaTime;
-        }
-        if(side_fukitobi_point < FUKITOBI_MINIMUM_POWER)
-        {
-            side_fukitobi_point_value = 0;
-            is_side_Fukitobi = false;
-        }
-
-    
-        if(is_up_Fukitobi == false && is_side_Fukitobi == false)
-        {
+            is_Init = true;
+            dist = 0;
             is_Fukitobi = false;
-            StartCoroutine(Can_Ukemi(0.5f, 3f));
+            is_CanUkemi = true;
+            Recovery(false);
         }
-
+        fukitobi_point += air_regist;
+        dist = fukitobi_point * Time.deltaTime;
+        this.transform.position += Fukitobi_Vector * dist * Time.deltaTime;
+        
+    
     }
     void Behavi_Reset()
     {
@@ -149,16 +97,6 @@ public class KnockBack : MonoBehaviour {
         }
 
     }
-    IEnumerator Can_Ukemi(float can_ukemi_time, float down_time)
-    {
-        is_can_ukemi = true;
-        yield return new WaitForSeconds(can_ukemi_time);
-        if (is_can_ukemi)
-        {
-            is_can_ukemi = false;
-            yield return new WaitForSeconds(down_time);
-            is_can_ukemi = true;
-        }
-    }
+    
     
 }

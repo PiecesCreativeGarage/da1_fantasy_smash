@@ -287,17 +287,68 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Fukitobi_Vector: {x: 0, y: 0, z: 0}
-  side_fukitobi_point_value: 0
-  up_fukitobi_point_value: 0
+  fukitobi_point_value: 0
+  fukitobi_point: 0
   dist: 0
-  gravity: -9.8
-  air_regist: -1
+  air_regist: -2
   is_Fukitobi: 0
+  is_CanUkemi: 0
   Names_Use_Recovery:
   - Move
   - Rotation
   - Attack
-  - AniCon
+  - Gravity
+--- !u!114 &94136781
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 94136779}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c88fa79bd3041f4429ea4962047f78f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  is_use_Gravity: 1
+  is_Ground: 0
+  Gravity_Scale: -9.8
+  center_plus: {x: 0, y: -1, z: 0}
+  halfExtents: {x: 0.25, y: 0.25, z: 0.25}
+  Names_Use_Recovery:
+  - Move
+  - Attack
+--- !u!114 &94136782
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 94136779}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 204885d8411381949ae5c2c7b9ca3235, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CanUkemi: 0
+  isc: 0
+--- !u!114 &94136783
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 94136779}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e6c05d7e8e16ad4f9547a933687019c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  keycode: j
+  jumppower_value: 500
+  gravity: -9.8
+  dist: 0
+  is_ground: 1
+  is_jumpping: 0
+  Names_Use_Recovery:
+  - Gravity
 --- !u!114 &94136789 stripped
 MonoBehaviour:
   m_PrefabParentObject: {fileID: 114998397900568488, guid: 08f0d3070af6afa46a62727fbd25ca8d,
@@ -466,6 +517,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotate_Speed: 2
+  camFollowSpeed: 2
   cam: {fileID: 913887520}
   cam_posi: {x: 0, y: 3, z: -5}
   player: {fileID: 94136779}
@@ -574,6 +626,95 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &444194254
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 444194259}
+  - component: {fileID: 444194258}
+  - component: {fileID: 444194257}
+  - component: {fileID: 444194256}
+  - component: {fileID: 444194255}
+  m_Layer: 0
+  m_Name: Camera
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!81 &444194255
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 444194254}
+  m_Enabled: 1
+--- !u!92 &444194256
+Behaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 444194254}
+  m_Enabled: 1
+--- !u!124 &444194257
+Behaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 444194254}
+  m_Enabled: 1
+--- !u!20 &444194258
+Camera:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 444194254}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_ClearFlags: 1
+  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_NormalizedViewPortRect:
+    serializedVersion: 2
+    x: 0.5
+    y: 0
+    width: 0.3
+    height: 0.3
+  near clip plane: 0.3
+  far clip plane: 1000
+  field of view: 60
+  orthographic: 0
+  orthographic size: 5
+  m_Depth: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RenderingPath: -1
+  m_TargetTexture: {fileID: 0}
+  m_TargetDisplay: 0
+  m_TargetEye: 3
+  m_HDR: 1
+  m_AllowMSAA: 1
+  m_ForceIntoRT: 0
+  m_OcclusionCulling: 1
+  m_StereoConvergence: 10
+  m_StereoSeparation: 0.022
+  m_StereoMirrorMode: 0
+--- !u!4 &444194259
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 444194254}
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: -35.1, y: -13.436003, z: -11.7}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!1001 &467562794
 Prefab:
   m_ObjectHideFlags: 0
@@ -641,7 +782,7 @@ Prefab:
     - target: {fileID: 114020136775044060, guid: cbda99f4b9787e24cb439b1e2aa084ab,
         type: 2}
       propertyPath: Attack_Point
-      value: 5
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 114425437371344852, guid: cbda99f4b9787e24cb439b1e2aa084ab,
         type: 2}
@@ -656,12 +797,12 @@ Prefab:
     - target: {fileID: 114020136775044060, guid: cbda99f4b9787e24cb439b1e2aa084ab,
         type: 2}
       propertyPath: Side_Fukitobi_Power
-      value: 30
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 114020136775044060, guid: cbda99f4b9787e24cb439b1e2aa084ab,
         type: 2}
       propertyPath: Up_Fukitobi_Power
-      value: 350
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 114425437371344852, guid: cbda99f4b9787e24cb439b1e2aa084ab,
         type: 2}
@@ -696,8 +837,34 @@ Prefab:
       propertyPath: recovery_Time
       value: 100
       objectReference: {fileID: 0}
+    - target: {fileID: 114020136775044060, guid: cbda99f4b9787e24cb439b1e2aa084ab,
+        type: 2}
+      propertyPath: Fukitobi_Point
+      value: 350
+      objectReference: {fileID: 0}
+    - target: {fileID: 114020136775044060, guid: cbda99f4b9787e24cb439b1e2aa084ab,
+        type: 2}
+      propertyPath: Fukitobi_Vector_plus.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114020136775044060, guid: cbda99f4b9787e24cb439b1e2aa084ab,
+        type: 2}
+      propertyPath: Fukitobi_Vector_plus.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114425437371344852, guid: cbda99f4b9787e24cb439b1e2aa084ab,
+        type: 2}
+      propertyPath: Hit_Point
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 114425437371344852, guid: cbda99f4b9787e24cb439b1e2aa084ab,
+        type: 2}
+      propertyPath: Guard
+      value: 
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 114005968698062114, guid: cbda99f4b9787e24cb439b1e2aa084ab, type: 2}
+    - {fileID: 114701194911918764, guid: cbda99f4b9787e24cb439b1e2aa084ab, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: cbda99f4b9787e24cb439b1e2aa084ab, type: 2}
   m_IsPrefabParent: 0
 --- !u!224 &652460132 stripped
@@ -994,12 +1161,12 @@ Prefab:
     - target: {fileID: 114866727040317274, guid: 08f0d3070af6afa46a62727fbd25ca8d,
         type: 2}
       propertyPath: Side_Fukitobi_Power
-      value: 10
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 114866727040317274, guid: 08f0d3070af6afa46a62727fbd25ca8d,
         type: 2}
       propertyPath: Up_Fukitobi_Power
-      value: 200
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 114605200724903494, guid: 08f0d3070af6afa46a62727fbd25ca8d,
         type: 2}
@@ -1010,7 +1177,7 @@ Prefab:
         type: 2}
       propertyPath: Gravity
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 94136781}
     - target: {fileID: 114998397900568488, guid: 08f0d3070af6afa46a62727fbd25ca8d,
         type: 2}
       propertyPath: is_Ground
@@ -1025,12 +1192,42 @@ Prefab:
         type: 2}
       propertyPath: Jump
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 94136783}
     - target: {fileID: 114127678390605842, guid: 08f0d3070af6afa46a62727fbd25ca8d,
         type: 2}
       propertyPath: recovery_Time
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 114866727040317274, guid: 08f0d3070af6afa46a62727fbd25ca8d,
+        type: 2}
+      propertyPath: Names_Use_Recovery.Array.data[3]
+      value: Guravity
+      objectReference: {fileID: 0}
+    - target: {fileID: 114998397900568488, guid: 08f0d3070af6afa46a62727fbd25ca8d,
+        type: 2}
+      propertyPath: Fukitobi_Vector.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114998397900568488, guid: 08f0d3070af6afa46a62727fbd25ca8d,
+        type: 2}
+      propertyPath: Fukitobi_Point
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114866727040317274, guid: 08f0d3070af6afa46a62727fbd25ca8d,
+        type: 2}
+      propertyPath: Fukitobi_Point
       value: 100
       objectReference: {fileID: 0}
+    - target: {fileID: 114866727040317274, guid: 08f0d3070af6afa46a62727fbd25ca8d,
+        type: 2}
+      propertyPath: Fukitobi_Vector_plus.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114998397900568488, guid: 08f0d3070af6afa46a62727fbd25ca8d,
+        type: 2}
+      propertyPath: Ukemi
+      value: 
+      objectReference: {fileID: 94136782}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 08f0d3070af6afa46a62727fbd25ca8d, type: 2}
   m_IsPrefabParent: 0
@@ -1329,7 +1526,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1169385750
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1342,6 +1539,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotate_Speed: 2
+  camFollowSpeed: 2
   cam: {fileID: 924010426}
   cam_posi: {x: 0, y: 1, z: -3}
   player: {fileID: 1181313611}
@@ -1404,12 +1602,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Fukitobi_Vector: {x: 0, y: 0, z: 0}
-  side_fukitobi_point_value: 0
-  up_fukitobi_point_value: 0
+  fukitobi_point_value: 0
+  fukitobi_point: 0
   dist: 0
-  gravity: -9.8
   air_regist: -5
   is_Fukitobi: 0
+  is_CanUkemi: 0
   Names_Use_Recovery: []
 --- !u!114 &1181313621
 MonoBehaviour:
@@ -1417,7 +1615,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1181313611}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c88fa79bd3041f4429ea4962047f78f8, type: 3}
   m_Name: 
@@ -1427,6 +1625,7 @@ MonoBehaviour:
   Gravity_Scale: -9.8
   center_plus: {x: 0, y: -0.5, z: 0}
   halfExtents: {x: 0.5, y: 0.25, z: 0.5}
+  Names_Use_Recovery: []
 --- !u!114 &1257614513 stripped
 MonoBehaviour:
   m_PrefabParentObject: {fileID: 114428803640022230, guid: 1134ba56d6de7504ebc7b7fe02f1ac73,

@@ -10,14 +10,16 @@ public class Status : MonoBehaviour {
     
     public float Attack_Point;
     public Vector3 Fukitobi_Vector;
-    public float Up_Fukitobi_Point;
-    public float Side_Fukitobi_Point;
+    public float Fukitobi_Point;
 
+    bool is_useGravity;
 
-    public bool is_Guarding;
+    bool is_Guarding;
+    bool success_guard;
 
     float guard_recoT;
-
+    public bool is_CanUkemi;
+    public bool isGround;
     public bool NoDamage;
 
     public bool Down;
@@ -30,10 +32,17 @@ public class Status : MonoBehaviour {
     public Guard Guard;
     
     public KnockBack KnockBack;
-
+  
+    public Gravity Gravity;
+    public Jump Jump;
+    public Ukemi Ukemi;
     void Start()
     {
-    
+        Gravity = GetComponent<Gravity>();
+
+        
+        Debug.Log(Jump);
+        Debug.Log(Gravity);
     }
     // Update is called once per frame
     void Update()
@@ -42,6 +51,10 @@ public class Status : MonoBehaviour {
             Guard_Mth();
 
             Attack_Mth();
+        
+        Gravity_Mth();
+        Jump_Mth();
+        CanUkemi();
       
     }
     private void OnTriggerEnter(Collider other)
@@ -52,14 +65,15 @@ public class Status : MonoBehaviour {
 
             if (other_status_C != null)
             {
-                if (is_Guarding)
+                if (NoDamage == false)
                 {
-
-                }
-                else
-                {
+                    if (is_Guarding)
+                    {
+                        guard_recoT = other_status_C.Attack_Point * 5;
+                        success_guard = true;
+                    }
                     HP_Cal(other_status_C.Attack_Point);
-                    this.KnockBack_Mth(other_status_C.Fukitobi_Vector, other_status_C.Up_Fukitobi_Point, other_status_C.Side_Fukitobi_Point);
+                    this.KnockBack_Mth(other_status_C.Fukitobi_Vector, other_status_C.Fukitobi_Point);
                 }
             }
            
@@ -102,7 +116,7 @@ public class Status : MonoBehaviour {
             if (Attacks[i].Existing == true)
             {
                 ATP_Cal(Attacks[i].Attack_Point);
-                FUP_Cal(Attacks[i].Up_Fukitobi_Power, Attacks[i].Side_Fukitobi_Power);
+                FUP_Cal(Attacks[i].Fukitobi_Point);
                 FuVe_Cal(Attacks[i].Fukitobi_Vector);
                 
                 break;
@@ -110,7 +124,7 @@ public class Status : MonoBehaviour {
             else
             {
                 ATP_Cal(0f);
-                FUP_Cal(0f, 0f);
+                FUP_Cal(0f);
                 FuVe_Cal(Vector3.zero);
         
             }
@@ -120,10 +134,9 @@ public class Status : MonoBehaviour {
     {
         this.Attack_Point = Attack_ATP;
     }
-    void FUP_Cal(float KnockBack_uFUP, float KnockBack_sFUP)
+    void FUP_Cal(float FuP)
     {
-        this.Up_Fukitobi_Point = KnockBack_uFUP;
-        this.Side_Fukitobi_Point = KnockBack_sFUP;
+        Fukitobi_Point = FuP;
     }
     void FuVe_Cal(Vector3 Attack_Vector)
     {
@@ -138,7 +151,11 @@ public class Status : MonoBehaviour {
             if (Guard.guarding == true)
             {
                 this.is_Guarding = true;
-             
+                if (success_guard)
+                {
+                    Guard.recovery_Time += guard_recoT;
+                    success_guard = false;
+                }
             }
             if (Guard.guarding == false)
             {
@@ -146,21 +163,59 @@ public class Status : MonoBehaviour {
             }
         }
     }
-    void KnockBack_Mth(Vector3 other_Fukitobi_Vector, float other_Up_Fukitobi_Point, float other_Side_Fukitobi_Point) //自作　有
+    void KnockBack_Mth(Vector3 other_Fukitobi_Vector, float other_fukitobi_point) //自作　有
     {
         if(KnockBack != null)
         {
-            if (NoDamage == false)
+            if (is_Guarding)
             {
-                
-                    KnockBack.Fukitobi_Vector = other_Fukitobi_Vector;
-                    KnockBack.up_fukitobi_point_value = other_Up_Fukitobi_Point;
-                    KnockBack.side_fukitobi_point_value = other_Side_Fukitobi_Point;
-                    KnockBack.is_Fukitobi = true;
-                
+               other_fukitobi_point *= 0.7f;
+         
+            }
+            else
+            {
+                if(other_fukitobi_point >= 200)
+                {
+                    this.transform.eulerAngles = new Vector3(-90, this.transform.eulerAngles.y, this.transform.eulerAngles.z);
+                }
+            }
+                KnockBack.Fukitobi_Vector = other_Fukitobi_Vector;
+                KnockBack.fukitobi_point_value = other_fukitobi_point;
+                KnockBack.is_Fukitobi = true;
+           
+        }
+    }
+    
+    void Jump_Mth()
+    {
+        if(Jump != null)
+        this.Jump.is_ground = isGround;
+        else
+            Jump = GetComponent<Jump>();
+    }
+    
+    void Gravity_Mth()
+    {
+        if (Gravity != null)
+        {
+            this.isGround = Gravity.is_Ground;
+        }
+    }
+    void CanUkemi()
+    {
+        if (Ukemi != null)
+        {
+            if (this.is_CanUkemi && isGround)
+            {
+
+                Ukemi.CanUkemi = true;
+                KnockBack.is_CanUkemi = is_CanUkemi = false;
+            }
+            else
+            {
+                is_CanUkemi = KnockBack.is_CanUkemi;
+
             }
         }
     }
-
-
 }

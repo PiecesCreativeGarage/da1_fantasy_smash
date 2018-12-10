@@ -33,7 +33,14 @@ public class Guard : MonoBehaviour {
         }
         if (guarding)
         {
-            recovery_Time--;
+            guardner.transform.localScale = guard_Scale;
+            guardner.transform.position = this.transform.position + guard_Posi;
+            guardner.transform.eulerAngles = this.transform.eulerAngles;
+            if (recovery_Time != 0)
+            {
+                recovery_Time--;
+                
+            }
         }
         if (!Input.GetKey(keycode) && recovery_Time <= 0)
         {
@@ -72,9 +79,7 @@ public class Guard : MonoBehaviour {
             Recovery(true);
 
             guardner.SetActive(true);
-            guardner.transform.localScale = guard_Scale;
-            guardner.transform.position = this.transform.position + guard_Posi;
-            guardner.transform.eulerAngles = this.transform.eulerAngles;
+            
 
         }
         if (guard_ON_OFF == false)
