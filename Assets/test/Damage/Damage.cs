@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Damage : MonoBehaviour {
+public class Damage : UnitBehaviourBase {
     public Vector3 Fukitobi_Vector;
     public float side_fukitobi_point_value;
     float side_fukitobi_point;
@@ -26,7 +26,7 @@ public class Damage : MonoBehaviour {
     public const float FUKITOBI_MINIMUM_POWER = 0;
 
     public string[] Names_Use_Recovery;
-    Behaviour[] behaviours;
+
     // Use this for initialization
     private void Start()
     {
@@ -136,28 +136,7 @@ public class Damage : MonoBehaviour {
             }
         }
     }
-    void Recovery(bool recovery_ON_OFF)
-    {
-        Debug.Log(recovery_ON_OFF);
-        if (recovery_ON_OFF == true)
-        {
 
-            for (int i = 0; i < behaviours.Length; i++)
-            {
-                behaviours[i].enabled = false;
-            }
-        }
-
-        if (recovery_ON_OFF == false)
-        {
-
-            for (int i = 0; i < behaviours.Length; i++)
-            {
-                behaviours[i].enabled = true;
-            }
-        }
-
-    }
     IEnumerator Can_Ukemi(float can_ukemi_time, float down_time)
     {
         is_can_ukemi = true;

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Guard : MonoBehaviour {
+public class Guard : UnitBehaviourBase {
  
     public bool guarding;
     public float recovery_Time;
@@ -90,22 +90,6 @@ public class Guard : MonoBehaviour {
             recovery_Time = default_recoT;
         }
     }
-    void Recovery(bool recovery_ON_OFF)
-    {
-        if (recovery_ON_OFF == true)
-        {
-            for (int i = 0; i < behaviours.Length; i++)
-            {
-                behaviours[i].enabled = false;
-            }
-        }
-        if (recovery_ON_OFF == false)
-        {
-            for (int i = 0; i < behaviours.Length; i++)
-            {
-                behaviours[i].enabled = true;
-            }
-        }
-    }
+
 
 }
