@@ -122,7 +122,6 @@ GameObject:
   - component: {fileID: 661274554}
   - component: {fileID: 661274553}
   - component: {fileID: 661274552}
-  - component: {fileID: 661274557}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -138,17 +137,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 661274551}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e6c05d7e8e16ad4f9547a933687019c, type: 3}
+  m_Script: {fileID: 11500000, guid: 2be02593466c9c541b66a69de511844a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  keycode: j
-  jumppower_value: 500
-  gravity: -9.8
-  dist: 0
-  is_ground: 0
-  is_jumpping: 0
-  Names_Use_Recovery:
-  - Ukemi
+  isMoving: 0
+  distance: 5
+  speed: 2
+  distnow: 0
+  Names_Use_Recovery: []
 --- !u!23 &661274553
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -213,19 +209,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
---- !u!114 &661274557
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 661274551}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 204885d8411381949ae5c2c7b9ca3235, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CanUkemi: 0
-  isc: 0
 --- !u!1 &1581057114
 GameObject:
   m_ObjectHideFlags: 0

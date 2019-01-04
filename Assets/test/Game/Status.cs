@@ -28,7 +28,7 @@ public class Status : MonoBehaviour {
 
 
     public Attack[] Attacks;
-
+    bool is_CantGuardAtack;
     public Guard Guard;
     
     public KnockBack KnockBack;
@@ -36,13 +36,14 @@ public class Status : MonoBehaviour {
     public Gravity Gravity;
     public Jump Jump;
     public Ukemi Ukemi;
+    public Step Step;
+
     void Start()
     {
         Gravity = GetComponent<Gravity>();
 
-        
-        Debug.Log(Jump);
-        Debug.Log(Gravity);
+        Step = GetComponent<Step>();
+
     }
     // Update is called once per frame
     void Update()
@@ -55,10 +56,14 @@ public class Status : MonoBehaviour {
         Gravity_Mth();
         Jump_Mth();
         CanUkemi();
-      
+        Step_Mth();
     }
     private void OnTriggerEnter(Collider other)
     {
+        if (other.CompareTag("DeathZone"))
+        {
+            Hit_Point = 0;
+        }
         Status other_status_C = other.GetComponentInParent<Status>();
         if (other.transform.parent != null)
         {
@@ -67,6 +72,10 @@ public class Status : MonoBehaviour {
             {
                 if (NoDamage == false)
                 {
+                    if (other_status_C.is_CantGuardAtack)
+                    {
+                        is_Guarding = false;
+                    }
                     if (is_Guarding)
                     {
                         guard_recoT = other_status_C.Attack_Point * 5;
@@ -118,7 +127,7 @@ public class Status : MonoBehaviour {
                 ATP_Cal(Attacks[i].Attack_Point);
                 FUP_Cal(Attacks[i].Fukitobi_Point);
                 FuVe_Cal(Attacks[i].Fukitobi_Vector);
-                
+                is_CantGuardAtack =  Attacks[i].Cant_Guard_ATK;
                 break;
             }
             else
@@ -216,6 +225,24 @@ public class Status : MonoBehaviour {
                 is_CanUkemi = KnockBack.is_CanUkemi;
 
             }
+        }
+    }
+    void Step_Mth()
+    {
+        
+        if (Step != null)
+        {
+
+            if (is_Guarding)
+        {
+            Step.isAble = true;
+        }
+        else
+        {
+            Step.isAble = false;
+        }
+       
+            NoDamage = Step.isMoving;
         }
     }
 }

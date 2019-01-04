@@ -39,7 +39,7 @@ public class GameMaster : MonoBehaviour
     {
         if (is_deel_GameSet == false)
         {
-            if (nn == 1)
+            if (nn == 0)
             {
                 is_deel_GameSet = true;
                 StartCoroutine("Game_Over");
@@ -48,7 +48,7 @@ public class GameMaster : MonoBehaviour
             {
                 for (num = 0; num < player_Info.Length; num++)
                 {
-
+                    HP_show(num);
                     if (player_Info[num].status.Down == true)
                     {
                         player_Info[num].win_lose = false;
@@ -56,7 +56,7 @@ public class GameMaster : MonoBehaviour
                         nn--;
 
                     }
-                    HP_show(num);
+                    
                 }
             }
         }
@@ -77,6 +77,7 @@ public class GameMaster : MonoBehaviour
             hp_maxs[num] = player_Info[num].status.Hit_Point;
             hp1s_fil1s[num] = 1 / hp_maxs[num];
             player_Info[num].win_lose = true;
+            
             player_Info[num].text.text = "";
         }
         GameSet_Label.text = "";
@@ -85,11 +86,12 @@ public class GameMaster : MonoBehaviour
     void HP_show(int num)
     {
 
-        if (nn > 1)
+        if (nn > 0)
         {
-
-            player_Info[num].text.text = player_Info[num].status.Hit_Point.ToString();
-            player_Info[num].image.fillAmount = 1 - (hp1s_fil1s[num] * (hp_maxs[num] - player_Info[num].status.Hit_Point));
+         
+                player_Info[num].text.text = player_Info[num].status.Hit_Point.ToString();
+                player_Info[num].image.fillAmount = 1 - (hp1s_fil1s[num] * (hp_maxs[num] - player_Info[num].status.Hit_Point));
+            
         }
 
     }

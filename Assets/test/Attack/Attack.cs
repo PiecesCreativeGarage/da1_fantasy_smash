@@ -13,7 +13,7 @@ public class Attack : MonoBehaviour {
     public Vector3 Fukitobi_Vector_plus;
     public Vector3 Fukitobi_Vector;
     public float Fukitobi_Point;
-
+    public bool Cant_Guard_ATK;
     public float Unguard_Seconds_B;
     public float Existing_Seconds;
     public float Unguard_Seconds_A;
