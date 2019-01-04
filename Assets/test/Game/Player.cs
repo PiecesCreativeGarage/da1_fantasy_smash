@@ -150,7 +150,7 @@ public class Player : MonoBehaviour {
 
         public void Start(float Pjumppow, float Pgravity)
         {
-            jumpPow = Pjumppow;
+            jumpPow = Pjumppow * 50;
             gravityScale = Pgravity;
         }
         public void Update()
@@ -175,6 +175,7 @@ public class Player : MonoBehaviour {
                 dist = 0;
                 velocity = 0;
                 isjumpping = false;
+                transform.position = new Vector3(transform.position.x, 0, transform.position.z);
             }
         }
     }
@@ -192,7 +193,7 @@ public class Player : MonoBehaviour {
         {
             waitFrame_value = waitFrame;
             keyCode = keycode_Guard;
-            gobj = guard_Object;
+            gobj = Instantiate(guard_Object, Vector3.zero, Quaternion.identity);
             if (gobj != null)
             {
                 gobj_exist = true;
