@@ -283,9 +283,15 @@ MonoBehaviour:
   moveSpeed: 5
   jumpPower: 8
   gravity: 9.8
+  attackPoint: 0
   guardPrefab: {fileID: 1410392178294790, guid: 6af208b4fd93bda44b25a776bebdb00f,
     type: 2}
   cam: {fileID: 31938138}
+  AttacksInfo:
+  - AttackNumver: 1
+    KeyCode: b
+  - AttackNumver: 2
+    KeyCode: v
 --- !u!1001 &1562702672
 Prefab:
   m_ObjectHideFlags: 0

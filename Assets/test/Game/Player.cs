@@ -3,26 +3,38 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : MonoBehaviour {
-
     public float moveSpeed;
     public float jumpPower;
     public float gravity;
+
+    public float attackPoint;
+
     public GameObject guardPrefab;
     public GameObject cam;
     Rotation rotation;
     Move move;
     Jump jump;
     Guard guard;
+    Attack attack;
+
+    [System.Serializable]
+    public class SetUseAttack
+    {
+        public int AttackNumver;
+        public string KeyCode;
+    }
+
+    public SetUseAttack[] AttacksInfo;
 
     Vector3 Input_dir;
 
     enum Status
     {
-        idle, jumpping, guarding,
+        idle, jumpping, guarding, attacking,
     }
 
 
-    int player_status;
+    Status player_status;
 
     private void Awake()
     {
@@ -30,6 +42,7 @@ public class Player : MonoBehaviour {
         move = new Move();
         jump = new Jump();
         guard = new Guard();
+        attack = new Attack();
     }
     private void Start()
     {
@@ -39,32 +52,43 @@ public class Player : MonoBehaviour {
 
         guard.Start(30, "g", guardPrefab);
 
+        attack.Start(AttacksInfo);
+
     }
     private void Update()
     {
         GetStatus();
         switch (player_status)
         {
-            case (int)Status.idle:
+            case Status.idle:
                 Input_dir = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
                 move.Update(transform, Input_dir);
                 rotation.Update(this.transform, Input_dir);
                 jump.Update();
                 guard.Update();
+                attack.Update();
                 break;
-            case (int)Status.jumpping:
+            case Status.jumpping:
                 jump.Jumpping(this.transform);
 
                 if (jump.isjumpping == false)
                 {
-                    GetStatus((int)Status.idle);
+                    GetStatus(Status.idle);
                 }
                 break;
-            case (int)Status.guarding:
+            case Status.guarding:
                 guard.Guarding(this.transform);
                 if (jump.isjumpping == false)
                 {
-                    GetStatus((int)Status.idle);
+                    GetStatus(Status.idle);
+                }
+                break;
+            case Status.attacking:
+                this.attackPoint = attack.Attacking();
+                if (attack.isAttacking == false)
+                {
+                    this.attackPoint = 0;
+                    GetStatus(Status.idle);
                 }
                 break;
         }
@@ -75,15 +99,19 @@ public class Player : MonoBehaviour {
 
         if (jump.isjumpping)
         {
-            player_status = (int)Status.jumpping;
+            player_status = Status.jumpping;
         }
         if (guard.isGuarding)
         {
-            player_status = (int)Status.guarding;
+            player_status = Status.guarding;
         }
+        if (attack.isAttacking)
+        {
 
+            player_status = Status.attacking;
+        }
     }
-    private void GetStatus(int idle)
+    private void GetStatus(Status idle)
     {
         player_status = idle;
     }
@@ -150,7 +178,7 @@ public class Player : MonoBehaviour {
 
         public void Start(float Pjumppow, float Pgravity)
         {
-            jumpPow = Pjumppow * 50;
+            jumpPow = Pjumppow;
             gravityScale = Pgravity;
         }
         public void Update()
@@ -175,7 +203,7 @@ public class Player : MonoBehaviour {
                 dist = 0;
                 velocity = 0;
                 isjumpping = false;
-                transform.position = new Vector3(transform.position.x, 0, transform.position.z);
+
             }
         }
     }
@@ -238,5 +266,73 @@ public class Player : MonoBehaviour {
             }
         }
     }
+    class Attack
+    {
+        public bool isAttacking;
+        AttackBace attackBace;
+        SetUseAttack[] Attacks;
+        public void Start(SetUseAttack[] setUseAttacks)
+        {
+            Attacks = new SetUseAttack[setUseAttacks.Length];
 
+
+            for (int i = 0; i < Attacks.Length; i++)
+            {
+                Attacks[i] = setUseAttacks[i];
+
+            }
+        }
+        public void Update()
+        {
+
+            for (int i = 0; i < Attacks.Length; i++)
+            {
+
+                if (Input.GetKeyDown(Attacks[i].KeyCode))
+                {
+
+                    SetAttack(Attacks[i].AttackNumver);
+
+                    if (!(attackBace == null))
+                    {
+
+                        isAttacking = true;
+                    }
+
+                }
+            }
+
+
+        }
+        void SetAttack(int Numver)
+        {
+            switch (Numver)
+            {
+                default:
+                    attackBace = null;
+                    break;
+
+                case 1:
+                    attackBace = new Attack_A();
+                    break;
+                case 2:
+                    attackBace = new Attack_B();
+                    break;
+            }
+        }
+        public float Attacking()
+        {
+
+            if (attackBace.isAttacking)
+            {
+                attackBace.Update();
+
+            }
+            else
+            {
+                isAttacking = false;
+            }
+            return attackBace.AttackPoint;
+        }
+    }
 }
