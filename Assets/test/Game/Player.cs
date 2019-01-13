@@ -51,7 +51,7 @@ public class Player : MonoBehaviour {
     { 
 
         rotation.Start(this.cam);
-        move.Start(moveSpeed);
+        move.Start(moveSpeed, animator);
         jump.Start(jumpPower, gravity);
 
         guard.Start(30, "g", guardPrefab);
@@ -122,15 +122,23 @@ public class Player : MonoBehaviour {
     class Move
     {
         float moveSpeed;
-
-        public void Start(float PmoveSpeed)
+        Animator animator;
+        public void Start(float PmoveSpeed,Animator animator)
         {
             moveSpeed = PmoveSpeed;
+            this.animator = animator;
         }
         public void Update(Transform transform, Vector3 input)
         {
             if (input.magnitude != 0)
+            {
+                animator.SetBool("Run", true);
                 transform.position += transform.forward * moveSpeed * Time.fixedDeltaTime;
+            }
+            else
+            {
+                animator.SetBool("Run", false);
+            }
         }
     }
 
