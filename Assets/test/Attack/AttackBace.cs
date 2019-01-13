@@ -4,10 +4,17 @@ using UnityEngine;
 
 public abstract class AttackBace{
 
+    public Animator animator;
+
     public bool isAttacking;
 
     public float AttackPoint;
     public float Frame;
+
+    public void Start()
+    {
+        SetAttack();
+    }
 
     public void Update()
     {
@@ -16,17 +23,19 @@ public abstract class AttackBace{
             Attacking();
         }
     }
+
     protected virtual void Attacking() { }
 
-
+    protected virtual void SetAttack() { }
 }
 class Attack_A : AttackBace
 {
-    public Attack_A()
+    protected override void SetAttack()
     {
         AttackPoint = 10;
         Frame = 40;
         isAttacking = true;
+        animator.SetTrigger("Attack1");
     }
     protected override void Attacking()
     {
@@ -37,21 +46,7 @@ class Attack_A : AttackBace
         }
     }
 }
-class Attack_B : AttackBace
+class Attack_B
 {
-    public Attack_B()
-    {
-        AttackPoint = 1500;
-        Frame = 120;
-        isAttacking = true;
-    }
-    protected override void Attacking()
-    {
-        Frame--;
-        if (Frame <= 0)
-        {
-            isAttacking = false;
-        }
-    }
 
 }

@@ -280,6 +280,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d577830ef3c10349a7ccc94afa74e26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animator: {fileID: 1084975243}
   moveSpeed: 5
   jumpPower: 8
   gravity: 9.8
@@ -290,8 +291,11 @@ MonoBehaviour:
   AttacksInfo:
   - AttackNumver: 1
     KeyCode: b
-  - AttackNumver: 2
-    KeyCode: v
+--- !u!95 &1084975243 stripped
+Animator:
+  m_PrefabParentObject: {fileID: 95280524229235436, guid: 481003747f4c24d8ab77e982054881ea,
+    type: 2}
+  m_PrefabInternal: {fileID: 1562702672}
 --- !u!1001 &1562702672
 Prefab:
   m_ObjectHideFlags: 0
@@ -331,6 +335,11 @@ Prefab:
       propertyPath: m_RootOrder
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 95280524229235436, guid: 481003747f4c24d8ab77e982054881ea,
+        type: 2}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 12db2886062df3e4db2074fcaea3812e, type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 481003747f4c24d8ab77e982054881ea, type: 2}
   m_IsPrefabParent: 0

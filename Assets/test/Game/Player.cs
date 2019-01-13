@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : MonoBehaviour {
+
+    public Animator animator;
+
     public float moveSpeed;
     public float jumpPower;
     public float gravity;
@@ -45,14 +48,15 @@ public class Player : MonoBehaviour {
         attack = new Attack();
     }
     private void Start()
-    {
+    { 
+
         rotation.Start(this.cam);
         move.Start(moveSpeed);
         jump.Start(jumpPower, gravity);
 
         guard.Start(30, "g", guardPrefab);
 
-        attack.Start(AttacksInfo);
+        attack.Start(AttacksInfo, animator);
 
     }
     private void Update()
@@ -269,13 +273,13 @@ public class Player : MonoBehaviour {
     class Attack
     {
         public bool isAttacking;
+        public Animator animator;
         AttackBace attackBace;
         SetUseAttack[] Attacks;
-        public void Start(SetUseAttack[] setUseAttacks)
+        public void Start(SetUseAttack[] setUseAttacks, Animator animator)
         {
             Attacks = new SetUseAttack[setUseAttacks.Length];
-
-
+            this.animator = animator;
             for (int i = 0; i < Attacks.Length; i++)
             {
                 Attacks[i] = setUseAttacks[i];
@@ -293,9 +297,11 @@ public class Player : MonoBehaviour {
 
                     SetAttack(Attacks[i].AttackNumver);
 
+                    attackBace.animator = this.animator;
+                    attackBace.Start();
+
                     if (!(attackBace == null))
                     {
-
                         isAttacking = true;
                     }
 
@@ -306,19 +312,7 @@ public class Player : MonoBehaviour {
         }
         void SetAttack(int Numver)
         {
-            switch (Numver)
-            {
-                default:
-                    attackBace = null;
-                    break;
-
-                case 1:
-                    attackBace = new Attack_A();
-                    break;
-                case 2:
-                    attackBace = new Attack_B();
-                    break;
-            }
+            attackBace = AttackDictionary.CreateAttack(Numver);
         }
         public float Attacking()
         {
@@ -326,7 +320,6 @@ public class Player : MonoBehaviour {
             if (attackBace.isAttacking)
             {
                 attackBace.Update();
-
             }
             else
             {
