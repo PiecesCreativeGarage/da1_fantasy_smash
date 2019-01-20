@@ -66,15 +66,14 @@ public class Player : MonoBehaviour {
     private void Update()
     {
 
+        isGrounded = GetGrounded(transform.position + new Vector3(0, 2), 0.5f, -transform.up, 3f);
+        GetStatus();
         if (isGrounded)
         {
-            GetStatus();
+
             switch (player_status)
             {
                 case Status.idle:
-                    isGrounded = GetGrounded(this.transform.position - new Vector3(0, 1f, 0),
-                                new Vector3(0.5f, 0.1f, 0.5f),
-                                Quaternion.identity);
                     Input_dir = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
                     move.Update(transform, Input_dir);
                     rotation.Update(this.transform, Input_dir);
@@ -136,13 +135,9 @@ public class Player : MonoBehaviour {
         }
         else
         {
-            GetStatus();
             switch (player_status)
             {
-                case Status.idle:
-                    isGrounded = GetGrounded(this.transform.position - new Vector3(0, 1.5f, 0),
-                                new Vector3(0.5f, 0.1f, 0.5f),
-                                Quaternion.identity);
+                case Status.idle:                   
                     Input_dir = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
                     move.Update(transform, Input_dir);
                     rotation.Update(this.transform, Input_dir);
@@ -217,10 +212,28 @@ public class Player : MonoBehaviour {
     {
         player_status = status;
     }
-    bool GetGrounded(Vector3 Center, Vector3 HalfExtents, Quaternion orentation)
+
+    bool GetGrounded(Vector3 origin,float radius, Vector3 direction, float maxdistance)
     {
-        return Physics.CheckBox(Center, HalfExtents, orentation);
+        Ray ray = new Ray(origin, direction);
+        RaycastHit raycastHit;
+        if(Physics.SphereCast(ray.origin, radius, ray.direction, out raycastHit, maxdistance))
+        {
+            if (raycastHit.collider.gameObject.CompareTag("ground"))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return false;
+        }
     }
+
     private void OnTriggerEnter(Collider other)
     {
         
