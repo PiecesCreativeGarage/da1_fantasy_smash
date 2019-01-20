@@ -1,117 +1,143 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
-[System.Serializable]
-public class Player_Info
-{
-    public GameObject player;
-    public bool wint_losef = true;
-
-    public GameObject Camera;
-
-    public GameObject canvas;
-    public Text label;
-    public string Win_message;
-    public string Lose_message;
-    
-
-    
-}
 
 public class GameOver : MonoBehaviour
 {
 
-
-    //
-    public GameObject Gameset_canvas;
-    Text GameSet_label;
-    public string GamesetMessage;
-    public float wait_Time;
-    //
-
-    int num_of_player;
-    public bool gameset_ON;
+    [System.Serializable]
+    public class Player_Info
+    {
+        public Player player;
+        public Text text;
+        public Image image;
+        public bool win_lose;　// Win True   Lose False
+    };
 
     public Player_Info[] player_Info;
+    public Text GameSet_Label;
+    int remainingPlayers = 0; //残り人数
+    float[] hp_maxs;
+    float[] hp1s_fil1s;
+    bool isGameSet = false;
 
     void Start()
     {
-        num_of_player = player_Info.Length;
-
-        GameSet_label = Gameset_canvas.gameObject.GetComponentInChildren<Text>();
-
-        for(int i = 0; i < num_of_player; i++)
-        {
-            player_Info[i].label = player_Info[i].canvas.gameObject.GetComponentInChildren<Text>();
-        }
-
+        Initialization();
     }
 
-
+    // Update is called once per frame
     void Update()
     {
-        for (int i = 0; i < player_Info.Length; i++)
-        {
-            if (player_Info[i].player == null)
+        if (!isGameSet) { 
+            for (int i = 0; i < player_Info.Length; i++)
             {
-                num_of_player--;
-                player_Info[i].wint_losef = false;
-
+                if (remainingPlayers == 0)
+                {
+                    StartCoroutine(GameSet());
+                }
+                else
+                {
+                    ShowHP(i);
+                    if (player_Info[i].player.player_status == Player.Status.Down)
+                    {
+                        player_Info[i].win_lose = false;
+                        remainingPlayers--;
+                    }
+                }
             }
-            if(num_of_player <= 1)
-            {
-                gameset_ON = true;
-                break;
-            }
-
-
         }
-        if(gameset_ON == true)
+        else
         {
-            StartCoroutine("Wait");
-            
+            if (Input.anyKeyDown && Time.timeScale == 0)
+            {
+                Time.timeScale = 1;
+                ReroadScene();
+            }
         }
-        
+       
     }
-    void Gameset()
+    void Initialization()
     {
-        
-
-
-
-
-
+        remainingPlayers = player_Info.Length;
+        hp_maxs = new float[remainingPlayers];
+        hp1s_fil1s = new float[remainingPlayers];
 
         for (int i = 0; i < player_Info.Length; i++)
         {
-           if(player_Info[i].wint_losef == true)
-            {
-                player_Info[i].label.text = player_Info[i].Win_message;
-                player_Info[i].canvas.SetActive(true);
-            }
-            if (player_Info[i].wint_losef == false)
-            {
-                player_Info[i].label.text = player_Info[i].Lose_message;
-                player_Info[i].canvas.SetActive(true);
-            }
+
+            hp_maxs[i] = player_Info[i].player.hitPoint;
+            hp1s_fil1s[i] = 1 / hp_maxs[i];
+            player_Info[i].win_lose = true;
+
+            player_Info[i].text.text = "";
         }
+        GameSet_Label.text = "";
+
+    }
+    IEnumerator GameSet()
+    {
         Time.timeScale = 0;
-        Destroy(this.gameObject);
+        isGameSet = true;
+        Time.timeScale = 1;
+        GameSet_Label.text = "GameSet";
+        yield return new WaitForSeconds(1);
+        GameSet_Label.text = "";
 
+        for (int i = 0; i < player_Info.Length; i++)
+        {
+            
+            if (player_Info[i].win_lose)
+            {
+                DeelWIN_or_LOSE(true, i);
+            }
+            else
+            {
+                DeelWIN_or_LOSE(false, i);
+            }
+            yield return new WaitForSeconds(0.5f);
+        }
+
+        for (int i = 0; i < player_Info.Length; i++)
+        {
+            player_Info[i].text.text = "";
+            yield return new WaitForSeconds(0.5f);
+        }
+        GameSet_Label.text = "Input anykey..";
+        Time.timeScale = 0;
     }
-    IEnumerator Wait()
+    void DeelWIN_or_LOSE(bool victory, int i)
     {
-        
-        GameSet_label.text = GamesetMessage;
-        Gameset_canvas.SetActive(true);
+        player_Info[i].image.enabled = false;
+       
+        if (victory)
+        {
+            player_Info[i].text.text = "WIN";
+        }
+        else
+        {
+            player_Info[i].text.text = "LOSE";
+        }
+    }
+    /// <summary>
+    /// player_Info[引数].hitPoint と
+    /// fillAmountを表示
+    /// </summary>
+    /// <param name="number"></param>
+    void ShowHP(int number)
+    {
+         player_Info[number].text.text = player_Info[number].player.hitPoint.ToString();
+         player_Info[number].image.fillAmount = 
+            1 - (hp1s_fil1s[number] * (hp_maxs[number] - player_Info[number].player.hitPoint));
+    }
+    void ReroadScene()
+    {
 
-        
-        yield return new WaitForSeconds(wait_Time);
-        Gameset_canvas.SetActive(false);
-        Gameset();
-        
-
+        isGameSet = false;
+        int sceneIndex = SceneManager.GetActiveScene().buildIndex;
+        SceneManager.LoadScene(sceneIndex);
     }
 }
 

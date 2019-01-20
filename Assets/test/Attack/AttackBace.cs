@@ -3,13 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class AttackBace{
-
+    
     public Animator animator;
 
     public bool isAttacking;
 
     public float AttackPoint;
-    public float Frame;
+
+    public float UpFukitobasiPower;
+    public float SideFukitobsiPower;
+
+    public Vector3 FukitobasiVector;
+
+    public float PreventTime;
+
+    public float KeepFrame;
 
     public void Start()
     {
@@ -33,14 +41,17 @@ class Attack_A : AttackBace
     protected override void SetAttack()
     {
         AttackPoint = 10;
-        Frame = 40;
+        KeepFrame = 40;
+        UpFukitobasiPower = 500;
+        SideFukitobsiPower = 200;
+ 
         isAttacking = true;
         animator.SetTrigger("Attack1");
     }
     protected override void Attacking()
     {
-        Frame--;
-        if (Frame <= 0)
+        KeepFrame--;
+        if (KeepFrame <= 0)
         {
             isAttacking = false;
         }
