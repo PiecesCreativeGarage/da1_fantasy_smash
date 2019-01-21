@@ -70,121 +70,130 @@ public class Player : MonoBehaviour {
         GetStatus();
         if (isGrounded)
         {
-
-            switch (player_status)
-            {
-                case Status.idle:
-                    Input_dir = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
-                    move.Update(transform, Input_dir);
-                    rotation.Update(this.transform, Input_dir);
-                    jump.Update();
-                    gravity.Update(true);
-                    guard.Update();
-                    attack.Update();
-                    break;
-                case Status.jumpping:
-                    jump.Jumpping(transform);
-                    break;
-                case Status.guarding:
-                    guard.Guarding(this.transform);
-                    if (jump.isjumpping == false)
-                    {
-                        GetStatus(Status.idle);
-                    }
-                    break;
-                case Status.attacking:
-                    attack.Attacking();
-                    if (attack.isAttacking == false)
-                    {
-                        GetStatus(Status.idle);
-                    }
-                    break;
-                case Status.damaged:
-
-                    switch (damage._EnumDameged)
-                    {
-                        case Damage._enumDameged.damaged:
-                            damage.Calcurate_HitPoint(ref this.hitPoint);
-                            damage._EnumDameged = Damage._enumDameged.fukitobi;
-                            break;
-                        case Damage._enumDameged.fukitobi:
-
-                            damage.Wait();
-                            damage.UPFukitobi();
-                            damage.SIDEFukitobi();
-
-                            if (damage.UPFukitobi() && damage.SIDEFukitobi() && damage.Wait())
-                            {
-                                damage._EnumDameged = Damage._enumDameged.end;
-                            }
-
-                            break;
-                        case Damage._enumDameged.end:
-                            GetStatus(Status.idle);
-                            damage._EnumDameged = Damage._enumDameged.damaged;
-                            break;
-
-                    }
-
-                    break;
-
-                case Status.Down:
-                    this.gameObject.SetActive(false);
-                    break;
-            }
+            GroundAction();
         }
         else
         {
-            switch (player_status)
-            {
-                case Status.idle:                   
-                    Input_dir = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
-                    move.Update(transform, Input_dir);
-                    rotation.Update(this.transform, Input_dir);
-                    gravity.Update(false);
-                    break;
-                case Status.jumpping:                    
-                    jump.Jumpping(this.transform);
-                    if (jump.isjumpping == false)
-                    {
-                        GetStatus(Status.idle);
-                    }
-                    break;
-                case Status.damaged:
-
-                    switch (damage._EnumDameged)
-                    {
-                        case Damage._enumDameged.damaged:
-                            damage.Calcurate_HitPoint(ref this.hitPoint);
-                            damage._EnumDameged = Damage._enumDameged.fukitobi;
-                            break;
-                        case Damage._enumDameged.fukitobi:
-
-                            damage.Wait();
-                            damage.UPFukitobi();
-                            damage.SIDEFukitobi();
-
-                            if (damage.UPFukitobi() && damage.SIDEFukitobi() && damage.Wait())
-                            {
-                                damage._EnumDameged = Damage._enumDameged.end;
-                            }
-
-                            break;
-                        case Damage._enumDameged.end:
-                            GetStatus(Status.idle);
-                            damage._EnumDameged = Damage._enumDameged.damaged;
-                            break;
-
-                    }
-
-                    break;
-
-                case Status.Down:
-                    this.gameObject.SetActive(false);
-                    break;
-            }
+            AirAction();
         }
     }
+
+    void GroundAction()
+    {
+        switch (player_status)
+        {
+            case Status.idle:
+                Input_dir = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
+                move.Update(transform, Input_dir);
+                rotation.Update(this.transform, Input_dir);
+                jump.Update();
+                gravity.Update(true);
+                guard.Update();
+                attack.Update();
+                break;
+            case Status.jumpping:
+                jump.Jumpping(transform);
+                break;
+            case Status.guarding:
+                guard.Guarding(this.transform);
+                if (jump.isjumpping == false)
+                {
+                    GetStatus(Status.idle);
+                }
+                break;
+            case Status.attacking:
+                attack.Attacking();
+                if (attack.isAttacking == false)
+                {
+                    GetStatus(Status.idle);
+                }
+                break;
+            case Status.damaged:
+
+                switch (damage._EnumDameged)
+                {
+                    case Damage._enumDameged.damaged:
+                        damage.Calcurate_HitPoint(ref this.hitPoint);
+                        damage._EnumDameged = Damage._enumDameged.fukitobi;
+                        break;
+                    case Damage._enumDameged.fukitobi:
+
+                        damage.Wait();
+                        damage.UPFukitobi();
+                        damage.SIDEFukitobi();
+
+                        if (damage.UPFukitobi() && damage.SIDEFukitobi() && damage.Wait())
+                        {
+                            damage._EnumDameged = Damage._enumDameged.end;
+                        }
+
+                        break;
+                    case Damage._enumDameged.end:
+                        GetStatus(Status.idle);
+                        damage._EnumDameged = Damage._enumDameged.damaged;
+                        break;
+
+                }
+
+                break;
+
+            case Status.Down:
+                this.gameObject.SetActive(false);
+                break;
+        }
+    }
+    void AirAction()
+    {
+        switch (player_status)
+        {
+            case Status.idle:
+                Input_dir = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
+                move.Update(transform, Input_dir);
+                rotation.Update(this.transform, Input_dir);
+                gravity.Update(false);
+                break;
+            case Status.jumpping:
+                jump.Jumpping(this.transform);
+                if (jump.isjumpping == false)
+                {
+                    GetStatus(Status.idle);
+                }
+                break;
+            case Status.damaged:
+
+                switch (damage._EnumDameged)
+                {
+                    case Damage._enumDameged.damaged:
+                        damage.Calcurate_HitPoint(ref this.hitPoint);
+                        damage._EnumDameged = Damage._enumDameged.fukitobi;
+                        break;
+                    case Damage._enumDameged.fukitobi:
+
+                        damage.Wait();
+                        damage.UPFukitobi();
+                        damage.SIDEFukitobi();
+
+                        if (damage.UPFukitobi() && damage.SIDEFukitobi() && damage.Wait())
+                        {
+                            damage._EnumDameged = Damage._enumDameged.end;
+                        }
+
+                        break;
+                    case Damage._enumDameged.end:
+                        GetStatus(Status.idle);
+                        damage._EnumDameged = Damage._enumDameged.damaged;
+                        break;
+
+                }
+
+                break;
+
+            case Status.Down:
+                this.gameObject.SetActive(false);
+                break;
+        }
+    }
+
     private void GetStatus()
     {
         if (hitPoint <= 0)
