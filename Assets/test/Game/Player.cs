@@ -9,7 +9,7 @@ public class Player : MonoBehaviour {
     public float moveSpeed;
     public float jumpPower;
     public float gravityScale;
-
+    public float airResistance;
     public float hitPoint;
 
     public GameObject guardPrefab;
@@ -21,6 +21,8 @@ public class Player : MonoBehaviour {
     Guard guard;
     Attack attack;
     Damage damage;
+
+    public Damager damager;
 
     [System.Serializable]
     public class SetUseAttack
@@ -44,30 +46,27 @@ public class Player : MonoBehaviour {
 
     private void Awake()
     {
-        rotation = new Rotation();
-        move = new Move();
+        rotation = new Rotation(transform, cam);
+        move = new Move(transform, animator);
         jump = new Jump();
-        gravity = new Gravity();
-        guard = new Guard();
-        attack = new Attack();
-        damage = new Damage();
+        gravity = new Gravity(transform);
+        guard = new Guard(guardPrefab);
+        attack = new Attack(AttacksInfo, animator, transform);
+        damage = new Damage(animator, transform);
+        damager = GetComponent<Damager>();
     }
     private void Start()
-    { 
-
-        rotation.Start(this.cam);
-        move.Start(moveSpeed, animator);
-        jump.Start(jumpPower, gravityScale);
-        gravity.Start(gravityScale, this.transform);
-        guard.Start(30, "g", guardPrefab);
-        attack.Start(AttacksInfo, animator, transform);
+    {
+        move.Start(moveSpeed, airResistance);
+        jump.Start(gravityScale, jumpPower, false);
+        gravity.gravityScale = this.gravityScale;
 
     }
     private void Update()
     {
-
-        isGrounded = GetGrounded(transform.position + new Vector3(0, 2), 0.5f, -transform.up, 3f);
         GetStatus();
+        isGrounded = GetGrounded(transform.position + new Vector3(0, 2), 0.5f, -transform.up, 3f);
+        Input_dir = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
         if (isGrounded)
         {
             GroundAction();
@@ -83,57 +82,50 @@ public class Player : MonoBehaviour {
         switch (player_status)
         {
             case Status.idle:
-                Input_dir = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
-                move.Update(transform, Input_dir);
-                rotation.Update(this.transform, Input_dir);
-                jump.Update();
-                gravity.Update(true);
-                guard.Update();
-                attack.Update();
+                
+                move.Update(Input_dir, true);
+                rotation.Update(Input_dir);
+                gravity.Update(true, gravityScale);
                 break;
             case Status.jumpping:
                 jump.Jumpping(transform);
                 break;
             case Status.guarding:
+                damage.UPFukitobi();
+                damage.SIDEFukitobi();
                 guard.Guarding(this.transform);
-                if (jump.isjumpping == false)
-                {
-                    GetStatus(Status.idle);
+                if (guard.isGuarding == false)
+                {                                   
+                    GetStatus(Status.idle);                    
                 }
                 break;
             case Status.attacking:
+
                 attack.Attacking();
+
+                GiveDamage(
+                    attack.attackPoint,
+                    attack.upfukitobasiPower,
+                    attack.sidefukitobasiPower,
+                    attack.fukitobasiVector,
+                    attack.preventTime);
+
                 if (attack.isAttacking == false)
                 {
+                    GiveDamage(0, 0, 0, Vector3.zero, 0);
+                    
                     GetStatus(Status.idle);
                 }
                 break;
             case Status.damaged:
-
-                switch (damage._EnumDameged)
-                {
-                    case Damage._enumDameged.damaged:
-                        damage.Calcurate_HitPoint(ref this.hitPoint);
-                        damage._EnumDameged = Damage._enumDameged.fukitobi;
-                        break;
-                    case Damage._enumDameged.fukitobi:
-
-                        damage.Wait();
-                        damage.UPFukitobi();
-                        damage.SIDEFukitobi();
-
-                        if (damage.UPFukitobi() && damage.SIDEFukitobi() && damage.Wait())
-                        {
-                            damage._EnumDameged = Damage._enumDameged.end;
-                        }
-
-                        break;
-                    case Damage._enumDameged.end:
-                        GetStatus(Status.idle);
-                        damage._EnumDameged = Damage._enumDameged.damaged;
-                        break;
-
-                }
+            
+                 damage.Wait();
+                 damage.UPFukitobi();
+                 damage.SIDEFukitobi();
+                 if (damage.UPFukitobi() && damage.SIDEFukitobi() && damage.Wait())
+                 {
+                      GetStatus(Status.idle);
+                 }
 
                 break;
 
@@ -147,43 +139,45 @@ public class Player : MonoBehaviour {
         switch (player_status)
         {
             case Status.idle:
-                Input_dir = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
-                move.Update(transform, Input_dir);
-                rotation.Update(this.transform, Input_dir);
-                gravity.Update(false);
+               
+                move.Update(Input_dir, false);
+                rotation.Update(Input_dir);
+                gravity.Update(false, gravityScale);
                 break;
+
             case Status.jumpping:
                 jump.Jumpping(this.transform);
+                move.Update(Input_dir, false);
+                rotation.Update(Input_dir);
                 if (jump.isjumpping == false)
                 {
                     GetStatus(Status.idle);
                 }
                 break;
-            case Status.damaged:
-
-                switch (damage._EnumDameged)
+            case Status.guarding:
+                damage.UPFukitobi();
+                damage.SIDEFukitobi();
+                gravity.Update(isGrounded, gravityScale);
+                guard.Guarding(this.transform);
+                if (guard.isGuarding == false)
                 {
-                    case Damage._enumDameged.damaged:
-                        damage.Calcurate_HitPoint(ref this.hitPoint);
-                        damage._EnumDameged = Damage._enumDameged.fukitobi;
-                        break;
-                    case Damage._enumDameged.fukitobi:
+                    GetStatus(Status.idle);
+                }
+                break;
+            case Status.damaged:
+  
+                damage.Wait();
+                        
+                damage.UPFukitobi();
+                if (damage.UPFukitobi())
+                {
+                    gravity.Update(false, gravityScale);
+                }
+                damage.SIDEFukitobi();
 
-                        damage.Wait();
-                        damage.UPFukitobi();
-                        damage.SIDEFukitobi();
-
-                        if (damage.UPFukitobi() && damage.SIDEFukitobi() && damage.Wait())
-                        {
-                            damage._EnumDameged = Damage._enumDameged.end;
-                        }
-
-                        break;
-                    case Damage._enumDameged.end:
-                        GetStatus(Status.idle);
-                        damage._EnumDameged = Damage._enumDameged.damaged;
-                        break;
-
+                if (damage.UPFukitobi() && damage.SIDEFukitobi() && damage.Wait())
+                {
+                    GetStatus(Status.idle);
                 }
 
                 break;
@@ -193,7 +187,7 @@ public class Player : MonoBehaviour {
                 break;
         }
     }
-
+    
     private void GetStatus()
     {
         if (hitPoint <= 0)
@@ -202,18 +196,29 @@ public class Player : MonoBehaviour {
         }
         else
         {
-            if (jump.isjumpping)
+            if (isGrounded)
             {
-                player_status = Status.jumpping;
-            }
-            if (guard.isGuarding)
-            {
-                player_status = Status.guarding;
-            }
-            if (attack.isAttacking)
-            {
-
-                player_status = Status.attacking;
+                if (player_status == Status.idle)
+                {
+                    if (Input.GetKeyDown(KeyCode.Space))
+                    {
+                        jump.Start(gravityScale, jumpPower, true);
+                        GetStatus(Status.jumpping);
+                    }
+                    if (Input.GetKeyDown(KeyCode.G))
+                    {
+                        guard.Start();
+                        GetStatus(Status.guarding);
+                    }
+                    for (int i = 0; i < AttacksInfo.Length; i++)
+                    {
+                        if (Input.GetKeyDown(AttacksInfo[i].KeyCode))
+                        {
+                            attack.Start(i);
+                            GetStatus(Status.attacking);
+                        }
+                    }
+                }
             }
         }
     }
@@ -243,90 +248,123 @@ public class Player : MonoBehaviour {
         }
     }
 
+    void GiveDamage(
+        float DamagePoint, 
+        float UpFukitobasiPower, 
+        float SideFukitobsiPower, 
+        Vector3 FukitobasiVector,
+        float PreventTime)
+    {
+        damager.DamagePoint = DamagePoint;
+        damager.UpFukitobasiPower = UpFukitobasiPower;
+        damager.SideFukitobsiPower = SideFukitobsiPower;
+        damager.FukitobasiVector = FukitobasiVector;
+        damager.PreventTime = PreventTime;
+    }
     private void OnTriggerEnter(Collider other)
     {
-        
-        if (other.GetComponentInParent<Player>() != null)
+        if (other.GetComponent<Damager>() != null)
         {
-            Player otherPlayer = other.GetComponentInParent<Player>();
-            GetStatus(Status.damaged);
-            damage.Start(otherPlayer.attack.attackPoint,
-                         otherPlayer.attack.upfukitobasiPower, 
-                         otherPlayer.attack.sidefukitobasiPower, 
-                         otherPlayer.attack.fukitobasiVector, 
-                         otherPlayer.attack.preventTime, 
-                         animator, transform);
-            
-        }
-        else if(other.GetComponent<Damager>() != null)
-        {
-            Damager damager = other.GetComponent<Damager>();
-            GetStatus(Status.damaged);
-            damage.Start(damager.DamagePoint, 
-                         damager.UpFukitobasiPower,
-                         damager.SideFukitobsiPower,
-                         damager.FukitobasiVector,
-                         damager.PreventTime, 
-                         animator, transform);
-        }
-    }
-    class Move
-    {
-        float moveSpeed;
-        Animator animator;
-        /// <summary>
-        /// SpeedとAnimatorの初期化
-        /// </summary>
-        /// <param name="PmoveSpeed"></param>
-        /// <param name="animator"></param>
-        public void Start(float PmoveSpeed,Animator animator)
-        {
-            moveSpeed = PmoveSpeed;
-            this.animator = animator;
-        }
-        /// <summary>
-        /// Animation再生とPositionの移動
-        /// </summary>
-        /// <param name="transform"></param>
-        /// <param name="input"></param>
-        public void Update(Transform transform, Vector3 input)
-        {
-            if (input.magnitude != 0)
+            Damager otherDamager = other.GetComponent<Damager>();
+
+            if (guard.transitionProperty == Guard.Transition.Guarding)
             {
-                animator.SetBool("Run", true);
-                transform.position += transform.forward * moveSpeed * Time.fixedDeltaTime;
+                if (guard.JustFrameProperty >= 0)//ジャストガード
+                {
+                    guard.GuardingFrame += otherDamager.PreventTime / 4;
+                }
+                else
+                {
+                    guard.GuardingFrame += otherDamager.PreventTime / 2;
+                    damage.Calcurate_HitPoint(ref hitPoint, otherDamager.DamagePoint / 10);
+
+                    damage.Start(
+                             gravityScale,
+                             airResistance,
+                             otherDamager.UpFukitobasiPower / 1.5f,
+                             otherDamager.SideFukitobsiPower / 1.5f,
+                             otherDamager.FukitobasiVector,
+                             0);
+                    
+                }
             }
             else
             {
-                animator.SetBool("Run", false);
+                GetStatus(Status.damaged);
+                damage.Start(
+                             gravityScale,
+                             airResistance,
+                             otherDamager.UpFukitobasiPower,
+                             otherDamager.SideFukitobsiPower,
+                             otherDamager.FukitobasiVector,
+                             otherDamager.PreventTime);
+                
+                damage.Calcurate_HitPoint(ref hitPoint, otherDamager.DamagePoint);
+            }
+        }
+
+    }
+
+    class Move
+    {
+        float moveSpeed;
+        float airResistance;
+        Animator animator;
+        Transform transform;
+  
+        public Move(Transform transform, Animator animator)
+        {
+            this.transform = transform;
+            this.animator = animator;
+        }
+        public void Start(float moveSpeed, float airResistance)
+        {
+            this.moveSpeed = moveSpeed;
+            this.airResistance = airResistance;
+        }
+        public void Update(Vector3 input, bool isGrounded)
+        {
+            if (isGrounded)
+            {
+                if (input.magnitude != 0)
+                {
+                    animator.SetBool("Run", true);
+                    transform.position += transform.forward * moveSpeed * Time.fixedDeltaTime;
+                }
+                else
+                {
+                    animator.SetBool("Run", false);
+                }
+            }
+            else
+            {
+                if (input.magnitude != 0)
+                {                   
+                    transform.position += transform.forward * (moveSpeed - airResistance) * Time.fixedDeltaTime;
+                    animator.SetBool("Run", false);
+                }
             }
         }
     }
 
     class Rotation
     {
+        Transform transform;
         GameObject cam;
-        bool use_cam;
-        /// <summary>
-        /// 使うCameraを設定
-        /// </summary>
-        /// <param name="Pcam"></param>
-        public void Start(GameObject Pcam)
+        public bool use_cam;
+ 
+        public Rotation(Transform transform ,GameObject Pcam)
         {
+            this.transform = transform;
             cam = Pcam;
             if (cam != null)
             {
                 use_cam = true;
             }
         }
-        /// <summary>
-        /// 受け取ったTransformを回転
-        /// Camera使う　Cameraに向き合わせる　　
-        /// 違う　Quaternion.LookRotationで
-        /// </summary>
-        /// <param name="transform"></param>
-        /// <param name="dir"></param>
-        public void Update(Transform transform, Vector3 dir)
+
+
+        public void Update(Vector3 dir)
         {
             if (use_cam)
             {
@@ -353,24 +391,24 @@ public class Player : MonoBehaviour {
 
     class Gravity
     {
-        float gravityScale;
+        public float gravityScale;
         float value;
         Transform transform;
-        public void Start(float gravityScale, Transform transform)
+        public Gravity(Transform transform)
         {
-            this.gravityScale = gravityScale;
             this.transform = transform;
       
         }
-        public void Update(bool isGounded)
+        public void Update(bool isGounded, float gravityScale)
         {
+            this.gravityScale = gravityScale;
             if (isGounded)
             {
                 value = 0;
             }
             else
             {
-                value -= gravityScale * Time.fixedDeltaTime;
+                value -= gravityScale / 15;
                 transform.position += new Vector3(0, value * Time.fixedDeltaTime);
             }
         }
@@ -382,36 +420,18 @@ public class Player : MonoBehaviour {
         float velocity;
         float dist;
         public bool isjumpping;
-
-        /// <summary>
-        /// ジャンプ力と重力の設定
-        /// </summary>
-        /// <param name="Pjumppow"></param>
-        /// <param name="Pgravity"></param>
-        public void Start(float Pjumppow, float Pgravity)
+        
+        public void Start(float gravityScale, float jumpPower, bool isJumpping)
         {
-            jumpPow = Pjumppow;
-            gravityScale = Pgravity;
-        }
-        /// <summary>
-        /// Key入力の判定
-        /// </summary>
-        public void Update()
-        {
-
-
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                velocity = jumpPow;
-                isjumpping = true;
-
-            }
-
+            jumpPow = jumpPower;
+            this.gravityScale = gravityScale;
+            velocity = jumpPow;
+            isjumpping = isJumpping;
         }
         public void Jumpping(Transform transform)
         {
             velocity -= gravityScale;
-            dist = velocity * Time.fixedDeltaTime;
+            dist = velocity / 15;
             transform.position += new Vector3(0, dist * Time.fixedDeltaTime);
             if (velocity < 0)
             {
@@ -428,18 +448,31 @@ public class Player : MonoBehaviour {
         public bool isGuarding;
         GameObject gobj;
         bool gobj_exist;
-        int waitFrame_value;
-        int waitFrame_for_Cal;
 
-        string keyCode;
+        public float GuardingFrame;
 
-        public void Start(int waitFrame, string keycode_Guard, GameObject guard_Object)
+        float StartFrame, EndFrame, JustGuardFrame;
+        public float JustFrameProperty
         {
-            waitFrame_value = waitFrame;
-            keyCode = keycode_Guard;
-            gobj = Instantiate(guard_Object, Vector3.zero, Quaternion.identity);
-            if (gobj != null)
+            get { return JustGuardFrame; }
+        }
+
+        public enum Transition
+        {
+            Start, Guarding, End,
+        }
+        Transition transition;
+
+        public Transition transitionProperty {
+            get { return transition; }
+        }
+        public Guard(GameObject guard_Object)
+        {
+
+            if (guard_Object != null)
             {
+                gobj = Instantiate(guard_Object, Vector3.zero, Quaternion.identity);
+                gobj.transform.localScale = new Vector3(3.5f, 3.5f, 3.5f);
                 gobj_exist = true;
                 gobj.SetActive(false);
             }
@@ -448,40 +481,59 @@ public class Player : MonoBehaviour {
                 gobj_exist = false;
             }
         }
-        /// <summary>
-        /// Key入力の判定
-        /// </summary>
-        public void Update()
-        {
 
-            if (Input.GetKeyDown(keyCode))
-            {
-                waitFrame_for_Cal = waitFrame_value;
-                if (gobj_exist)
-                {
-                    gobj.SetActive(true);
-                }
-                isGuarding = true;
-            }
+        public void Start()
+        {
+            
+            StartFrame = 8f; GuardingFrame = 15f; //時間を設定
+            EndFrame = 10f; JustGuardFrame = 3f;
+
+            isGuarding = true;
+            transition = Transition.Start;
+            
 
         }
         public void Guarding(Transform Guard_Posi)
         {
-            gobj.transform.position = Guard_Posi.position;
-            if (waitFrame_for_Cal > 0)
-                waitFrame_for_Cal--;
+            gobj.transform.position = Guard_Posi.position + new Vector3(0, 1.25f);
 
-            if (!Input.GetKey(keyCode))
-            {
-                if (waitFrame_for_Cal == 0)
-                {
+
+            switch (transition) {
+                case Transition.Start:
+                    StartFrame--;
+                    if(StartFrame <= 0)
+                    {
+                        transition = Transition.Guarding;
+                    }
+                    break;
+                case Transition.Guarding:
                     if (gobj_exist)
                     {
-                        gobj.SetActive(false);
+                        gobj.SetActive(true);
                     }
-                    isGuarding = false;
-                }
-            }
+
+                    GuardingFrame--;
+                    JustGuardFrame--;
+                    if (!Input.GetKey(KeyCode.G) && GuardingFrame <= 0)
+                    {
+
+                        if (gobj_exist)
+                        {
+                            gobj.SetActive(false);
+                        }
+                        transition = Transition.End;
+                        
+                    }
+                    break;
+                case Transition.End:
+                    EndFrame--;
+                    if(EndFrame <= 0)
+                    {
+                        isGuarding = false;
+                    }
+                    break;
+                    
+            } 
         }
     }
     class Attack
@@ -505,7 +557,7 @@ public class Player : MonoBehaviour {
         /// <param name="setUseAttacks"></param>
         /// <param name="animator"></param>
         /// <param name="transform"></param>
-        public void Start(SetUseAttack[] setUseAttacks, Animator animator,Transform transform)
+        public Attack(SetUseAttack[] setUseAttacks, Animator animator,Transform transform)
         {
             Attacks = new SetUseAttack[setUseAttacks.Length];
             this.transform = transform;
@@ -516,28 +568,17 @@ public class Player : MonoBehaviour {
 
             }
         }
-        public void Update()
-        {
-            for (int i = 0; i < Attacks.Length; i++)
+        public void Start(int number)
+        {     
+            SetAttack(Attacks[number].AttackNumver);
+            attackBace.FukitobasiVector += transform.forward;
+            attackBace.animator = this.animator;
+            attackBace.Start();
+
+            if (!(attackBace == null))
             {
-
-                if (Input.GetKeyDown(Attacks[i].KeyCode))
-                {
-                  
-                    SetAttack(Attacks[i].AttackNumver);
-                    attackBace.FukitobasiVector += transform.forward;
-                    attackBace.animator = this.animator;
-                    attackBace.Start();
-
-                    if (!(attackBace == null))
-                    {
-                        isAttacking = true;
-                    }
-
-                }
+                isAttacking = true;
             }
-
-
         }
         void SetAttack(int Numver)
         {
@@ -569,12 +610,8 @@ public class Player : MonoBehaviour {
     }
     class Damage
     {
-        public enum _enumDameged　//攻撃を受けたときの状態の変化
-        {
-            damaged, fukitobi, end,
-        }
-        public _enumDameged _EnumDameged;
-
+        float gravityScale;
+        float airResistance;
         float damagePoint;
         float upfukitobiPower;
         float sidefukitobiPower;
@@ -583,18 +620,24 @@ public class Player : MonoBehaviour {
         float waitTime;
         Transform transform;
         Animator animator;
-        public void Start(float DamagePoint,float UpFukitobiPower,float SideFukitobiPower, Vector3 FukitobiVector, float WaitTime, Animator animator, Transform transform)
+        public Damage(Animator animator, Transform transform)
         {
-            damagePoint = DamagePoint;
+            this.animator = animator;
+            this.transform = transform;
+        }
+        public void Start(float gravityScale, float airResistance, float UpFukitobiPower,float SideFukitobiPower, Vector3 FukitobiVector, float WaitTime)
+        {
+            this.gravityScale = gravityScale;
+            this.airResistance = airResistance;
             upfukitobiPower = UpFukitobiPower;
             sidefukitobiPower = SideFukitobiPower;
             fukitobiVector = FukitobiVector;
             this.waitTime = WaitTime;
-            this.animator = animator;
-            this.transform = transform;
+
         }
-        public void Calcurate_HitPoint(ref float HitPoint)
+        public void Calcurate_HitPoint(ref float HitPoint, float damagePoint)
         {
+            this.damagePoint = damagePoint;
             HitPoint -= damagePoint;
         }
         /// <summary>
@@ -604,10 +647,10 @@ public class Player : MonoBehaviour {
         public bool UPFukitobi()
         {
 
-            if (transform.position.y > 0 || upfukitobiPower > 0)
+            if (upfukitobiPower > 0)
             {
-                upfukitobiPower -= 9.8f;
-                dist = upfukitobiPower * Time.fixedDeltaTime;
+                upfukitobiPower -= gravityScale;
+                dist = upfukitobiPower / 15;
                 transform.position += new Vector3(0, dist * Time.fixedDeltaTime);
                 return false;
             }
@@ -615,8 +658,7 @@ public class Player : MonoBehaviour {
             {
                 return true;
             }
-            
-           
+                      
         }
         /// <summary>
         /// Finished True
@@ -624,12 +666,11 @@ public class Player : MonoBehaviour {
         /// <returns></returns>
         public bool SIDEFukitobi()
         {
-
             if (sidefukitobiPower > 0)
             {
                 
-                sidefukitobiPower -= 3;
-                dist = sidefukitobiPower * Time.fixedDeltaTime;
+                sidefukitobiPower -= airResistance;
+                dist = sidefukitobiPower / 15;
                 transform.position += fukitobiVector * dist * Time.fixedDeltaTime;
                 return false;
             }
@@ -646,8 +687,44 @@ public class Player : MonoBehaviour {
         public bool Wait()
         {
             waitTime--;
-            animator.SetBool("Run", false);
+            Debug.Log(waitTime);
             return (waitTime <= 0);
         }
+    }
+}
+
+public class Wait
+{
+    public float waitFrame;
+    bool isSet;
+    public void Set_waitFrame(float waitFrame)
+    {
+        if (!isSet)
+        {
+            this.waitFrame = waitFrame;
+            isSet = true;
+        }
+    }
+    public bool? Waiting()
+    {
+        if (isSet)
+        {
+            if (waitFrame <= 0)
+            {
+                waitFrame = 0;
+                isSet = false;
+                return true;
+            }
+            else
+            {
+                waitFrame--;
+                return false;
+            }
+        }
+        else
+        {
+            return null;
+        }
+ 
     }
 }
