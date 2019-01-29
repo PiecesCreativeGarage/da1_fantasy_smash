@@ -46,6 +46,7 @@ public class Player : MonoBehaviour {
 
     public Status player_status;
     public bool isGrounded;
+    public bool isHit_against_theWall;
 
     private void Awake()
     {
@@ -70,7 +71,7 @@ public class Player : MonoBehaviour {
     private void Update()
     {
         GetStatus();
-        if (GetGrounded(transform.position + new Vector3(0, 2), 0.5f, -transform.up, 3f))
+        if (GetGrounded(transform.position + new Vector3(0, 0.5f), 0.5f, -transform.up, 0.1f))
         {
             if (!isGrounded)
             {
@@ -79,11 +80,16 @@ public class Player : MonoBehaviour {
                 player_status = Status.waiting;
                 isGrounded = true;
             }
-        }
+        }        
         else
         {
             isGrounded = false;
         }
+
+        isHit_against_theWall = GetGrounded(transform.position + new Vector3(0, 2),
+                                            1f, transform.forward, 3f);
+                                        
+
         Input_dir = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
         if (isGrounded)
         {
@@ -101,7 +107,7 @@ public class Player : MonoBehaviour {
         {
             case Status.idle:
                 
-                move.Update(Input_dir, true);
+                move.Update(Input_dir, true, isHit_against_theWall);
                 rotation.Update(Input_dir);
                 gravity.Update(true, gravityScale);
                 break;
@@ -116,7 +122,7 @@ public class Player : MonoBehaviour {
                     if (Input_dir.magnitude != 0)
                     {
                         guard.gobj.SetActive(false);
-                        step.Start(20, 3, 3, Input_dir, true);
+                        step.Start(20, 3, Input_dir, true);
                         GetStatus(Status.stepping);
                         break;
                     }
@@ -149,7 +155,7 @@ public class Player : MonoBehaviour {
                 }
                 break;
             case Status.stepping:
-                step.Stepping();
+                step.Stepping(isHit_against_theWall);
                 isInvincible = step.invincibleProperty > 0 ? true : false;
                 if (!step.isStepping)
                 {
@@ -185,14 +191,14 @@ public class Player : MonoBehaviour {
         {
             case Status.idle:
                
-                move.Update(Input_dir, false);
+                move.Update(Input_dir, false, isHit_against_theWall);
                 rotation.Update(Input_dir);
                 gravity.Update(false, gravityScale);
                 break;
 
             case Status.jumpping:
                 jump.Jumpping(this.transform);
-                move.Update(Input_dir, false);
+                move.Update(Input_dir, false, isHit_against_theWall);
                 rotation.Update(Input_dir);
                 if (jump.isjumpping == false)
                 {
@@ -210,7 +216,7 @@ public class Player : MonoBehaviour {
                 }
                 break;
             case Status.stepping:
-                step.Stepping();
+                step.Stepping(isHit_against_theWall);
                 isInvincible = step.invincibleProperty > 0 ? true : false;
                 if (!step.isStepping)
                 {
@@ -384,26 +390,29 @@ public class Player : MonoBehaviour {
             this.airResistance = airResistance;
             this.animationName = animationName;
         }
-        public void Update(Vector3 input, bool isGrounded)
+        public void Update(Vector3 input, bool isGrounded, bool isHit_against_theWall)
         {
-            if (isGrounded)
+            if (!isHit_against_theWall)
             {
-                if (input.magnitude != 0)
+                if (isGrounded)
                 {
-                    animator.SetBool(animationName, true);
-                    transform.position += transform.forward * moveSpeed * Time.fixedDeltaTime;
+                    if (input.magnitude != 0)
+                    {
+                        animator.SetBool(animationName, true);
+                        transform.position += transform.forward * moveSpeed * Time.fixedDeltaTime;
+                    }
+                    else
+                    {
+                        animator.SetBool(animationName, false);
+                    }
                 }
                 else
                 {
-                    animator.SetBool(animationName, false);
-                }
-            }
-            else
-            {
-                if (input.magnitude != 0)
-                {                   
-                    transform.position += transform.forward * (moveSpeed - airResistance) * Time.fixedDeltaTime;
-                    animator.SetBool(animationName, false);
+                    if (input.magnitude != 0)
+                    {
+                        transform.position += transform.forward * (moveSpeed - airResistance) * Time.fixedDeltaTime;
+                        animator.SetBool(animationName, false);
+                    }
                 }
             }
         }
@@ -787,10 +796,9 @@ class Step
     {
         this.transform = transform;
     }
-    public void Start(float moveSpeed, float moveDistance, float invincibleFrame, Vector3 direction, bool isStepping)
+    public void Start(float moveSpeed, float invincibleFrame, Vector3 direction, bool isStepping)
     {
         this.moveSpeed = moveSpeed;
-        this.moveDistance = moveDistance;
         this.direction = direction;
         this.invincibleFrame = invincibleFrame;
 
@@ -802,7 +810,7 @@ class Step
         }
     }
 
-    public void Stepping()
+    public void Stepping(bool is_in_front_of_wall)
     {
         switch (transition) {
             case Transition.Start:
@@ -815,18 +823,20 @@ class Step
             case Transition.Stepping:
                 invincibleFrame--;
                 stepFrame--;
-                if (nowDistance >= moveDistance)
+
+                if (stepFrame <= 0)
                 {
-                    if (stepFrame <= 0)
-                    {
-                        nowDistance = 0;
-                        transition = Transition.End;
-                    }
+
+                    transition = Transition.End;
+
                 }
                 else
                 {
-                    transform.position += direction * moveSpeed * Time.fixedDeltaTime;
-                    nowDistance += moveSpeed * Time.fixedDeltaTime;
+                    if (!is_in_front_of_wall)
+                    {
+                        transform.position += direction * moveSpeed * Time.fixedDeltaTime;
+
+                    }
                 }
                 break;
             case Transition.End:
