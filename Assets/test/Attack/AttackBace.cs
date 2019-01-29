@@ -7,7 +7,7 @@ public abstract class AttackBace{
     public Animator animator;
 
     public bool isAttacking;
-
+    public bool is_UnableTo_Guard;
     public float AttackPoint;
 
     public float UpFukitobasiPower;
@@ -17,7 +17,18 @@ public abstract class AttackBace{
 
     public float PreventTime;
 
-    public float KeepFrame;
+    protected float starFrame, endFrame;
+    public float AttakingFrame;
+
+    public enum Transition
+    {
+        Start, Attacking, End,
+    }
+    protected Transition transition;
+    public Transition transitionProperty
+    {
+        get { return transition; }
+    }
 
     public void Start()
     {
@@ -32,7 +43,19 @@ public abstract class AttackBace{
         }
     }
 
-    protected virtual void Attacking() { }
+    protected virtual void Attacking()
+    {
+        switch (transition)
+        {
+            case Transition.Start:
+                break;
+            case Transition.Attacking:
+                break;
+            case Transition.End:
+                break;
+
+        }
+    }
 
     protected virtual void SetAttack() { }
 }
@@ -41,19 +64,41 @@ class Attack_A : AttackBace
     protected override void SetAttack()
     {
         AttackPoint = 10;
-        KeepFrame = 40;
+        starFrame = 20;
+        AttakingFrame = 3;
+        endFrame = 40;
         UpFukitobasiPower = 500;
         SideFukitobsiPower = 200;
- 
+        is_UnableTo_Guard = true;
         isAttacking = true;
         animator.SetTrigger("Attack1");
     }
     protected override void Attacking()
     {
-        KeepFrame--;
-        if (KeepFrame <= 0)
+        switch (transition)
         {
-            isAttacking = false;
+            case Transition.Start:
+                starFrame--;
+                if(starFrame <= 0)
+                {
+                    transition = Transition.Attacking;
+                }
+                break;
+            case Transition.Attacking:
+                AttakingFrame--;
+                if(AttakingFrame <= 0)
+                {
+                    transition = Transition.End;
+                }
+                break;
+            case Transition.End:
+                endFrame--;
+                if(endFrame <= 0)
+                {
+                    isAttacking = false;
+                }
+                break;
+
         }
     }
 }

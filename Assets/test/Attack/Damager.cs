@@ -11,5 +11,7 @@ public class Damager : MonoBehaviour
     public Vector3 FukitobasiVector;
 
     public float PreventTime;
+
+    public bool is_UnableTo_Guard;
 }
 

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Step : MonoBehaviour {
+class stepaaa : MonoBehaviour {
 
     float x, z;
     public bool isAble;

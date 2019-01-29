@@ -11,9 +11,10 @@ public class Player : MonoBehaviour {
     public float gravityScale;
     public float airResistance;
     public float hitPoint;
-
+    public bool isInvincible;
     public GameObject guardPrefab;
     public GameObject cam;
+    public string[] animationNames = {"", "Run"};
     Rotation rotation;
     Move move;
     Gravity gravity;
@@ -21,6 +22,8 @@ public class Player : MonoBehaviour {
     Guard guard;
     Attack attack;
     Damage damage;
+    Step step;
+    Wait wait;
 
     public Damager damager;
 
@@ -37,7 +40,7 @@ public class Player : MonoBehaviour {
 
     public enum Status
     {
-        idle, jumpping, guarding, attacking, damaged, Down,
+        idle, jumpping, guarding, attacking, stepping, damaged, waiting, Down,
     }
 
 
@@ -53,11 +56,13 @@ public class Player : MonoBehaviour {
         guard = new Guard(guardPrefab);
         attack = new Attack(AttacksInfo, animator, transform);
         damage = new Damage(animator, transform);
+        step = new Step(transform);
         damager = GetComponent<Damager>();
+        wait = new Wait();
     }
     private void Start()
     {
-        move.Start(moveSpeed, airResistance);
+        move.Start(moveSpeed, airResistance, animationNames[1]);
         jump.Start(gravityScale, jumpPower, false);
         gravity.gravityScale = this.gravityScale;
 
@@ -65,7 +70,20 @@ public class Player : MonoBehaviour {
     private void Update()
     {
         GetStatus();
-        isGrounded = GetGrounded(transform.position + new Vector3(0, 2), 0.5f, -transform.up, 3f);
+        if (GetGrounded(transform.position + new Vector3(0, 2), 0.5f, -transform.up, 3f))
+        {
+            if (!isGrounded)
+            {
+
+                wait.Set(10, 0); //着地硬直
+                player_status = Status.waiting;
+                isGrounded = true;
+            }
+        }
+        else
+        {
+            isGrounded = false;
+        }
         Input_dir = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
         if (isGrounded)
         {
@@ -93,7 +111,18 @@ public class Player : MonoBehaviour {
             case Status.guarding:
                 damage.UPFukitobi();
                 damage.SIDEFukitobi();
+                if (guard.transitionProperty == Guard.Transition.Guarding)
+                {
+                    if (Input_dir.magnitude != 0)
+                    {
+                        guard.gobj.SetActive(false);
+                        step.Start(20, 3, 3, Input_dir, true);
+                        GetStatus(Status.stepping);
+                        break;
+                    }
+                }
                 guard.Guarding(this.transform);
+               
                 if (guard.isGuarding == false)
                 {                                   
                     GetStatus(Status.idle);                    
@@ -102,18 +131,28 @@ public class Player : MonoBehaviour {
             case Status.attacking:
 
                 attack.Attacking();
-
-                GiveDamage(
-                    attack.attackPoint,
-                    attack.upfukitobasiPower,
-                    attack.sidefukitobasiPower,
-                    attack.fukitobasiVector,
-                    attack.preventTime);
-
+                if (attack.attackBaceProperty.transitionProperty == AttackBace.Transition.Attacking)
+                {
+                    GiveDamage(
+                        attack.attackPoint,
+                        attack.upfukitobasiPower,
+                        attack.sidefukitobasiPower,
+                        attack.fukitobasiVector,
+                        attack.preventTime,
+                        attack.attackBaceProperty.is_UnableTo_Guard);
+                }
                 if (attack.isAttacking == false)
                 {
-                    GiveDamage(0, 0, 0, Vector3.zero, 0);
+                    GiveDamage(0, 0, 0, Vector3.zero, 0, false);
                     
+                    GetStatus(Status.idle);
+                }
+                break;
+            case Status.stepping:
+                step.Stepping();
+                isInvincible = step.invincibleProperty > 0 ? true : false;
+                if (!step.isStepping)
+                {
                     GetStatus(Status.idle);
                 }
                 break;
@@ -128,7 +167,13 @@ public class Player : MonoBehaviour {
                  }
 
                 break;
-
+            case Status.waiting:
+                wait.Waiting();
+                if(wait.Waiting() == true)
+                {
+                    GetStatus(Status.idle);
+                }
+                break;
             case Status.Down:
                 this.gameObject.SetActive(false);
                 break;
@@ -160,6 +205,14 @@ public class Player : MonoBehaviour {
                 gravity.Update(isGrounded, gravityScale);
                 guard.Guarding(this.transform);
                 if (guard.isGuarding == false)
+                {
+                    GetStatus(Status.idle);
+                }
+                break;
+            case Status.stepping:
+                step.Stepping();
+                isInvincible = step.invincibleProperty > 0 ? true : false;
+                if (!step.isStepping)
                 {
                     GetStatus(Status.idle);
                 }
@@ -205,7 +258,7 @@ public class Player : MonoBehaviour {
                         jump.Start(gravityScale, jumpPower, true);
                         GetStatus(Status.jumpping);
                     }
-                    if (Input.GetKeyDown(KeyCode.G))
+                    if (Input.GetKeyDown(KeyCode.G) || Input.GetKey(KeyCode.G))
                     {
                         guard.Start();
                         GetStatus(Status.guarding);
@@ -218,8 +271,10 @@ public class Player : MonoBehaviour {
                             GetStatus(Status.attacking);
                         }
                     }
+                    
                 }
             }
+            
         }
     }
     private void GetStatus(Status status)
@@ -235,6 +290,7 @@ public class Player : MonoBehaviour {
         {
             if (raycastHit.collider.gameObject.CompareTag("ground"))
             {
+                
                 return true;
             }
             else
@@ -253,60 +309,65 @@ public class Player : MonoBehaviour {
         float UpFukitobasiPower, 
         float SideFukitobsiPower, 
         Vector3 FukitobasiVector,
-        float PreventTime)
+        float PreventTime,
+        bool is_UnableTo_Guard)
     {
         damager.DamagePoint = DamagePoint;
         damager.UpFukitobasiPower = UpFukitobasiPower;
         damager.SideFukitobsiPower = SideFukitobsiPower;
         damager.FukitobasiVector = FukitobasiVector;
         damager.PreventTime = PreventTime;
+        damager.is_UnableTo_Guard = is_UnableTo_Guard;
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.GetComponent<Damager>() != null)
+        if (!isInvincible) //無敵じゃなかったらダメージ
         {
-            Damager otherDamager = other.GetComponent<Damager>();
-
-            if (guard.transitionProperty == Guard.Transition.Guarding)
+            if (other.GetComponent<Damager>() != null)
             {
-                if (guard.JustFrameProperty >= 0)//ジャストガード
+                Damager otherDamager = other.GetComponent<Damager>();
+                
+                if (guard.transitionProperty == Guard.Transition.Guarding && !otherDamager.is_UnableTo_Guard)
                 {
-                    guard.GuardingFrame += otherDamager.PreventTime / 4;
+                    if (guard.JustFrameProperty >= 0)//ジャストガード
+                    {
+                        guard.GuardingFrame += otherDamager.PreventTime / 4;
+                    }
+                    else
+                    {
+                        guard.GuardingFrame += otherDamager.PreventTime / 2;
+                        damage.Calcurate_HitPoint(ref hitPoint, otherDamager.DamagePoint / 10);
+
+                        damage.Start(
+                                 gravityScale,
+                                 airResistance,
+                                 otherDamager.UpFukitobasiPower / 1.5f,
+                                 otherDamager.SideFukitobsiPower / 1.5f,
+                                 otherDamager.FukitobasiVector,
+                                 0);
+
+                    }
                 }
                 else
                 {
-                    guard.GuardingFrame += otherDamager.PreventTime / 2;
-                    damage.Calcurate_HitPoint(ref hitPoint, otherDamager.DamagePoint / 10);
-
+                    GetStatus(Status.damaged);
                     damage.Start(
-                             gravityScale,
-                             airResistance,
-                             otherDamager.UpFukitobasiPower / 1.5f,
-                             otherDamager.SideFukitobsiPower / 1.5f,
-                             otherDamager.FukitobasiVector,
-                             0);
-                    
+                                 gravityScale,
+                                 airResistance,
+                                 otherDamager.UpFukitobasiPower,
+                                 otherDamager.SideFukitobsiPower,
+                                 otherDamager.FukitobasiVector,
+                                 otherDamager.PreventTime);
+
+                    damage.Calcurate_HitPoint(ref hitPoint, otherDamager.DamagePoint);
                 }
             }
-            else
-            {
-                GetStatus(Status.damaged);
-                damage.Start(
-                             gravityScale,
-                             airResistance,
-                             otherDamager.UpFukitobasiPower,
-                             otherDamager.SideFukitobsiPower,
-                             otherDamager.FukitobasiVector,
-                             otherDamager.PreventTime);
-                
-                damage.Calcurate_HitPoint(ref hitPoint, otherDamager.DamagePoint);
-            }
         }
-
     }
 
     class Move
     {
+        string animationName;
         float moveSpeed;
         float airResistance;
         Animator animator;
@@ -317,10 +378,11 @@ public class Player : MonoBehaviour {
             this.transform = transform;
             this.animator = animator;
         }
-        public void Start(float moveSpeed, float airResistance)
+        public void Start(float moveSpeed, float airResistance, string animationName)
         {
             this.moveSpeed = moveSpeed;
             this.airResistance = airResistance;
+            this.animationName = animationName;
         }
         public void Update(Vector3 input, bool isGrounded)
         {
@@ -328,12 +390,12 @@ public class Player : MonoBehaviour {
             {
                 if (input.magnitude != 0)
                 {
-                    animator.SetBool("Run", true);
+                    animator.SetBool(animationName, true);
                     transform.position += transform.forward * moveSpeed * Time.fixedDeltaTime;
                 }
                 else
                 {
-                    animator.SetBool("Run", false);
+                    animator.SetBool(animationName, false);
                 }
             }
             else
@@ -341,7 +403,7 @@ public class Player : MonoBehaviour {
                 if (input.magnitude != 0)
                 {                   
                     transform.position += transform.forward * (moveSpeed - airResistance) * Time.fixedDeltaTime;
-                    animator.SetBool("Run", false);
+                    animator.SetBool(animationName, false);
                 }
             }
         }
@@ -446,7 +508,7 @@ public class Player : MonoBehaviour {
     class Guard
     {
         public bool isGuarding;
-        GameObject gobj;
+        public GameObject gobj;
         bool gobj_exist;
 
         public float GuardingFrame;
@@ -485,8 +547,8 @@ public class Player : MonoBehaviour {
         public void Start()
         {
             
-            StartFrame = 8f; GuardingFrame = 15f; //時間を設定
-            EndFrame = 10f; JustGuardFrame = 3f;
+            StartFrame = 5f; GuardingFrame = 7f; //時間を設定
+            EndFrame = 4f; JustGuardFrame = 3f;
 
             isGuarding = true;
             transition = Transition.Start;
@@ -511,6 +573,7 @@ public class Player : MonoBehaviour {
                     {
                         gobj.SetActive(true);
                     }
+                    
 
                     GuardingFrame--;
                     JustGuardFrame--;
@@ -549,6 +612,10 @@ public class Player : MonoBehaviour {
 
         Transform transform;
         AttackBace attackBace;
+        public AttackBace attackBaceProperty
+        {
+            get { return attackBace; }
+        }
         SetUseAttack[] Attacks;
         
         /// <summary>
@@ -687,28 +754,122 @@ public class Player : MonoBehaviour {
         public bool Wait()
         {
             waitTime--;
-            Debug.Log(waitTime);
             return (waitTime <= 0);
         }
     }
 }
 
-public class Wait
+class Step
 {
-    public float waitFrame;
-    bool isSet;
-    public void Set_waitFrame(float waitFrame)
+    public bool isStepping;
+    float moveSpeed;
+    float moveDistance;
+    float nowDistance;
+    Transform transform;
+    Vector3 direction;
+    float invincibleFrame;
+    public float invincibleProperty
     {
-        if (!isSet)
+        get { return invincibleFrame; }
+    }
+    float startFrame, stepFrame, endFrame;
+    public enum Transition
+    {
+        Start, Stepping, End
+    }
+    Transition transition;
+    public Transition transitionProperty
+    {
+        get { return transition; }
+    }
+
+    public Step(Transform transform)
+    {
+        this.transform = transform;
+    }
+    public void Start(float moveSpeed, float moveDistance, float invincibleFrame, Vector3 direction, bool isStepping)
+    {
+        this.moveSpeed = moveSpeed;
+        this.moveDistance = moveDistance;
+        this.direction = direction;
+        this.invincibleFrame = invincibleFrame;
+
+        startFrame = 3f; stepFrame = 5f; endFrame = 5f;
+        this.isStepping = isStepping;
+        if (isStepping)
         {
-            this.waitFrame = waitFrame;
-            isSet = true;
+            transition = Transition.Start;
         }
     }
+
+    public void Stepping()
+    {
+        switch (transition) {
+            case Transition.Start:
+                startFrame--;
+                if(startFrame <= 0)
+                {
+                    transition = Transition.Stepping;
+                }
+                break;
+            case Transition.Stepping:
+                invincibleFrame--;
+                stepFrame--;
+                if (nowDistance >= moveDistance)
+                {
+                    if (stepFrame <= 0)
+                    {
+                        nowDistance = 0;
+                        transition = Transition.End;
+                    }
+                }
+                else
+                {
+                    transform.position += direction * moveSpeed * Time.fixedDeltaTime;
+                    nowDistance += moveSpeed * Time.fixedDeltaTime;
+                }
+                break;
+            case Transition.End:
+                endFrame--;
+                if(endFrame <= 0)
+                {
+                    isStepping = false;
+                }
+                break;
+        }
+    }
+}
+
+class Wait
+{
+    float waitFrame;
+    public float waitFrameProperty
+    {
+        get { return waitFrame; }
+    }
+    bool isSet;
+
+    public void Set(float waitFrame, float addValue)
+    {
+        if (isSet && addValue != 0)
+        {
+            this.waitFrame += addValue;
+        }
+        else
+        {
+            if (waitFrame > 0)
+            {
+                this.waitFrame = waitFrame;
+                isSet = true;
+            }
+        }
+    }
+
     public bool? Waiting()
     {
         if (isSet)
         {
+            waitFrame--;
             if (waitFrame <= 0)
             {
                 waitFrame = 0;
@@ -717,7 +878,6 @@ public class Wait
             }
             else
             {
-                waitFrame--;
                 return false;
             }
         }
@@ -725,6 +885,5 @@ public class Wait
         {
             return null;
         }
- 
     }
 }

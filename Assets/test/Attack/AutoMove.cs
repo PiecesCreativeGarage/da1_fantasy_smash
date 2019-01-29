@@ -5,6 +5,7 @@ using UnityEngine;
 public class AutoMove : MonoBehaviour {
 
     public float moveSpeed;
+    public float turnFrame;
     float turnTime;
     int dire = 1;
 
@@ -12,7 +13,7 @@ public class AutoMove : MonoBehaviour {
 		if(turnTime < 0)
         {
             dire *= -1;
-            SetTime(60f);
+            SetTime(turnFrame);
         }
         else
         {

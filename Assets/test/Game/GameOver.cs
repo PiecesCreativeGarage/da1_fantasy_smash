@@ -91,11 +91,11 @@ public class GameOver : MonoBehaviour
             
             if (player_Info[i].win_lose)
             {
-                DeelWIN_or_LOSE(true, i);
+                DealWIN_or_LOSE(true, i);
             }
             else
             {
-                DeelWIN_or_LOSE(false, i);
+                DealWIN_or_LOSE(false, i);
             }
             yield return new WaitForSeconds(0.5f);
         }
@@ -108,7 +108,7 @@ public class GameOver : MonoBehaviour
         GameSet_Label.text = "Input anykey..";
         Time.timeScale = 0;
     }
-    void DeelWIN_or_LOSE(bool victory, int i)
+    void DealWIN_or_LOSE(bool victory, int i)
     {
         player_Info[i].image.enabled = false;
        

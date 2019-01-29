@@ -306,6 +306,7 @@ MonoBehaviour:
   SideFukitobsiPower: 0
   FukitobasiVector: {x: 0, y: 0, z: 0}
   PreventTime: 0
+  is_UnableTo_Guard: 0
 --- !u!65 &127325203
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -508,6 +509,7 @@ MonoBehaviour:
   SideFukitobsiPower: 0
   FukitobasiVector: {x: 0, y: 0, z: 0}
   PreventTime: 0
+  is_UnableTo_Guard: 0
 --- !u!1 &638777570
 GameObject:
   m_ObjectHideFlags: 0
@@ -543,7 +545,8 @@ MonoBehaviour:
   UpFukitobasiPower: 200
   SideFukitobsiPower: 200
   FukitobasiVector: {x: -1, y: 0, z: 0}
-  PreventTime: 20
+  PreventTime: 60
+  is_UnableTo_Guard: 0
 --- !u!23 &638777572
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -619,7 +622,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9aa25d66244d6b04aa06cafe88416aeb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 4
+  moveSpeed: 15
+  turnFrame: 20
 --- !u!1 &701715199
 GameObject:
   m_ObjectHideFlags: 0
@@ -933,6 +937,11 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 114611584249114618, guid: 481003747f4c24d8ab77e982054881ea,
+        type: 2}
+      propertyPath: animationNames.Array.size
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 4975376788586314, guid: 481003747f4c24d8ab77e982054881ea, type: 2}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -982,7 +991,7 @@ Prefab:
     - target: {fileID: 114611584249114618, guid: 481003747f4c24d8ab77e982054881ea,
         type: 2}
       propertyPath: jumpPower
-      value: 300
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 114611584249114618, guid: 481003747f4c24d8ab77e982054881ea,
         type: 2}
@@ -993,6 +1002,11 @@ Prefab:
         type: 2}
       propertyPath: airResistance
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 114611584249114618, guid: 481003747f4c24d8ab77e982054881ea,
+        type: 2}
+      propertyPath: animationNames.Array.data[2]
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 481003747f4c24d8ab77e982054881ea, type: 2}
