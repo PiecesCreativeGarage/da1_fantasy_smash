@@ -68,14 +68,17 @@ public class Player : MonoBehaviour {
         gravity.gravityScale = this.gravityScale;
 
     }
+
+    float coll_radius = 0.5f;
+    Vector3 coll_origin;
     private void Update()
     {
+        coll_origin = transform.position + Vector3.up * coll_radius;
         GetStatus();
-        if (GetGrounded(transform.position + new Vector3(0, 0.5f), 0.5f, -transform.up, 0.1f))
+        if (GetGrounded(coll_origin, coll_radius, -transform.up, 0.1f))
         {
             if (!isGrounded)
             {
-
                 wait.Set(10, 0); //着地硬直
                 player_status = Status.waiting;
                 isGrounded = true;
@@ -86,9 +89,7 @@ public class Player : MonoBehaviour {
             isGrounded = false;
         }
 
-        isHit_against_theWall = GetGrounded(transform.position + new Vector3(0, 2),
-                                            1f, transform.forward, 3f);
-                                        
+        isHit_against_theWall = GetGrounded(coll_origin, coll_radius, transform.forward, 0.1f);
 
         Input_dir = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
         if (isGrounded)
@@ -99,6 +100,20 @@ public class Player : MonoBehaviour {
         {
             AirAction();
         }
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawWireSphere(coll_origin, coll_radius);
+    }
+
+    private void OnGUI()
+    {
+        GUILayout.BeginVertical();
+        GUILayout.Label("isGrounded:" + isGrounded);
+        GUILayout.Label("isHit_against_theWall:" + isHit_against_theWall);
+        GUILayout.Label("state:"+player_status);
+        GUILayout.EndVertical();
     }
 
     void GroundAction()
@@ -288,26 +303,24 @@ public class Player : MonoBehaviour {
         player_status = status;
     }
 
-    bool GetGrounded(Vector3 origin,float radius, Vector3 direction, float maxdistance)
+    bool GetGrounded(Vector3 origin,float radius, Vector3 ray_dir, float ray_length)
     {
-        Ray ray = new Ray(origin, direction);
+        bool is_hit_ground = false;
+        string ground_tag = "ground";
+
+        // 始点における球状範囲がヒット対象範囲にならないので始点ずらして判定範囲を補正する
+        Vector3 offset = -ray_dir * radius;
+        ray_length += radius;
+
         RaycastHit raycastHit;
-        if(Physics.SphereCast(ray.origin, radius, ray.direction, out raycastHit, maxdistance))
+        if(Physics.SphereCast(origin + offset, radius, ray_dir, out raycastHit, ray_length))
         {
-            if (raycastHit.collider.gameObject.CompareTag("ground"))
-            {
-                
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            is_hit_ground |= raycastHit.collider.gameObject.CompareTag(ground_tag);
+            float hit_dist = ray_length - raycastHit.distance;
+            // 地面にめり込んだ分押し戻す
+            transform.position += hit_dist * -ray_dir;
         }
-        else
-        {
-            return false;
-        }
+        return is_hit_ground;
     }
 
     void GiveDamage(
