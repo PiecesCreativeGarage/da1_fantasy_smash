@@ -2,50 +2,45 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Rotation : MonoBehaviour {
 
+class Rotation
+{
+    Transform transform;
+    GameObject cam;
+    public bool use_cam;
 
-    public GameObject cam;
-
-    float x;
-    float z;
-
-    Vector3 angle_this;
-    Vector3 angle_camera;
-
-    void Start()
+    public Rotation(Transform transform, GameObject Pcam)
     {
-     
+        this.transform = transform;
+        cam = Pcam;
+        if (cam != null)
+        {
+            use_cam = true;
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+
+    public void Update(Vector3 dir)
     {
-        x = Input.GetAxisRaw("Horizontal");
-        z = Input.GetAxisRaw("Vertical");
-
-
-            angle_this = transform.eulerAngles;
-        
-            angle_camera = cam.transform.eulerAngles;
-
-
-            if (Input.GetKey("up"))
+        if (use_cam)
+        {
+            if (dir.z == 1)
             {
-                this.transform.eulerAngles = new Vector3(angle_this.x, (45 * x) + angle_camera.y, angle_this.z);
+                transform.eulerAngles = cam.transform.eulerAngles + new Vector3(transform.eulerAngles.x, (dir.x * 45), transform.eulerAngles.z);
             }
-            else if (Input.GetKey("down"))
+            else if (dir.z == -1)
             {
-            Debug.Log("down");
-                this.transform.eulerAngles = new Vector3(angle_this.x, (180 * z - 45 * x) + angle_camera.y, angle_this.z);
+                transform.eulerAngles = cam.transform.eulerAngles + new Vector3(transform.eulerAngles.x, (180 * dir.z) - (dir.x * 45), transform.eulerAngles.z);
             }
-            else if (Input.GetKey("right") || Input.GetKey("left"))
+            else if (dir.x != 0)
             {
-            Debug.Log("side");
-
-                this.transform.eulerAngles = new Vector3(angle_this.x, (90 * x) + angle_camera.y, angle_this.z);
+                transform.eulerAngles = cam.transform.eulerAngles + new Vector3(transform.eulerAngles.x, (dir.x * 90), transform.eulerAngles.z);
             }
+        }
+        else
+        {
+            transform.rotation = Quaternion.LookRotation(dir);
+        }
 
     }
-     
 }

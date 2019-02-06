@@ -2,32 +2,49 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Move : MonoBehaviour {
+class Move
+{
+    string animationName;
+    float moveSpeed;
+    float airResistance;
+    Animator animator;
+    Transform transform;
 
-
-
-    public float MoveSpeed;
-
-    float x;
-    float z;
-
-
-
-    void Start()
+    public Move(Transform transform, Animator animator)
     {
+        this.transform = transform;
+        this.animator = animator;
     }
-
-    // Update is called once per frame
-    void Update()
+    public void Start(float moveSpeed, float airResistance, string animationName)
     {
-
-        x = Input.GetAxisRaw("Horizontal");
-        z = Input.GetAxisRaw("Vertical");
-
-            if (x != 0 || z != 0)
+        this.moveSpeed = moveSpeed;
+        this.airResistance = airResistance;
+        this.animationName = animationName;
+    }
+    public void Update(Vector3 input, bool isGrounded, bool[] isHit_against_theWall)
+    {
+        if (!isHit_against_theWall[0])
+        {
+            if (isGrounded)
             {
-                this.transform.position += MoveSpeed * this.transform.forward * Time.deltaTime;
+                if (input.magnitude != 0)
+                {
+                    animator.SetBool(animationName, true);
+                    transform.position += transform.forward * moveSpeed * Time.fixedDeltaTime;
+                }
+                else
+                {
+                    animator.SetBool(animationName, false);
+                }
             }
-  
+            else
+            {
+                if (input.magnitude != 0)
+                {
+                    transform.position += transform.forward * (moveSpeed - airResistance) * Time.fixedDeltaTime;
+                    animator.SetBool(animationName, false);
+                }
+            }
+        }
     }
 }

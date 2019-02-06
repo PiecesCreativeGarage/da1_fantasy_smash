@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class AttackBace{
-    
+    public GameObject gameObject;
     public Animator animator;
 
     public bool isAttacking;
@@ -59,10 +59,22 @@ public abstract class AttackBace{
 
     protected virtual void SetAttack() { }
 }
+
+class AssistanceAttack : MonoBehaviour
+{
+    public void GetDamager(ref Damager storedObject, GameObject gameObject)
+    {
+        storedObject = gameObject.GetComponent<Damager>();
+    }
+}
 class Attack_A : AttackBace
 {
+    AssistanceAttack assistance = new AssistanceAttack();
+    Damager damager;
+
     protected override void SetAttack()
     {
+        assistance.GetDamager(ref damager, base.gameObject);
         AttackPoint = 10;
         starFrame = 20;
         AttakingFrame = 3;
@@ -81,13 +93,26 @@ class Attack_A : AttackBace
                 starFrame--;
                 if(starFrame <= 0)
                 {
+                    damager.DamagePoint = AttackPoint;
+                    damager.FukitobasiVector = FukitobasiVector;
+                    damager.UpFukitobasiPower = UpFukitobasiPower;
+                    damager.SideFukitobsiPower = SideFukitobsiPower;
+                    damager.PreventTime = PreventTime;
+
                     transition = Transition.Attacking;
                 }
                 break;
             case Transition.Attacking:
                 AttakingFrame--;
+
                 if(AttakingFrame <= 0)
                 {
+                    damager.DamagePoint = 0;
+                    damager.FukitobasiVector = Vector3.zero;
+                    damager.UpFukitobasiPower = 0;
+                    damager.SideFukitobsiPower = 0;
+                    damager.PreventTime = 0;
+
                     transition = Transition.End;
                 }
                 break;
@@ -102,7 +127,8 @@ class Attack_A : AttackBace
         }
     }
 }
-class Attack_B
+class Attack_B : AttackBace
 {
+
 
 }
