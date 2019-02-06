@@ -67,14 +67,21 @@ public class Player : MonoBehaviour
         gravity.gravityScale = this.gravityScale;
 
     }
+
+    float coll_radius = 0.5f;
+    Vector3 coll_origin;
     private void Update()
     {
+        coll_origin = transform.position + Vector3.up * coll_radius;
         GetStatus();
+<<<<<<< HEAD
         if (GetGrounded(transform.position + new Vector3(0, 0.5f), 0.5f, -transform.up, 0.5f))
+=======
+        if (GetGrounded(coll_origin, coll_radius, -transform.up, 0.1f))
+>>>>>>> 1c6aeb43c53ea0511e1e2c2c20f89673676d6fc0
         {
             if (!isGrounded)
             {
-
                 wait.Set(10, 0); //着地硬直
                 player_status = Status.waiting;
                 isGrounded = true;
@@ -84,6 +91,7 @@ public class Player : MonoBehaviour
         {
             isGrounded = false;
         }
+<<<<<<< HEAD
         isHit_against_theWall = new bool[4];
         isHit_against_theWall[0] = GetGrounded(transform.position + new Vector3(0, 1),
                                             0.5f, transform.forward, 0.1f);
@@ -93,13 +101,35 @@ public class Player : MonoBehaviour
                                             0.5f, -transform.right, 0.1f);
         isHit_against_theWall[3] = GetGrounded(transform.position + new Vector3(0, 1),
                                             0.5f, transform.right, 0.1f);
+=======
+
+        isHit_against_theWall = GetGrounded(coll_origin, coll_radius, transform.forward, 0.1f);
+>>>>>>> 1c6aeb43c53ea0511e1e2c2c20f89673676d6fc0
 
         Input_dir = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
 
             Action();
     }
 
+<<<<<<< HEAD
     void Action()
+=======
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawWireSphere(coll_origin, coll_radius);
+    }
+
+    private void OnGUI()
+    {
+        GUILayout.BeginVertical();
+        GUILayout.Label("isGrounded:" + isGrounded);
+        GUILayout.Label("isHit_against_theWall:" + isHit_against_theWall);
+        GUILayout.Label("state:"+player_status);
+        GUILayout.EndVertical();
+    }
+
+    void GroundAction()
+>>>>>>> 1c6aeb43c53ea0511e1e2c2c20f89673676d6fc0
     {
         switch (player_status)
         {
@@ -225,10 +255,21 @@ public class Player : MonoBehaviour
         player_status = status;
     }
 
+<<<<<<< HEAD
     bool GetGrounded(Vector3 origin, float radius, Vector3 direction, float maxdistance)
+=======
+    bool GetGrounded(Vector3 origin,float radius, Vector3 ray_dir, float ray_length)
+>>>>>>> 1c6aeb43c53ea0511e1e2c2c20f89673676d6fc0
     {
-        Ray ray = new Ray(origin, direction);
+        bool is_hit_ground = false;
+        string ground_tag = "ground";
+
+        // 始点における球状範囲がヒット対象範囲にならないので始点ずらして判定範囲を補正する
+        Vector3 offset = -ray_dir * radius;
+        ray_length += radius;
+
         RaycastHit raycastHit;
+<<<<<<< HEAD
         if (Physics.SphereCast(ray.origin, radius, ray.direction, out raycastHit, maxdistance))
         {
             if (raycastHit.collider.gameObject.CompareTag("ground"))
@@ -242,9 +283,16 @@ public class Player : MonoBehaviour
             }
         }
         else
+=======
+        if(Physics.SphereCast(origin + offset, radius, ray_dir, out raycastHit, ray_length))
+>>>>>>> 1c6aeb43c53ea0511e1e2c2c20f89673676d6fc0
         {
-            return false;
+            is_hit_ground |= raycastHit.collider.gameObject.CompareTag(ground_tag);
+            float hit_dist = ray_length - raycastHit.distance;
+            // 地面にめり込んだ分押し戻す
+            transform.position += hit_dist * -ray_dir;
         }
+        return is_hit_ground;
     }
 
     private void OnTriggerEnter(Collider other)
