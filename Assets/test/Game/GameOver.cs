@@ -68,7 +68,7 @@ public class GameOver : MonoBehaviour
         for (int i = 0; i < player_Info.Length; i++)
         {
 
-            hp_maxs[i] = player_Info[i].player.hitPoint;
+            hp_maxs[i] = player_Info[i].player.playerData.baseData.hitPoint;
             hp1s_fil1s[i] = 1 / hp_maxs[i];
             player_Info[i].win_lose = true;
 
@@ -128,9 +128,11 @@ public class GameOver : MonoBehaviour
     /// <param name="number"></param>
     void ShowHP(int number)
     {
-         player_Info[number].text.text = player_Info[number].player.hitPoint.ToString();
+         player_Info[number].text.text = 
+            player_Info[number].player.playerData.baseData.hitPoint.ToString();
          player_Info[number].image.fillAmount = 
-            1 - (hp1s_fil1s[number] * (hp_maxs[number] - player_Info[number].player.hitPoint));
+            1 - (hp1s_fil1s[number] * 
+            (hp_maxs[number] - player_Info[number].player.playerData.baseData.hitPoint));
     }
     void ReroadScene()
     {

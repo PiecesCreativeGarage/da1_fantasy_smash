@@ -18,25 +18,21 @@ class Attack
     {
         get { return attackBace; }
     }
-    Player.SetUseAttack[] Attacks;
+    PlayerData.UsedAttackData[] Attacks;
 
-    /// <summary>
-    /// 使う攻撃を判定
-    /// </summary>
-    /// <param name="setUseAttacks"></param>
-    /// <param name="animator"></param>
-    /// <param name="transform"></param>
-    public Attack(Player.SetUseAttack[] setUseAttacks, Animator animator, Transform transform)
+ 
+    public Attack(PlayerData.UsedAttackData[] UsedAttacks, Animator animator, Transform transform)
     {
-        Attacks = new Player.SetUseAttack[setUseAttacks.Length];
+        Attacks = new PlayerData.UsedAttackData[UsedAttacks.Length];
         this.transform = transform;
         this.animator = animator;
         for (int i = 0; i < Attacks.Length; i++)
         {
-            Attacks[i] = setUseAttacks[i];
+            Attacks[i] = UsedAttacks[i];
 
         }
     }
+
     public void Start(int number)
     {
         SetAttack(Attacks[number].AttackNumver);
@@ -64,7 +60,6 @@ class Attack
         }
         else
         {
-
             isAttacking = false;
         }
     }

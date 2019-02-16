@@ -9,6 +9,7 @@ class Step
     float moveDistance;
     float nowDistance;
     Transform transform;
+    PlayerData playerData;
     Vector3 direction;
     float invincibleFrame;
     public float invincibleProperty
@@ -26,17 +27,20 @@ class Step
         get { return transition; }
     }
 
-    public Step(Transform transform)
+    public Step(Transform transform, PlayerData playerData)
     {
         this.transform = transform;
+        this.playerData = playerData;
     }
-    public void Start(float moveSpeed, float invincibleFrame, Vector3 direction, bool isStepping)
+    public void Start(Vector3 direction, bool isStepping)
     {
-        this.moveSpeed = moveSpeed;
+        this.moveSpeed = playerData.stepData.moveSpeed;
         this.direction = direction;
-        this.invincibleFrame = invincibleFrame;
+        this.invincibleFrame = playerData.stepData.invincibleFrame;
 
-        startFrame = 3f; stepFrame = 5f; endFrame = 5f;
+        startFrame = playerData.stepData.transitionFrames[0];
+        stepFrame = playerData.stepData.transitionFrames[1];
+        endFrame = playerData.stepData.transitionFrames[2];
         this.isStepping = isStepping;
         if (isStepping)
         {

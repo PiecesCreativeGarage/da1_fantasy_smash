@@ -7,34 +7,35 @@ class Move
     string animationName;
     float moveSpeed;
     float airResistance;
-    Animator animator;
-    Transform transform;
 
-    public Move(Transform transform, Animator animator)
+    Transform transform;
+    PlayerData playerData;
+
+    public Move(Transform transform, PlayerData playerData)
     {
         this.transform = transform;
-        this.animator = animator;
+        this.playerData = playerData;
     }
-    public void Start(float moveSpeed, float airResistance, string animationName)
+    public void Start(string animationName)
     {
-        this.moveSpeed = moveSpeed;
-        this.airResistance = airResistance;
         this.animationName = animationName;
     }
     public void Update(Vector3 input, bool isGrounded, bool[] isHit_against_theWall)
     {
+        this.moveSpeed = playerData.moveData.moveSpeed;
+        this.airResistance = playerData.baseData.airResistance;
         if (!isHit_against_theWall[0])
         {
             if (isGrounded)
             {
                 if (input.magnitude != 0)
                 {
-                    animator.SetBool(animationName, true);
+                    playerData.baseData.animator.SetBool(animationName, true);
                     transform.position += transform.forward * moveSpeed * Time.fixedDeltaTime;
                 }
                 else
                 {
-                    animator.SetBool(animationName, false);
+                    playerData.baseData.animator.SetBool(animationName, false);
                 }
             }
             else
@@ -42,7 +43,7 @@ class Move
                 if (input.magnitude != 0)
                 {
                     transform.position += transform.forward * (moveSpeed - airResistance) * Time.fixedDeltaTime;
-                    animator.SetBool(animationName, false);
+                    playerData.baseData.animator.SetBool(animationName, false);
                 }
             }
         }

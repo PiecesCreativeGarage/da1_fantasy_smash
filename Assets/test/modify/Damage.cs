@@ -62,7 +62,6 @@ class Damage
     {
         if (sidefukitobiPower > 0)
         {
-
             sidefukitobiPower -= airResistance;
             dist = sidefukitobiPower / 15;
             transform.position += fukitobiVector * dist * Time.fixedDeltaTime;
@@ -83,5 +82,6 @@ class Damage
         waitTime--;
         return (waitTime <= 0);
     }
+
 }
 

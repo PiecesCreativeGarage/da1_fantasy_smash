@@ -7,7 +7,8 @@ class Guard : MonoBehaviour
     public bool isGuarding;
     public GameObject gobj;
     bool gobj_exist;
-
+    Transform playerTransform;
+    PlayerData.GuardData guardData;
     public float GuardingFrame;
 
     float StartFrame, EndFrame, JustGuardFrame;
@@ -26,13 +27,14 @@ class Guard : MonoBehaviour
     {
         get { return transition; }
     }
-    public Guard(GameObject guard_Object)
+    public Guard(Transform transform, PlayerData.GuardData guardData)
     {
-
-        if (guard_Object != null)
+        this.guardData = guardData;
+        this.playerTransform = transform;
+        if (guardData.guardObject != null)
         {
-            gobj = Instantiate(guard_Object, Vector3.zero, Quaternion.identity);
-            gobj.transform.localScale = new Vector3(3.5f, 3.5f, 3.5f);
+            gobj = Instantiate(guardData.guardObject, Vector3.zero, Quaternion.identity);
+            gobj.transform.localScale = guardData.guardScale;
             gobj_exist = true;
             gobj.SetActive(false);
         }
@@ -44,19 +46,17 @@ class Guard : MonoBehaviour
 
     public void Start()
     {
-
-        StartFrame = 5f; GuardingFrame = 7f; //時間を設定
-        EndFrame = 4f; JustGuardFrame = 3f;
+        gobj.transform.localScale = guardData.guardScale;
+        this.StartFrame = guardData.transitionFrames[0]; this.GuardingFrame = guardData.transitionFrames[1]; //時間を設定
+        this.EndFrame = guardData.transitionFrames[2]; this.JustGuardFrame = guardData.justGuardFrame;
 
         isGuarding = true;
         transition = Transition.Start;
 
-
     }
-    public void Guarding(Transform Guard_Posi)
+    public void Guarding()
     {
-        gobj.transform.position = Guard_Posi.position + new Vector3(0, 1.25f);
-
+        gobj.transform.position = playerTransform.position + guardData.plusGuardPosi;
 
         switch (transition)
         {

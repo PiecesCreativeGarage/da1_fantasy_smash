@@ -1,21 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 public class Player : MonoBehaviour
 {
-
-    public Animator animator;
-
-    public float moveSpeed;
-    public float jumpPower;
-    public float gravityScale;
-    public float airResistance;
-    public float hitPoint;
-    public bool isInvincible;
-    public GameObject guardPrefab;
-    public GameObject cam;
-    public string[] animationNames = { "", "Run" };
+    public PlayerData playerData;
     Rotation rotation;
     Move move;
     Gravity gravity;
@@ -25,15 +13,6 @@ public class Player : MonoBehaviour
     Damage damage;
     Step step;
     Wait wait;
-    [System.Serializable]
-    public class SetUseAttack
-    {
-        public int AttackNumver;
-        public string KeyCode;
-        public GameObject Weapon;
-    }
-
-    public SetUseAttack[] AttacksInfo;
 
     Vector3 Input_dir;
 
@@ -45,26 +24,29 @@ public class Player : MonoBehaviour
 
     public Status player_status;
     public bool isGrounded;
-    public bool[] isHit_against_theWall = new bool[4];
 
+    public bool[] isHit_against_theWall = new bool[4];
+    public bool isInvincible;
     private void Awake()
     {
-        rotation = new Rotation(transform, cam);
-        move = new Move(transform, animator);
+        playerData = GetComponent<PlayerData>();
+        rotation = new Rotation(transform, playerData.baseData.cam);
+        move = new Move(transform, playerData);
         jump = new Jump();
         gravity = new Gravity(transform);
-        guard = new Guard(guardPrefab);
-        attack = new Attack(AttacksInfo, animator, transform);
-        damage = new Damage(animator, transform);
-        step = new Step(transform);
+        guard = new Guard(transform, playerData.guardData);
+        attack = new Attack(playerData.usedAttacks, playerData.baseData.animator, transform);
+        damage = new Damage(playerData.baseData.animator, transform);
+        step = new Step(transform, playerData);
 
         wait = new Wait();
     }
     private void Start()
     {
-        move.Start(moveSpeed, airResistance, animationNames[1]);
-        jump.Start(gravityScale, jumpPower, false);
-        gravity.gravityScale = this.gravityScale;
+        move.Start(playerData.baseData.animationNames[1]);
+        jump.Start(playerData.baseData.gravityScale,
+                   playerData.jumpData.jumpPower, false);
+        gravity.gravityScale = playerData.baseData.gravityScale;
 
     }
 
@@ -74,16 +56,15 @@ public class Player : MonoBehaviour
     {
         coll_origin = transform.position + Vector3.up * coll_radius;
         GetStatus();
-<<<<<<< HEAD
-        if (GetGrounded(transform.position + new Vector3(0, 0.5f), 0.5f, -transform.up, 0.5f))
-=======
         if (GetGrounded(coll_origin, coll_radius, -transform.up, 0.1f))
->>>>>>> 1c6aeb43c53ea0511e1e2c2c20f89673676d6fc0
         {
             if (!isGrounded)
             {
-                wait.Set(10, 0); //着地硬直
-                player_status = Status.waiting;
+                if (player_status == Status.idle)
+                {
+                    wait.Set(20, 0); //着地硬直
+                    player_status = Status.waiting;
+                }
                 isGrounded = true;
             }
         }
@@ -91,29 +72,17 @@ public class Player : MonoBehaviour
         {
             isGrounded = false;
         }
-<<<<<<< HEAD
-        isHit_against_theWall = new bool[4];
-        isHit_against_theWall[0] = GetGrounded(transform.position + new Vector3(0, 1),
-                                            0.5f, transform.forward, 0.1f);
-        isHit_against_theWall[1] = GetGrounded(transform.position + new Vector3(0, 1),
-                                            0.5f, -transform.forward, 0.1f);
-        isHit_against_theWall[2] = GetGrounded(transform.position + new Vector3(0, 1),
-                                            0.5f, -transform.right, 0.1f);
-        isHit_against_theWall[3] = GetGrounded(transform.position + new Vector3(0, 1),
-                                            0.5f, transform.right, 0.1f);
-=======
 
-        isHit_against_theWall = GetGrounded(coll_origin, coll_radius, transform.forward, 0.1f);
->>>>>>> 1c6aeb43c53ea0511e1e2c2c20f89673676d6fc0
+        isHit_against_theWall[0] = GetGrounded(coll_origin, coll_radius, transform.forward, 0.1f);
+        isHit_against_theWall[1] = GetGrounded(coll_origin, coll_radius, -transform.forward, 0.1f); isHit_against_theWall[0] = GetGrounded(coll_origin, coll_radius, transform.forward, 0.1f);
+        isHit_against_theWall[2] = GetGrounded(coll_origin, coll_radius, -transform.right, 0.1f);
+        isHit_against_theWall[3] = GetGrounded(coll_origin, coll_radius, transform.right, 0.1f);
 
         Input_dir = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
 
-            Action();
+         Action();
     }
 
-<<<<<<< HEAD
-    void Action()
-=======
     private void OnDrawGizmos()
     {
         Gizmos.DrawWireSphere(coll_origin, coll_radius);
@@ -128,8 +97,7 @@ public class Player : MonoBehaviour
         GUILayout.EndVertical();
     }
 
-    void GroundAction()
->>>>>>> 1c6aeb43c53ea0511e1e2c2c20f89673676d6fc0
+    void Action()
     {
         switch (player_status)
         {
@@ -137,7 +105,7 @@ public class Player : MonoBehaviour
 
                 move.Update(Input_dir, isGrounded, isHit_against_theWall);
                 rotation.Update(Input_dir);
-                gravity.Update(isGrounded, gravityScale);
+                gravity.Update(isGrounded, playerData.baseData.gravityScale);
                 break;
             case Status.jumpping:
                 jump.Jumpping(this.transform);
@@ -156,12 +124,12 @@ public class Player : MonoBehaviour
                     if (Input_dir.magnitude != 0)
                     {
                         guard.gobj.SetActive(false);
-                        step.Start(20, 3, Input_dir, true);
+                        step.Start(Input_dir, true);
                         GetStatus(Status.stepping);
                         break;
                     }
                 }
-                guard.Guarding(this.transform);
+                guard.Guarding();
 
                 if (guard.isGuarding == false)
                 {
@@ -185,19 +153,38 @@ public class Player : MonoBehaviour
                 }
                 break;
             case Status.damaged:
-
-                damage.Wait();
-                damage.UPFukitobi();
-                damage.UPFukitobi();
-                if (damage.UPFukitobi())
+                if (isGrounded && damage.UPFukitobi()) //Down
                 {
-                    gravity.Update(isGrounded, gravityScale);
+                    if (Input.anyKeyDown)
+                    {
+                        transform.eulerAngles = new Vector3(this.transform.eulerAngles.x,
+                                                            this.transform.eulerAngles.y,
+                                                            0);
+                        wait.Set(100f, 100f);
+                        GetStatus(Status.waiting);
+                    }
+                }
+                else
+                {
+                    damage.Wait();
+                    if (damage.Wait())
+                    {
+                        if (Input.anyKeyDown) //受身
+                        {
+                            wait.Set(30, 0);
+                            GetStatus(Status.waiting);
+                        }
+
+                    }
+                    damage.UPFukitobi();
+                    if (damage.UPFukitobi())
+                    {
+                        gravity.Update(isGrounded, playerData.baseData.gravityScale);
+                    }
                 }
                 damage.SIDEFukitobi();
-                if (damage.UPFukitobi() && damage.SIDEFukitobi() && damage.Wait())
-                {
-                    GetStatus(Status.idle);
-                }
+
+                
 
                 break;
             case Status.waiting:
@@ -216,7 +203,7 @@ public class Player : MonoBehaviour
 
     private void GetStatus()
     {
-        if (hitPoint <= 0)
+        if (playerData.baseData.hitPoint <= 0)
         {
             player_status = Status.Down;
         }
@@ -228,7 +215,8 @@ public class Player : MonoBehaviour
                 {
                     if (Input.GetKeyDown(KeyCode.Space))
                     {
-                        jump.Start(gravityScale, jumpPower, true);
+                        jump.Start(playerData.baseData.gravityScale,
+                                   playerData.jumpData.jumpPower, true);
                         GetStatus(Status.jumpping);
                     }
                     if (Input.GetKeyDown(KeyCode.G) || Input.GetKey(KeyCode.G))
@@ -236,9 +224,9 @@ public class Player : MonoBehaviour
                         guard.Start();
                         GetStatus(Status.guarding);
                     }
-                    for (int i = 0; i < AttacksInfo.Length; i++)
+                    for (int i = 0; i < playerData.usedAttacks.Length; i++)
                     {
-                        if (Input.GetKeyDown(AttacksInfo[i].KeyCode))
+                        if (Input.GetKeyDown(playerData.usedAttacks[i].KeyCode))
                         {
                             attack.Start(i);
                             GetStatus(Status.attacking);
@@ -255,11 +243,7 @@ public class Player : MonoBehaviour
         player_status = status;
     }
 
-<<<<<<< HEAD
-    bool GetGrounded(Vector3 origin, float radius, Vector3 direction, float maxdistance)
-=======
     bool GetGrounded(Vector3 origin,float radius, Vector3 ray_dir, float ray_length)
->>>>>>> 1c6aeb43c53ea0511e1e2c2c20f89673676d6fc0
     {
         bool is_hit_ground = false;
         string ground_tag = "ground";
@@ -269,23 +253,7 @@ public class Player : MonoBehaviour
         ray_length += radius;
 
         RaycastHit raycastHit;
-<<<<<<< HEAD
-        if (Physics.SphereCast(ray.origin, radius, ray.direction, out raycastHit, maxdistance))
-        {
-            if (raycastHit.collider.gameObject.CompareTag("ground"))
-            {
-
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        else
-=======
         if(Physics.SphereCast(origin + offset, radius, ray_dir, out raycastHit, ray_length))
->>>>>>> 1c6aeb43c53ea0511e1e2c2c20f89673676d6fc0
         {
             is_hit_ground |= raycastHit.collider.gameObject.CompareTag(ground_tag);
             float hit_dist = ray_length - raycastHit.distance;
@@ -312,11 +280,11 @@ public class Player : MonoBehaviour
                     else
                     {
                         guard.GuardingFrame += otherDamager.PreventTime / 2;
-                        damage.Calcurate_HitPoint(ref hitPoint, otherDamager.DamagePoint / 10);
+                        damage.Calcurate_HitPoint(ref playerData.baseData.hitPoint, otherDamager.DamagePoint / 10);
 
                         damage.Start(
-                                 gravityScale,
-                                 airResistance,
+                                 playerData.baseData.gravityScale,
+                                 playerData.baseData.airResistance,
                                  otherDamager.UpFukitobasiPower / 1.5f,
                                  otherDamager.SideFukitobsiPower / 1.5f,
                                  otherDamager.FukitobasiVector,
@@ -328,14 +296,14 @@ public class Player : MonoBehaviour
                 {
                     GetStatus(Status.damaged);
                     damage.Start(
-                                 gravityScale,
-                                 airResistance,
+                                 playerData.baseData.gravityScale,
+                                 playerData.baseData.airResistance,
                                  otherDamager.UpFukitobasiPower,
                                  otherDamager.SideFukitobsiPower,
                                  otherDamager.FukitobasiVector,
                                  otherDamager.PreventTime);
 
-                    damage.Calcurate_HitPoint(ref hitPoint, otherDamager.DamagePoint);
+                    damage.Calcurate_HitPoint(ref playerData.baseData.hitPoint, otherDamager.DamagePoint);
                 }
             }
         }
