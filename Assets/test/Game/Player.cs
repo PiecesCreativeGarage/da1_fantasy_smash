@@ -74,13 +74,38 @@ public class Player : MonoBehaviour
         }
 
         isHit_against_theWall[0] = GetGrounded(coll_origin, coll_radius, transform.forward, 0.1f);
-        isHit_against_theWall[1] = GetGrounded(coll_origin, coll_radius, -transform.forward, 0.1f); isHit_against_theWall[0] = GetGrounded(coll_origin, coll_radius, transform.forward, 0.1f);
+        isHit_against_theWall[1] = GetGrounded(coll_origin, coll_radius, -transform.forward, 0.1f);
         isHit_against_theWall[2] = GetGrounded(coll_origin, coll_radius, -transform.right, 0.1f);
         isHit_against_theWall[3] = GetGrounded(coll_origin, coll_radius, transform.right, 0.1f);
 
-        Input_dir = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
+        //Input_dir = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
+        
+        if (Input.GetKey(playerData.baseData.InputKeys[0]))
+        {
+            Input_dir = new Vector3(Input_dir.x, 0, 1);
+        }        
+        else if (Input.GetKey(playerData.baseData.InputKeys[1]))
+        {
+            Input_dir = new Vector3(Input_dir.x, 0, -1);
+        }
+        else
+        {
+            Input_dir = new Vector3(Input_dir.x, 0, 0);
+        }
+        if (Input.GetKey(playerData.baseData.InputKeys[2]))
+        {
+            Input_dir = new Vector3(-1, 0, Input_dir.z);
+        }
+        else if (Input.GetKey(playerData.baseData.InputKeys[3]))
+        {
+            Input_dir = new Vector3(1, 0, Input_dir.z);
+        }
+        else
+        {
+            Input_dir = new Vector3(0, 0, Input_dir.z);
+        }
 
-         Action();
+        Action();
     }
 
     private void OnDrawGizmos()
@@ -117,8 +142,8 @@ public class Player : MonoBehaviour
                 }
                 break;
             case Status.guarding:
-                damage.UPFukitobi();
-                damage.SIDEFukitobi();
+                damage.UPFukitobi(isHit_against_theWall);
+                damage.SIDEFukitobi(isHit_against_theWall);
                 if (guard.transitionProperty == Guard.Transition.Guarding)
                 {
                     if (Input_dir.magnitude != 0)
@@ -153,36 +178,24 @@ public class Player : MonoBehaviour
                 }
                 break;
             case Status.damaged:
-                if (isGrounded && damage.UPFukitobi()) //Down
-                {
-                    if (Input.anyKeyDown)
-                    {
-                        transform.eulerAngles = new Vector3(this.transform.eulerAngles.x,
-                                                            this.transform.eulerAngles.y,
-                                                            0);
-                        wait.Set(100f, 100f);
-                        GetStatus(Status.waiting);
-                    }
-                }
-                else
-                {
+                
                     damage.Wait();
                     if (damage.Wait())
                     {
                         if (Input.anyKeyDown) //受身
-                        {
+                        {                     
                             wait.Set(30, 0);
                             GetStatus(Status.waiting);
                         }
 
                     }
-                    damage.UPFukitobi();
-                    if (damage.UPFukitobi())
+                    damage.UPFukitobi(isHit_against_theWall);
+                    if (damage.UPFukitobi(isHit_against_theWall))
                     {
                         gravity.Update(isGrounded, playerData.baseData.gravityScale);
                     }
-                }
-                damage.SIDEFukitobi();
+                
+                damage.SIDEFukitobi(isHit_against_theWall);
 
                 
 
@@ -258,6 +271,7 @@ public class Player : MonoBehaviour
             is_hit_ground |= raycastHit.collider.gameObject.CompareTag(ground_tag);
             float hit_dist = ray_length - raycastHit.distance;
             // 地面にめり込んだ分押し戻す
+            if(!raycastHit.collider.gameObject.CompareTag("Weapon"))
             transform.position += hit_dist * -ray_dir;
         }
         return is_hit_ground;
@@ -265,6 +279,14 @@ public class Player : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        for (int i = 0; i < playerData.usedAttacks.Length; i++) {
+
+            if (playerData.usedAttacks[i].Weapon.GetInstanceID() == other.GetInstanceID())
+            {
+                return;
+            }
+        }
+
         if (!isInvincible) //無敵じゃなかったらダメージ
         {
             if (other.GetComponent<Damager>() != null)

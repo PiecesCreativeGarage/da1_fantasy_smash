@@ -38,19 +38,25 @@ class Damage
     /// Finished True
     /// </summary>
     /// <returns></returns>
-    public bool UPFukitobi()
+    public bool UPFukitobi(bool[] ishit_against_theWall)
     {
-
-        if (upfukitobiPower > 0)
+        if (!(ishit_against_theWall[0] && ishit_against_theWall[1]))
         {
-            upfukitobiPower -= gravityScale;
-            dist = upfukitobiPower / 15;
-            transform.position += new Vector3(0, dist * Time.fixedDeltaTime);
-            return false;
+            if (upfukitobiPower > 0)
+            {
+                upfukitobiPower -= gravityScale;
+                dist = upfukitobiPower / 15;
+                transform.position += new Vector3(0, dist * Time.fixedDeltaTime);
+                return false;
+            }
+            else
+            {
+                return true;
+            }
         }
         else
         {
-            return true;
+            return false;
         }
 
     }
@@ -58,20 +64,26 @@ class Damage
     /// Finished True
     /// </summary>
     /// <returns></returns>
-    public bool SIDEFukitobi()
+    public bool SIDEFukitobi(bool[] ishit_against_theWall)
     {
-        if (sidefukitobiPower > 0)
+        if (!(ishit_against_theWall[0] && ishit_against_theWall[1]))
         {
-            sidefukitobiPower -= airResistance;
-            dist = sidefukitobiPower / 15;
-            transform.position += fukitobiVector * dist * Time.fixedDeltaTime;
-            return false;
+            if (sidefukitobiPower > 0)
+            {
+                sidefukitobiPower -= airResistance;
+                dist = sidefukitobiPower / 15;
+                transform.position += fukitobiVector * dist * Time.fixedDeltaTime;
+                return false;
+            }
+            else
+            {
+                return true;
+            }
         }
         else
         {
             return true;
         }
-
     }
     /// <summary>
     /// Finished True
