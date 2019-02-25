@@ -40,20 +40,22 @@ public class NewBehaviourScript : MonoBehaviour {
     {
         Ray ray = new Ray(origin, direction);
         RaycastHit raycastHit;
-
+        Vector3 offset = transform.position - beforePosition;
         Debug.DrawRay(ray.origin, ray.direction, Color.red);
-        Debug.DrawRay(transform.position, beforePosition, Color.green);
-        Vector3 offse = transform.position - beforePosition;
+        Debug.DrawRay(transform.position, offset.normalized * 100, Color.green);
+        
         if(Physics.Raycast(ray, out raycastHit, maxDistance))
         {
             Debug.Log("111");
             transform.position += -ray.direction * raycastHit.distance * Time.fixedDeltaTime;
             return true;
         }
-        else if(Physics.Raycast(transform.position, beforePosition, out raycastHit, Mathf.Abs(offse.z) + maxDistance))
+        else if(Physics.Raycast(transform.position, //offset.normalized
+                beforePosition, out raycastHit, 100))
         {
             Debug.Log("aaa");
-            transform.position += beforePosition * 10 * Time.fixedDeltaTime;
+            transform.position = beforePosition * 3 * Time.fixedDeltaTime;
+
             return true;
         }
         else

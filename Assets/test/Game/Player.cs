@@ -24,7 +24,7 @@ public class Player : MonoBehaviour
 
     public Status player_status;
     public bool isGrounded;
-
+    [HideInInspector]
     public bool[] isHit_against_theWall = new bool[4];
     public bool isInvincible;
     private void Awake()
