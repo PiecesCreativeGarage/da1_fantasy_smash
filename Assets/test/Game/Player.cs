@@ -16,6 +16,9 @@ public class Player : MonoBehaviour
 
     Vector3 Input_dir;
 
+    public Vector3 diff;
+    public Vector3 beforePosition;
+
     public enum Status
     {
         idle, jumpping, guarding, attacking, stepping, damaged, waiting, Down,
@@ -52,8 +55,13 @@ public class Player : MonoBehaviour
 
     float coll_radius = 0.5f;
     Vector3 coll_origin;
-    private void Update()
+
+
+    private void LateUpdate()
     {
+        diff = transform.position - beforePosition;
+        beforePosition = transform.position;
+
         coll_origin = transform.position + Vector3.up * coll_radius;
         GetStatus();
         if (GetGrounded(coll_origin, coll_radius, -transform.up, 0.1f))
@@ -74,10 +82,11 @@ public class Player : MonoBehaviour
         }
 
         isHit_against_theWall[0] = GetGrounded(coll_origin, coll_radius, transform.forward, 0.1f);
+        /*
         isHit_against_theWall[1] = GetGrounded(coll_origin, coll_radius, -transform.forward, 0.1f);
         isHit_against_theWall[2] = GetGrounded(coll_origin, coll_radius, -transform.right, 0.1f);
         isHit_against_theWall[3] = GetGrounded(coll_origin, coll_radius, transform.right, 0.1f);
-
+        */
         //Input_dir = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
         
         if (Input.GetKey(playerData.baseData.InputKeys[0]))
@@ -106,6 +115,10 @@ public class Player : MonoBehaviour
         }
 
         Action();
+        
+
+        SURINUKE(transform.position, coll_radius, 0.1f);
+        
     }
 
     private void OnDrawGizmos()
@@ -127,9 +140,8 @@ public class Player : MonoBehaviour
         switch (player_status)
         {
             case Status.idle:
-
-                move.Update(Input_dir, isGrounded, isHit_against_theWall);
                 rotation.Update(Input_dir);
+                move.Update(Input_dir, isGrounded, isHit_against_theWall);              
                 gravity.Update(isGrounded, playerData.baseData.gravityScale);
                 break;
             case Status.jumpping:
@@ -266,6 +278,7 @@ public class Player : MonoBehaviour
         ray_length += radius;
 
         RaycastHit raycastHit;
+        
         if(Physics.SphereCast(origin + offset, radius, ray_dir, out raycastHit, ray_length))
         {
             is_hit_ground |= raycastHit.collider.gameObject.CompareTag(ground_tag);
@@ -274,6 +287,8 @@ public class Player : MonoBehaviour
             if(!raycastHit.collider.gameObject.CompareTag("Weapon"))
             transform.position += hit_dist * -ray_dir;
         }
+        
+
         return is_hit_ground;
     }
 
@@ -331,6 +346,19 @@ public class Player : MonoBehaviour
         }
     }
 
+    void SURINUKE( Vector3 origin, float radius, float ray_length)
+    {
+        RaycastHit raycastHit;
+        if (Physics.Raycast(origin, -diff.normalized, out raycastHit, diff.sqrMagnitude))
+        {
+            Debug.Log(origin);
+            Debug.Log(diff.sqrMagnitude);
+            transform.position = raycastHit.point - diff.normalized * (ray_length + radius * 2);
+            beforePosition = transform.position;
+            Debug.DrawRay(origin, -diff.normalized * diff.sqrMagnitude, Color.red);
+        }
+        
+    }
 }
 
 class Wait

@@ -1124,12 +1124,12 @@ MonoBehaviour:
     - a
     - d
     animator: {fileID: 935344160}
-    cam: {fileID: 31938138}
+    cam: {fileID: 0}
     animationNames:
     - 
     - Run
   moveData:
-    moveSpeed: 20
+    moveSpeed: 1000
   jumpData:
     jumpPower: 200
   guardData:
@@ -1725,7 +1725,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &638777571
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2531,6 +2531,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerData: {fileID: 274725769}
+  diff: {x: 0, y: 0, z: 0}
+  beforePosition: {x: 0, y: 5, z: 0}
   player_status: 0
   isGrounded: 0
   isHit_against_theWall: 00000000
@@ -2712,7 +2714,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!65 &1055123531
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2752,6 +2754,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerData: {fileID: 0}
+  diff: {x: 0, y: 0, z: 0}
+  beforePosition: {x: 0, y: 0, z: 0}
   player_status: 0
   isGrounded: 0
   isHit_against_theWall: 00000000
@@ -4338,7 +4342,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1696191524
 Transform:
   m_ObjectHideFlags: 0

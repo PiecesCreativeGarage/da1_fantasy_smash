@@ -6,21 +6,19 @@ public class SURINUKE : MonoBehaviour {
 
     public float moveAmount;
     Vector3 direction;
+    float toSurfaceLength = 0.6f;   // 中心座標から物体表面までの長さ
 
-    public Vector3 beforePosition;
+    Vector3 beforePosition;
 
     private void Update()
     {
-        
+
+        beforePosition = this.transform.position;
+
         direction = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
         if (direction.magnitude != 0)
         {
             transform.rotation = Quaternion.LookRotation(direction);
-        }
-
-        if (Input.GetKeyDown(KeyCode.M))
-        {
-            beforePosition = this.transform.position;
             this.transform.position = this.transform.position + (direction * moveAmount);
         }
 
@@ -29,19 +27,30 @@ public class SURINUKE : MonoBehaviour {
 
     void Surinuke()
     {
+        Vector3 diff =  transform.position - beforePosition;
+        Vector3 foward = diff.normalized;
+        Vector3 backward = -foward;        // 移動先に対して正反対の方向
+        Vector3 surfaceOffset = foward * toSurfaceLength;
+
         RaycastHit raycastHit;
-        if(Physics.Raycast(transform.position, transform.forward, out raycastHit, 1))
+        // 前方にゆっくり進もうとした時用に物体にめり込まないように前方に対して当たり判定する
+        if (Physics.Raycast(transform.position, foward, out raycastHit, toSurfaceLength))
         {
-            Debug.Log("!!!");
-            transform.position += -transform.forward * moveAmount * Time.fixedDeltaTime;
+            // ヒットした場所と物体表面が接するように座標を正す
+            transform.position = raycastHit.point - surfaceOffset;
         }
-        else if(Physics.Raycast(transform.position, beforePosition, out raycastHit))
-                //transform.position.magnitude - beforePosition.magnitude))
+
+        float move_amount = diff.sqrMagnitude;      // 移動量
+        // 物体表面から移動反対方向に移動量分の線分を飛ばし、線分に対して物体がヒットしていたら、高速ですり抜けたということになる
+        if (Physics.Raycast(transform.position, backward, out raycastHit, move_amount))
         {
-            Debug.Log(beforePosition.normalized * 1);
-            transform.position = raycastHit.point + (beforePosition.normalized * 1);
+            // ヒット方向と進行方向のベクトルの内積を算出して、１以上なら同じ方向にいる物体なので前方に進もうとした時に衝突したということ
+            bool is_foward_obj = 0 < Vector3.Dot(raycastHit.point -　beforePosition, foward);
+            if (is_foward_obj)
+            {
+                // ヒットした場所と物体表面が接するように座標を正す
+                transform.position = raycastHit.point - surfaceOffset;
+            }
         }
-        Debug.DrawRay(transform.position, transform.forward, Color.red);
-        Debug.DrawRay(transform.position, beforePosition, Color.green);
     }
 }
