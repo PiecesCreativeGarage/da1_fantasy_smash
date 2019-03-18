@@ -1124,7 +1124,7 @@ MonoBehaviour:
     - a
     - d
     animator: {fileID: 935344160}
-    cam: {fileID: 0}
+    cam: {fileID: 31938138}
     animationNames:
     - 
     - Run

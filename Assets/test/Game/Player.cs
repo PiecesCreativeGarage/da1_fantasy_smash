@@ -306,44 +306,47 @@ public class Player : MonoBehaviour
 
         if (!isInvincible) //無敵じゃなかったらダメージ
         {
-            
-            if (other.GetComponent<Damager>() != null && other.GetComponentInChildren<Damager>() == null) { 
-                
-                Damager otherDamager = other.GetComponent<Damager>();
 
-                if (guard.transitionProperty == Guard.Transition.Guarding && !otherDamager.is_UnableTo_Guard)
+            if (other.GetComponent<Damager>() != null && other.gameObject.CompareTag("Weapon"))
+            {
+
+                Damager otherDamager = other.GetComponent<Damager>();
+                if (otherDamager.DamagePoint != 0)
                 {
-                    if (guard.JustFrameProperty >= 0)//ジャストガード
+                    if (guard.transitionProperty == Guard.Transition.Guarding && !otherDamager.is_UnableTo_Guard)
                     {
-                        guard.GuardingFrame += otherDamager.PreventTime / 4;
+                        if (guard.JustFrameProperty >= 0)//ジャストガード
+                        {
+                            guard.GuardingFrame += otherDamager.PreventTime / 4;
+                        }
+                        else
+                        {
+                            guard.GuardingFrame += otherDamager.PreventTime / 2;
+                            damage.Calcurate_HitPoint(ref playerData.baseData.hitPoint, otherDamager.DamagePoint / 10);
+
+                            damage.Start(
+                                     playerData.baseData.gravityScale,
+                                     playerData.baseData.airResistance,
+                                     otherDamager.UpFukitobasiPower / 1.5f,
+                                     otherDamager.SideFukitobsiPower / 1.5f,
+                                     otherDamager.FukitobasiVector,
+                                     0);
+
+                        }
                     }
                     else
                     {
-                        guard.GuardingFrame += otherDamager.PreventTime / 2;
-                        damage.Calcurate_HitPoint(ref playerData.baseData.hitPoint, otherDamager.DamagePoint / 10);
-
+                        GetStatus(Status.damaged);
                         damage.Start(
-                                 playerData.baseData.gravityScale,
-                                 playerData.baseData.airResistance,
-                                 otherDamager.UpFukitobasiPower / 1.5f,
-                                 otherDamager.SideFukitobsiPower / 1.5f,
-                                 otherDamager.FukitobasiVector,
-                                 0);
-                    
+                                     playerData.baseData.gravityScale,
+                                     playerData.baseData.airResistance,
+                                     otherDamager.UpFukitobasiPower,
+                                     otherDamager.SideFukitobsiPower,
+                                     otherDamager.FukitobasiVector,
+                                     otherDamager.PreventTime);
+
+                        damage.Calcurate_HitPoint(ref playerData.baseData.hitPoint, otherDamager.DamagePoint);
                     }
-                }
-                else
-                {
-                    GetStatus(Status.damaged);
-                    damage.Start(
-                                 playerData.baseData.gravityScale,
-                                 playerData.baseData.airResistance,
-                                 otherDamager.UpFukitobasiPower,
-                                 otherDamager.SideFukitobsiPower,
-                                 otherDamager.FukitobasiVector,
-                                 otherDamager.PreventTime);
-                   
-                    damage.Calcurate_HitPoint(ref playerData.baseData.hitPoint, otherDamager.DamagePoint);
                 }
             }
         }

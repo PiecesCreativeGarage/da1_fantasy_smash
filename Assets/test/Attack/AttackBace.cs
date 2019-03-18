@@ -19,7 +19,7 @@ public abstract class AttackBace{
     public float PreventTime;
 
     protected float starFrame, endFrame;
-    public float AttakingFrame;
+    public float AttackingFrame;
 
     public enum Transition
     {
@@ -79,7 +79,7 @@ class Attack_A : AttackBace
         assistance.GetDamager(ref damager, base.gameObject);
         AttackPoint = 10;
         starFrame = 20;
-        AttakingFrame = 3;
+        AttackingFrame = 10;
         endFrame = 40;
         PreventTime = 60;
         UpFukitobasiPower = 500;
@@ -106,9 +106,9 @@ class Attack_A : AttackBace
                 }
                 break;
             case Transition.Attacking:
-                AttakingFrame--;
-
-                if(AttakingFrame <= 0)
+                AttackingFrame--;
+                Debug.Log(AttackingFrame);
+                if(AttackingFrame <= 0)
                 {
                     damager.DamagePoint = 0;
                     damager.FukitobasiVector = Vector3.zero;
@@ -140,7 +140,7 @@ class Attack_B : AttackBace
         assistance.GetDamager(ref damager, base.gameObject);
         AttackPoint = 10;
         starFrame = 3;
-        AttakingFrame = 50;
+        AttackingFrame = 50;
         endFrame = 40;
         UpFukitobasiPower = 300;
         SideFukitobsiPower = 200;
@@ -167,9 +167,9 @@ class Attack_B : AttackBace
                 }
                 break;
             case Transition.Attacking:
-                AttakingFrame--;
-                Debug.Log(AttakingFrame);
-                if (AttakingFrame <= 0)
+                AttackingFrame--;
+                Debug.Log(AttackingFrame);
+                if (AttackingFrame <= 0)
                 {
                     damager.DamagePoint = 0;
                     damager.FukitobasiVector = Vector3.zero;
@@ -201,7 +201,7 @@ class RemoteAttack:AttackBace
         assistance.GetDamager(ref damager, base.gameObject);
         AttackPoint = 10;
         starFrame = 3;
-        AttakingFrame = 50;
+        AttackingFrame = 50;
         endFrame = 40;
         UpFukitobasiPower = 300;
         SideFukitobsiPower = 200;
@@ -229,9 +229,9 @@ class RemoteAttack:AttackBace
                 }
                 break;
             case Transition.Attacking:
-                AttakingFrame--;
+                AttackingFrame--;
 
-                if (AttakingFrame <= 0)
+                if (AttackingFrame <= 0)
                 {
                     damager.DamagePoint = 0;
                     damager.FukitobasiVector = Vector3.zero;
