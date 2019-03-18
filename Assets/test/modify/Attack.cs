@@ -39,6 +39,7 @@ class Attack
         attackBace.FukitobasiVector += transform.forward;
         attackBace.animator = this.animator;
         attackBace.gameObject = Attacks[number].Weapon;
+        attackBace.playerTransform = transform;
         attackBace.Start();
 
         if (!(attackBace == null))

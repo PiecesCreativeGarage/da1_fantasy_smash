@@ -29,6 +29,7 @@ public class Player : MonoBehaviour
     public bool isGrounded;
     [HideInInspector]
     public bool[] isHit_against_theWall = new bool[4];
+    bool isAttacked;
     public bool isInvincible;
     private void Awake()
     {
@@ -57,9 +58,9 @@ public class Player : MonoBehaviour
     Vector3 coll_origin;
 
 
-    private void LateUpdate()
+    private void Update()
     {
-        diff = transform.position - beforePosition;
+        
         beforePosition = transform.position;
 
         coll_origin = transform.position + Vector3.up * coll_radius;
@@ -82,12 +83,11 @@ public class Player : MonoBehaviour
         }
 
         isHit_against_theWall[0] = GetGrounded(coll_origin, coll_radius, transform.forward, 0.1f);
-        /*
+        
         isHit_against_theWall[1] = GetGrounded(coll_origin, coll_radius, -transform.forward, 0.1f);
         isHit_against_theWall[2] = GetGrounded(coll_origin, coll_radius, -transform.right, 0.1f);
         isHit_against_theWall[3] = GetGrounded(coll_origin, coll_radius, transform.right, 0.1f);
-        */
-        //Input_dir = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
+        
         
         if (Input.GetKey(playerData.baseData.InputKeys[0]))
         {
@@ -115,10 +115,11 @@ public class Player : MonoBehaviour
         }
 
         Action();
-        
 
+        diff = transform.position - beforePosition;
         SURINUKE(transform.position, coll_radius, 0.1f);
-        
+
+       
     }
 
     private void OnDrawGizmos()
@@ -294,6 +295,7 @@ public class Player : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        
         for (int i = 0; i < playerData.usedAttacks.Length; i++) {
 
             if (playerData.usedAttacks[i].Weapon.GetInstanceID() == other.GetInstanceID())
@@ -304,8 +306,9 @@ public class Player : MonoBehaviour
 
         if (!isInvincible) //無敵じゃなかったらダメージ
         {
-            if (other.GetComponent<Damager>() != null)
-            {
+            
+            if (other.GetComponent<Damager>() != null && other.GetComponentInChildren<Damager>() == null) { 
+                
                 Damager otherDamager = other.GetComponent<Damager>();
 
                 if (guard.transitionProperty == Guard.Transition.Guarding && !otherDamager.is_UnableTo_Guard)
@@ -326,7 +329,7 @@ public class Player : MonoBehaviour
                                  otherDamager.SideFukitobsiPower / 1.5f,
                                  otherDamager.FukitobasiVector,
                                  0);
-
+                    
                     }
                 }
                 else
@@ -339,23 +342,28 @@ public class Player : MonoBehaviour
                                  otherDamager.SideFukitobsiPower,
                                  otherDamager.FukitobasiVector,
                                  otherDamager.PreventTime);
-
+                   
                     damage.Calcurate_HitPoint(ref playerData.baseData.hitPoint, otherDamager.DamagePoint);
                 }
             }
         }
     }
 
+
     void SURINUKE( Vector3 origin, float radius, float ray_length)
     {
+        Debug.DrawRay(origin, -diff.normalized * diff.sqrMagnitude, Color.red);
         RaycastHit raycastHit;
         if (Physics.Raycast(origin, -diff.normalized, out raycastHit, diff.sqrMagnitude))
         {
-            Debug.Log(origin);
-            Debug.Log(diff.sqrMagnitude);
-            transform.position = raycastHit.point - diff.normalized * (ray_length + radius * 2);
-            beforePosition = transform.position;
-            Debug.DrawRay(origin, -diff.normalized * diff.sqrMagnitude, Color.red);
+
+            bool is_foward_obj = 0 < Vector3.Dot(raycastHit.point - beforePosition, diff.normalized);
+            if (is_foward_obj)
+            {
+                transform.position = raycastHit.point - diff.normalized * (ray_length + radius * 2);
+                beforePosition = transform.position;
+            }
+            
         }
         
     }

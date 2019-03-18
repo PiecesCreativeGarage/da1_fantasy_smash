@@ -9,6 +9,7 @@ public static class AttackDictionary {
     {
         { 1, typeof(Attack_A)},
         { 2, typeof(Attack_B)},
+        { 3, typeof(RemoteAttack) },
     };
 
     public static AttackBace CreateAttack(int id)

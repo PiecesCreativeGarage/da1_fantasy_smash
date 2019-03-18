@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 33904525675239148}
   - component: {fileID: 135180391229112304}
   - component: {fileID: 23504346188307432}
+  - component: {fileID: 114687523511828596}
   m_Layer: 0
   m_Name: Sphere
   m_TagString: Untagged
@@ -81,6 +82,23 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1871935735159094}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &114687523511828596
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1871935735159094}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92966b8528ab81947838640267d7fcaf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DamagePoint: 0
+  UpFukitobasiPower: 0
+  SideFukitobsiPower: 0
+  FukitobasiVector: {x: 0, y: 0, z: 0}
+  PreventTime: 0
+  is_UnableTo_Guard: 0
 --- !u!135 &135180391229112304
 SphereCollider:
   m_ObjectHideFlags: 1
