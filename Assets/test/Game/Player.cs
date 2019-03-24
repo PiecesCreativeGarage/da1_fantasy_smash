@@ -4,6 +4,7 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     public PlayerData playerData;
+    public GameObject target;
     Rotation rotation;
     Move move;
     Gravity gravity;
@@ -29,7 +30,6 @@ public class Player : MonoBehaviour
     public bool isGrounded;
     [HideInInspector]
     public bool[] isHit_against_theWall = new bool[4];
-    bool isAttacked;
     public bool isInvincible;
     private void Awake()
     {
@@ -40,7 +40,7 @@ public class Player : MonoBehaviour
         gravity = new Gravity(transform);
         guard = new Guard(transform, playerData.guardData);
         attack = new Attack(playerData.usedAttacks, playerData.baseData.animator, transform);
-        damage = new Damage(playerData.baseData.animator, transform);
+        damage = new Damage(transform, playerData);
         step = new Step(transform, playerData);
 
         wait = new Wait();
@@ -119,7 +119,6 @@ public class Player : MonoBehaviour
         diff = transform.position - beforePosition;
         SURINUKE(transform.position, coll_radius, 0.1f);
 
-       
     }
 
     private void OnDrawGizmos()
@@ -168,7 +167,7 @@ public class Player : MonoBehaviour
                     }
                 }
                 guard.Guarding();
-
+                gravity.Update(isGrounded, playerData.baseData.gravityScale);
                 if (guard.isGuarding == false)
                 {
                     GetStatus(Status.idle);
@@ -191,7 +190,8 @@ public class Player : MonoBehaviour
                 }
                 break;
             case Status.damaged:
-                
+                guard.gobj.SetActive(false);
+
                     damage.Wait();
                     if (damage.Wait())
                     {
@@ -245,10 +245,16 @@ public class Player : MonoBehaviour
                                    playerData.jumpData.jumpPower, true);
                         GetStatus(Status.jumpping);
                     }
-                    if (Input.GetKeyDown(KeyCode.G) || Input.GetKey(KeyCode.G))
+                    if (Input.GetKeyDown(playerData.guardData.keyCode)
+                        || Input.GetKey(playerData.guardData.keyCode))
                     {
                         guard.Start();
                         GetStatus(Status.guarding);
+
+                        if(target != null)
+                        {
+                            this.transform.LookAt(target.transform.position);
+                        }
                     }
                     for (int i = 0; i < playerData.usedAttacks.Length; i++)
                     {
@@ -256,6 +262,10 @@ public class Player : MonoBehaviour
                         {
                             attack.Start(i);
                             GetStatus(Status.attacking);
+                            if (target != null)
+                            {
+                                this.transform.LookAt(target.transform.position);
+                            }
                         }
                     }
 
@@ -282,11 +292,18 @@ public class Player : MonoBehaviour
         
         if(Physics.SphereCast(origin + offset, radius, ray_dir, out raycastHit, ray_length))
         {
-            is_hit_ground |= raycastHit.collider.gameObject.CompareTag(ground_tag);
-            float hit_dist = ray_length - raycastHit.distance;
+             
+                is_hit_ground |= raycastHit.collider.gameObject.CompareTag(ground_tag);
+                float hit_dist = ray_length - raycastHit.distance;
             // 地面にめり込んだ分押し戻す
-            if(!raycastHit.collider.gameObject.CompareTag("Weapon"))
-            transform.position += hit_dist * -ray_dir;
+            if (!raycastHit.collider.gameObject.CompareTag("Weapon"))
+            {
+                if (!Physics.Raycast(origin, -ray_dir, ray_length + radius))
+                {
+                    transform.position += hit_dist * -ray_dir;
+                }
+            }
+           
         }
         
 
@@ -300,8 +317,10 @@ public class Player : MonoBehaviour
 
             if (playerData.usedAttacks[i].Weapon.GetInstanceID() == other.GetInstanceID())
             {
+             
                 return;
             }
+            
         }
 
         if (!isInvincible) //無敵じゃなかったらダメージ
@@ -311,7 +330,8 @@ public class Player : MonoBehaviour
             {
 
                 Damager otherDamager = other.GetComponent<Damager>();
-                if (otherDamager.DamagePoint != 0)
+                Debug.Log(other.name);
+                if (otherDamager.PreventTime != 0)
                 {
                     if (guard.transitionProperty == Guard.Transition.Guarding && !otherDamager.is_UnableTo_Guard)
                     {
@@ -337,6 +357,7 @@ public class Player : MonoBehaviour
                     else
                     {
                         GetStatus(Status.damaged);
+                        
                         damage.Start(
                                      playerData.baseData.gravityScale,
                                      playerData.baseData.airResistance,
@@ -359,17 +380,20 @@ public class Player : MonoBehaviour
         RaycastHit raycastHit;
         if (Physics.Raycast(origin, -diff.normalized, out raycastHit, diff.sqrMagnitude))
         {
-
-            bool is_foward_obj = 0 < Vector3.Dot(raycastHit.point - beforePosition, diff.normalized);
-            if (is_foward_obj)
+            if (raycastHit.collider.gameObject.CompareTag("ground"))
             {
-                transform.position = raycastHit.point - diff.normalized * (ray_length + radius * 2);
-                beforePosition = transform.position;
+                bool is_foward_obj = 0 < Vector3.Dot(raycastHit.point - beforePosition, diff.normalized);
+                if (is_foward_obj)
+                {
+                    transform.position = raycastHit.point - diff.normalized * (ray_length + radius * 2);
+                    beforePosition = transform.position;
+                }
             }
-            
         }
         
     }
+
+    
 }
 
 class Wait

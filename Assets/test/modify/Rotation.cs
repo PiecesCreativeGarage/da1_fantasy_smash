@@ -26,15 +26,15 @@ class Rotation
         {
             if (dir.z == 1)
             {
-                transform.eulerAngles = cam.transform.eulerAngles + new Vector3(transform.eulerAngles.x, (dir.x * 45), transform.eulerAngles.z);
+                transform.eulerAngles = new Vector3(transform.eulerAngles.x, (dir.x * 45) + cam.transform.eulerAngles.y, transform.eulerAngles.z);
             }
             else if (dir.z == -1)
             {
-                transform.eulerAngles = cam.transform.eulerAngles + new Vector3(transform.eulerAngles.x, (180 * dir.z) - (dir.x * 45), transform.eulerAngles.z);
+                transform.eulerAngles = new Vector3(transform.eulerAngles.x, (180 * dir.z) - (dir.x * 45) + cam.transform.eulerAngles.y, transform.eulerAngles.z);
             }
             else if (dir.x != 0)
             {
-                transform.eulerAngles = cam.transform.eulerAngles + new Vector3(transform.eulerAngles.x, (dir.x * 90), transform.eulerAngles.z);
+                transform.eulerAngles = new Vector3(transform.eulerAngles.x, (dir.x * 90) + cam.transform.eulerAngles.y, transform.eulerAngles.z);
             }
         }
         else

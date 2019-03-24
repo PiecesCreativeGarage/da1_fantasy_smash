@@ -4,6 +4,8 @@ using UnityEngine;
 
 class Damage
 {
+    PlayerData playerData;
+
     float gravityScale;
     float airResistance;
     float damagePoint;
@@ -14,10 +16,11 @@ class Damage
     float waitTime;
     Transform transform;
     Animator animator;
-    public Damage(Animator animator, Transform transform)
+    public Damage(Transform transform, PlayerData playerData)
     {
-        this.animator = animator;
+ 
         this.transform = transform;
+        this.playerData = playerData;
     }
     public void Start(float gravityScale, float airResistance, float UpFukitobiPower, float SideFukitobiPower, Vector3 FukitobiVector, float WaitTime)
     {
@@ -85,6 +88,7 @@ class Damage
             return true;
         }
     }
+
     /// <summary>
     /// Finished True
     /// </summary>

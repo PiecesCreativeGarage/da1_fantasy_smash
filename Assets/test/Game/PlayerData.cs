@@ -35,6 +35,7 @@ public class PlayerData : MonoBehaviour
     [System.Serializable]
     public class GuardData
     {
+        public string keyCode;
         public GameObject guardObject;
         public Vector3 plusGuardPosi, guardScale;
         public float[] transitionFrames = new float[3];

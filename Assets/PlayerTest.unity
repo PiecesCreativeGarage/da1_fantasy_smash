@@ -1092,7 +1092,6 @@ GameObject:
   - component: {fileID: 274725770}
   - component: {fileID: 997891387}
   - component: {fileID: 274725769}
-  - component: {fileID: 274725772}
   m_Layer: 0
   m_Name: 2HandedWarrior
   m_TagString: Untagged
@@ -1133,6 +1132,7 @@ MonoBehaviour:
   jumpData:
     jumpPower: 200
   guardData:
+    keyCode: g
     guardObject: {fileID: 1410392178294790, guid: 6af208b4fd93bda44b25a776bebdb00f,
       type: 2}
     plusGuardPosi: {x: 0, y: 1.25, z: 0}
@@ -1152,7 +1152,13 @@ MonoBehaviour:
     - 2
   usedAttacks:
   - AttackNumver: 1
-    KeyCode: b
+    KeyCode: z
+    Weapon: {fileID: 425837495}
+  - AttackNumver: 3
+    KeyCode: x
+    Weapon: {fileID: 1528730889661992, guid: d15aa09d72895b5479d8e302f32fd151, type: 2}
+  - AttackNumver: 4
+    KeyCode: c
     Weapon: {fileID: 425837495}
 --- !u!65 &274725770
 BoxCollider:
@@ -1183,23 +1189,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &274725772
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 274725768}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 92966b8528ab81947838640267d7fcaf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DamagePoint: 0
-  UpFukitobasiPower: 0
-  SideFukitobsiPower: 0
-  FukitobasiVector: {x: 0, y: 0, z: 0}
-  PreventTime: 0
-  is_UnableTo_Guard: 0
 --- !u!4 &274725773
 Transform:
   m_ObjectHideFlags: 0
@@ -2811,7 +2800,8 @@ MonoBehaviour:
   jumpData:
     jumpPower: 50
   guardData:
-    guardObject: {fileID: 1528730889661992, guid: 69b0913825bda6645873a8b974895cc7,
+    keyCode: h
+    guardObject: {fileID: 1410392178294790, guid: 6af208b4fd93bda44b25a776bebdb00f,
       type: 2}
     plusGuardPosi: {x: 0, y: 1.25, z: 0}
     guardScale: {x: 3, y: 3, z: 3}
@@ -2830,6 +2820,12 @@ MonoBehaviour:
     - 4
   usedAttacks:
   - AttackNumver: 2
+    KeyCode: b
+    Weapon: {fileID: 1169873218}
+  - AttackNumver: 3
+    KeyCode: n
+    Weapon: {fileID: 1528730889661992, guid: f8fc9103cbdd4d841a731f8640f55d07, type: 2}
+  - AttackNumver: 4
     KeyCode: m
     Weapon: {fileID: 1169873218}
 --- !u!4 &1055123536
