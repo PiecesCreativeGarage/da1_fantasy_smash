@@ -83,7 +83,7 @@ public class Player : MonoBehaviour
         {
             isGrounded = false;
         }
-
+        
         isHit_against_theWall[0] = GetGrounded(coll_origin, coll_radius, transform.forward, 0.1f);        
         isHit_against_theWall[1] = GetGrounded(coll_origin, coll_radius, -transform.forward, 0.1f);
         isHit_against_theWall[2] = GetGrounded(coll_origin, coll_radius, -transform.right, 0.1f);
@@ -308,23 +308,34 @@ public class Player : MonoBehaviour
         ray_length += radius;
 
         RaycastHit raycastHit;
-        
-        if(Physics.SphereCast(origin + offset, radius, ray_dir, out raycastHit, ray_length))
+        float hit_dist;
+        Debug.DrawRay(origin + -ray_dir * ray_length, ray_dir * (ray_length + radius), Color.green);
+
+        if (Physics.SphereCast(origin + offset, radius, ray_dir, out raycastHit, ray_length))
         {
-             
-                is_hit_ground |= raycastHit.collider.gameObject.CompareTag(ground_tag);
-                float hit_dist = ray_length - raycastHit.distance;
+            is_hit_ground |= raycastHit.collider.gameObject.CompareTag(ground_tag);
+            hit_dist = ray_length - raycastHit.distance;
             // 地面にめり込んだ分押し戻す
-            if (!raycastHit.collider.gameObject.CompareTag("Weapon"))
+
+            if (Physics.Raycast(origin, ray_dir, ray_length + radius))
             {
-                if (!Physics.Raycast(origin, -ray_dir, ray_length + radius))
+                if (!raycastHit.collider.gameObject.CompareTag("Weapon")
+                    && (raycastHit.collider.GetInstanceID() != this.GetInstanceID()))
                 {
                     transform.position += hit_dist * -ray_dir;
                 }
             }
-           
+
         }
-        
+        else if (Physics.Raycast(origin, ray_dir, out raycastHit, ray_length + radius))
+        {
+            if (!raycastHit.collider.gameObject.CompareTag("Weapon")
+                && (raycastHit.collider.GetInstanceID() != this.GetInstanceID()))
+            {
+                transform.position = raycastHit.point + -ray_dir.normalized * ray_length;
+            }
+        }
+
 
         return is_hit_ground;
     }
@@ -404,7 +415,8 @@ public class Player : MonoBehaviour
                 bool is_foward_obj = 0 < Vector3.Dot(raycastHit.point - beforePosition, diff.normalized);
                 if (is_foward_obj)
                 {
-                    transform.position = raycastHit.point - diff.normalized * (ray_length + radius * 2);
+                    transform.position =
+                        raycastHit.point - diff.normalized * (ray_length + radius);
                     beforePosition = transform.position;
                 }
             }

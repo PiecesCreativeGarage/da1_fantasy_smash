@@ -18,6 +18,7 @@ class Gravity
         if (isGounded)
         {
             value = 0;
+           
         }
         else
         {
