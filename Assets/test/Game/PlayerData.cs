@@ -29,7 +29,9 @@ public class PlayerData : MonoBehaviour
     [System.Serializable]
     public class JumpData
     {
+        public string keyCode;
         public float jumpPower;
+        public int airJumpLimit;
     }
 
     [System.Serializable]

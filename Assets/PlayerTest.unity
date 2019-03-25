@@ -1144,6 +1144,7 @@ MonoBehaviour:
   moveData:
     moveSpeed: 10
   jumpData:
+    keyCode: space
     jumpPower: 200
   guardData:
     keyCode: g
@@ -2554,6 +2555,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerData: {fileID: 274725769}
   target: {fileID: 1055123530}
+  airJumpLimit: 1
   diff: {x: 0, y: 0, z: 0}
   beforePosition: {x: 0, y: 5, z: 0}
   player_status: 0
@@ -2778,6 +2780,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerData: {fileID: 0}
   target: {fileID: 0}
+  airJumpLimit: 0
   diff: {x: 0, y: 0, z: 0}
   beforePosition: {x: 0, y: 0, z: 0}
   player_status: 0
@@ -2833,6 +2836,7 @@ MonoBehaviour:
   moveData:
     moveSpeed: 5
   jumpData:
+    keyCode: o
     jumpPower: 50
   guardData:
     keyCode: h

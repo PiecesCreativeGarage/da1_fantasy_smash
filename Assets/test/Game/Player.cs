@@ -5,6 +5,8 @@ public class Player : MonoBehaviour
 {
     public PlayerData playerData;
     public GameObject target;
+
+    int airJumpAmount;
     Rotation rotation;
     Move move;
     Gravity gravity;
@@ -82,8 +84,7 @@ public class Player : MonoBehaviour
             isGrounded = false;
         }
 
-        isHit_against_theWall[0] = GetGrounded(coll_origin, coll_radius, transform.forward, 0.1f);
-        
+        isHit_against_theWall[0] = GetGrounded(coll_origin, coll_radius, transform.forward, 0.1f);        
         isHit_against_theWall[1] = GetGrounded(coll_origin, coll_radius, -transform.forward, 0.1f);
         isHit_against_theWall[2] = GetGrounded(coll_origin, coll_radius, -transform.right, 0.1f);
         isHit_against_theWall[3] = GetGrounded(coll_origin, coll_radius, transform.right, 0.1f);
@@ -237,9 +238,11 @@ public class Player : MonoBehaviour
         {
             if (isGrounded)
             {
+                airJumpAmount = 0;
+
                 if (player_status == Status.idle)
                 {
-                    if (Input.GetKeyDown(KeyCode.Space))
+                    if (Input.GetKeyDown(playerData.jumpData.keyCode))
                     {
                         jump.Start(playerData.baseData.gravityScale,
                                    playerData.jumpData.jumpPower, true);
@@ -269,6 +272,22 @@ public class Player : MonoBehaviour
                         }
                     }
 
+                }
+            }
+            else
+            {
+                if(player_status == Status.idle || player_status == Status.jumpping)
+                {
+                    if (airJumpAmount < playerData.jumpData.airJumpLimit)
+                    {
+                        if (Input.GetKeyDown(playerData.jumpData.keyCode))
+                        {
+                            airJumpAmount++;
+                            jump.Start(playerData.baseData.gravityScale,
+                                       playerData.jumpData.jumpPower, true);
+                            GetStatus(Status.jumpping);
+                        }
+                    }
                 }
             }
 

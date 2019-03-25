@@ -6,14 +6,11 @@ public class CameraContoroller : MonoBehaviour {
 
     public GameObject player;
     public GameObject target;
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
+    Vector3 diff;
 	// Update is called once per frame
 	void Update () {
-        transform.position = player.transform.position + new Vector3(0, 3, 8);
+        diff = target.transform.position - player.transform.position;
+        transform.position = player.transform.position + -this.transform.forward * 8;  
         TargetCameraMethod();
 	}
     void TargetCameraMethod()

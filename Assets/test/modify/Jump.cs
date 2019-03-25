@@ -10,6 +10,7 @@ class Jump
     float dist;
     public bool isjumpping;
 
+
     public void Start(float gravityScale, float jumpPower, bool isJumpping)
     {
         jumpPow = jumpPower;
