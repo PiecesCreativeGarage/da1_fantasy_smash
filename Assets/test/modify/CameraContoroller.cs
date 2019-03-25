@@ -10,7 +10,7 @@ public class CameraContoroller : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         diff = target.transform.position - player.transform.position;
-        transform.position = player.transform.position + -this.transform.forward * 8;  
+        transform.position = player.transform.position + -this.transform.forward * 8 + new Vector3(0, 1.5f, 0);  
         TargetCameraMethod();
 	}
     void TargetCameraMethod()

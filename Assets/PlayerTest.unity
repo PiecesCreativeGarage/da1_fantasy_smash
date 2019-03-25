@@ -413,7 +413,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 31938138}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3e2c7ab8c7418e44d9ba8d74812193fb, type: 3}
   m_Name: 
@@ -1146,6 +1146,7 @@ MonoBehaviour:
   jumpData:
     keyCode: space
     jumpPower: 200
+    airJumpLimit: 2
   guardData:
     keyCode: g
     guardObject: {fileID: 1410392178294790, guid: 6af208b4fd93bda44b25a776bebdb00f,
@@ -2555,7 +2556,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerData: {fileID: 274725769}
   target: {fileID: 1055123530}
-  airJumpLimit: 1
   diff: {x: 0, y: 0, z: 0}
   beforePosition: {x: 0, y: 5, z: 0}
   player_status: 0
@@ -2780,7 +2780,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerData: {fileID: 0}
   target: {fileID: 0}
-  airJumpLimit: 0
   diff: {x: 0, y: 0, z: 0}
   beforePosition: {x: 0, y: 0, z: 0}
   player_status: 0
@@ -2838,6 +2837,7 @@ MonoBehaviour:
   jumpData:
     keyCode: o
     jumpPower: 50
+    airJumpLimit: 0
   guardData:
     keyCode: h
     guardObject: {fileID: 1410392178294790, guid: 6af208b4fd93bda44b25a776bebdb00f,
