@@ -66,8 +66,9 @@ public class Player : MonoBehaviour
         beforePosition = transform.position;
 
         coll_origin = transform.position + Vector3.up * coll_radius;
+
         GetStatus();
-        if (GetGrounded(coll_origin, coll_radius, -transform.up, 0.1f))
+        if (GetGrounded(transform.position + transform.up * coll_radius, coll_radius, new Vector3(0, -1), 0.1f))
         {
             if (!isGrounded)
             {
@@ -83,12 +84,15 @@ public class Player : MonoBehaviour
         {
             isGrounded = false;
         }
-        
-        isHit_against_theWall[0] = GetGrounded(coll_origin, coll_radius, transform.forward, 0.1f);        
-        isHit_against_theWall[1] = GetGrounded(coll_origin, coll_radius, -transform.forward, 0.1f);
-        isHit_against_theWall[2] = GetGrounded(coll_origin, coll_radius, -transform.right, 0.1f);
-        isHit_against_theWall[3] = GetGrounded(coll_origin, coll_radius, transform.right, 0.1f);
-        
+        //isGroundedの方向と同じだとガタガタなるので　同じなら判定しない
+        if(transform.forward != -Vector3.up)
+            isHit_against_theWall[0] = GetGrounded(coll_origin, coll_radius, transform.forward, 0.1f);
+        if (-transform.forward != -Vector3.up)
+            isHit_against_theWall[1] = GetGrounded(coll_origin, coll_radius, -transform.forward, 0.1f);
+        if (-transform.right != -Vector3.up)
+            isHit_against_theWall[2] = GetGrounded(coll_origin, coll_radius, -transform.right, 0.1f);
+        if (transform.right != -Vector3.up)
+            isHit_against_theWall[3] = GetGrounded(coll_origin, coll_radius, transform.right, 0.1f);
         
         if (Input.GetKey(playerData.baseData.InputKeys[0]))
         {
@@ -197,7 +201,13 @@ public class Player : MonoBehaviour
                     if (damage.Wait())
                     {
                         if (Input.anyKeyDown) //受身
-                        {                     
+                        {                    
+                         
+                            transform.localEulerAngles =
+                                new Vector3
+                                (transform.localEulerAngles.x,
+                                transform.localEulerAngles.y, 0);
+                        
                             wait.Set(30, 0);
                             GetStatus(Status.waiting);
                         }
@@ -311,6 +321,7 @@ public class Player : MonoBehaviour
         float hit_dist;
         Debug.DrawRay(origin + -ray_dir * ray_length, ray_dir * (ray_length + radius), Color.green);
 
+
         if (Physics.SphereCast(origin + offset, radius, ray_dir, out raycastHit, ray_length))
         {
             is_hit_ground |= raycastHit.collider.gameObject.CompareTag(ground_tag);
@@ -395,7 +406,12 @@ public class Player : MonoBehaviour
                                      otherDamager.SideFukitobsiPower,
                                      otherDamager.FukitobasiVector,
                                      otherDamager.PreventTime);
-
+                        
+                        if (otherDamager.UpFukitobasiPower > 100)
+                        {
+                            transform.localEulerAngles =
+                                new Vector3(transform.localEulerAngles.x, transform.localEulerAngles.y, 90);
+                        }
                         damage.Calcurate_HitPoint(ref playerData.baseData.hitPoint, otherDamager.DamagePoint);
                     }
                 }
