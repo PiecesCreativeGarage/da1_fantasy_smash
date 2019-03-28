@@ -30,7 +30,6 @@ public class Player : MonoBehaviour
 
     public Status player_status;
     public bool isGrounded;
-    [HideInInspector]
     public bool[] isHit_against_theWall = new bool[4];
     public bool isInvincible;
     private void Awake()
@@ -62,42 +61,54 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-        
+
         beforePosition = transform.position;
 
         coll_origin = transform.position + Vector3.up * coll_radius;
 
         GetStatus();
-        if (GetGrounded(transform.position + transform.up * coll_radius, coll_radius, new Vector3(0, -1), 0.1f))
+
+
+        if (GetGrounded(transform.position + transform.up * coll_radius
+            , coll_radius, new Vector3(0, -1), 0.5f))
         {
+            
             if (!isGrounded)
             {
                 if (player_status == Status.idle)
                 {
+
+                    isGrounded = true;
                     wait.Set(20, 0); //着地硬直
+                    
                     player_status = Status.waiting;
+
                 }
-                isGrounded = true;
+
             }
+            
         }
         else
         {
             isGrounded = false;
         }
+
+        Debug.Log(isGrounded);
         //isGroundedの方向と同じだとガタガタなるので　同じなら判定しない
-        if(transform.forward != -Vector3.up)
-            isHit_against_theWall[0] = GetGrounded(coll_origin, coll_radius, transform.forward, 0.1f);
+        /*
+        if (transform.forward != -Vector3.up)
+           isHit_against_theWall[0] = GetGrounded(coll_origin, coll_radius, transform.forward, 0.1f);
         if (-transform.forward != -Vector3.up)
             isHit_against_theWall[1] = GetGrounded(coll_origin, coll_radius, -transform.forward, 0.1f);
         if (-transform.right != -Vector3.up)
             isHit_against_theWall[2] = GetGrounded(coll_origin, coll_radius, -transform.right, 0.1f);
         if (transform.right != -Vector3.up)
             isHit_against_theWall[3] = GetGrounded(coll_origin, coll_radius, transform.right, 0.1f);
-        
+        */
         if (Input.GetKey(playerData.baseData.InputKeys[0]))
         {
             Input_dir = new Vector3(Input_dir.x, 0, 1);
-        }        
+        }
         else if (Input.GetKey(playerData.baseData.InputKeys[1]))
         {
             Input_dir = new Vector3(Input_dir.x, 0, -1);
@@ -121,9 +132,14 @@ public class Player : MonoBehaviour
 
         Action();
 
-        diff = transform.position - beforePosition;
-        SURINUKE(transform.position, coll_radius, 0.1f);
 
+        diff = transform.position - beforePosition;
+        
+        if (diff.sqrMagnitude > 0.5 + coll_radius) //spherecastの長さより大きいなら
+        {
+          SURINUKE(coll_origin, coll_radius, 0.1f);
+        }
+        
     }
 
     private void OnDrawGizmos()
@@ -136,17 +152,18 @@ public class Player : MonoBehaviour
         GUILayout.BeginVertical();
         GUILayout.Label("isGrounded:" + isGrounded);
         GUILayout.Label("isHit_against_theWall:" + isHit_against_theWall);
-        GUILayout.Label("state:"+player_status);
+        GUILayout.Label("state:" + player_status);
         GUILayout.EndVertical();
     }
 
     void Action()
     {
+
         switch (player_status)
         {
             case Status.idle:
                 rotation.Update(Input_dir);
-                move.Update(Input_dir, isGrounded, isHit_against_theWall);              
+                move.Update(Input_dir, isGrounded, isHit_against_theWall);
                 gravity.Update(isGrounded, playerData.baseData.gravityScale);
                 break;
             case Status.jumpping:
@@ -197,31 +214,31 @@ public class Player : MonoBehaviour
             case Status.damaged:
                 guard.gobj.SetActive(false);
 
-                    damage.Wait();
-                    if (damage.Wait())
+                damage.Wait();
+                if (damage.Wait())
+                {
+                    if (!isGrounded && Input.anyKeyDown) //受身
                     {
-                        if (Input.anyKeyDown) //受身
-                        {                    
-                         
-                            transform.localEulerAngles =
-                                new Vector3
-                                (transform.localEulerAngles.x,
-                                transform.localEulerAngles.y, 0);
-                        
-                            wait.Set(30, 0);
-                            GetStatus(Status.waiting);
-                        }
 
+                        transform.localEulerAngles =
+                            new Vector3
+                            (transform.localEulerAngles.x,
+                            transform.localEulerAngles.y, 0);
+
+                        wait.Set(30, 0);
+                        GetStatus(Status.waiting);
                     }
-                    damage.UPFukitobi(isHit_against_theWall);
-                    if (damage.UPFukitobi(isHit_against_theWall))
-                    {
-                        gravity.Update(isGrounded, playerData.baseData.gravityScale);
-                    }
-                
+
+                }
+                damage.UPFukitobi(isHit_against_theWall);
+                if (damage.UPFukitobi(isHit_against_theWall))
+                {
+                    gravity.Update(isGrounded, playerData.baseData.gravityScale);                    
+                }
+
                 damage.SIDEFukitobi(isHit_against_theWall);
 
-                
+
 
                 break;
             case Status.waiting:
@@ -230,11 +247,13 @@ public class Player : MonoBehaviour
                 {
                     GetStatus(Status.idle);
                 }
+                Debug.Log(isGrounded);
                 break;
             case Status.Down:
                 this.gameObject.SetActive(false);
                 break;
         }
+
     }
 
 
@@ -264,7 +283,7 @@ public class Player : MonoBehaviour
                         guard.Start();
                         GetStatus(Status.guarding);
 
-                        if(target != null)
+                        if (target != null)
                         {
                             this.transform.LookAt(target.transform.position);
                         }
@@ -286,7 +305,7 @@ public class Player : MonoBehaviour
             }
             else
             {
-                if(player_status == Status.idle || player_status == Status.jumpping)
+                if (player_status == Status.idle || player_status == Status.jumpping)
                 {
                     if (airJumpAmount < playerData.jumpData.airJumpLimit)
                     {
@@ -308,7 +327,7 @@ public class Player : MonoBehaviour
         player_status = status;
     }
 
-    bool GetGrounded(Vector3 origin,float radius, Vector3 ray_dir, float ray_length)
+    bool GetGrounded(Vector3 origin, float radius, Vector3 ray_dir, float ray_length)
     {
         bool is_hit_ground = false;
         string ground_tag = "ground";
@@ -318,50 +337,39 @@ public class Player : MonoBehaviour
         ray_length += radius;
 
         RaycastHit raycastHit;
-        float hit_dist;
-        Debug.DrawRay(origin + -ray_dir * ray_length, ray_dir * (ray_length + radius), Color.green);
+        float hit_dist = 0;
 
-
+        Debug.DrawRay(origin, ray_dir * radius, Color.black);
         if (Physics.SphereCast(origin + offset, radius, ray_dir, out raycastHit, ray_length))
         {
-            is_hit_ground |= raycastHit.collider.gameObject.CompareTag(ground_tag);
-            hit_dist = ray_length - raycastHit.distance;
-            // 地面にめり込んだ分押し戻す
-
-            if (Physics.Raycast(origin, ray_dir, ray_length + radius))
+            
+            if (raycastHit.collider.gameObject.CompareTag(ground_tag))
             {
-                if (!raycastHit.collider.gameObject.CompareTag("Weapon")
-                    && (raycastHit.collider.GetInstanceID() != this.GetInstanceID()))
+                is_hit_ground = true;
+                if (Physics.Raycast(origin, ray_dir, out raycastHit, radius))
                 {
+                    Debug.Log(raycastHit.distance);
+                    hit_dist = ray_length - raycastHit.distance;
                     transform.position += hit_dist * -ray_dir;
                 }
             }
-
         }
-        else if (Physics.Raycast(origin, ray_dir, out raycastHit, ray_length + radius))
-        {
-            if (!raycastHit.collider.gameObject.CompareTag("Weapon")
-                && (raycastHit.collider.GetInstanceID() != this.GetInstanceID()))
-            {
-                transform.position = raycastHit.point + -ray_dir.normalized * ray_length;
-            }
-        }
-
-
+        
         return is_hit_ground;
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        
-        for (int i = 0; i < playerData.usedAttacks.Length; i++) {
+
+        for (int i = 0; i < playerData.usedAttacks.Length; i++)
+        {
 
             if (playerData.usedAttacks[i].Weapon.GetInstanceID() == other.GetInstanceID())
             {
-             
+
                 return;
             }
-            
+
         }
 
         if (!isInvincible) //無敵じゃなかったらダメージ
@@ -371,7 +379,7 @@ public class Player : MonoBehaviour
             {
 
                 Damager otherDamager = other.GetComponent<Damager>();
-                Debug.Log(other.name);
+
                 if (otherDamager.PreventTime != 0)
                 {
                     if (guard.transitionProperty == Guard.Transition.Guarding && !otherDamager.is_UnableTo_Guard)
@@ -398,7 +406,7 @@ public class Player : MonoBehaviour
                     else
                     {
                         GetStatus(Status.damaged);
-                        
+
                         damage.Start(
                                      playerData.baseData.gravityScale,
                                      playerData.baseData.airResistance,
@@ -406,7 +414,8 @@ public class Player : MonoBehaviour
                                      otherDamager.SideFukitobsiPower,
                                      otherDamager.FukitobasiVector,
                                      otherDamager.PreventTime);
-                        
+
+
                         if (otherDamager.UpFukitobasiPower > 100)
                         {
                             transform.localEulerAngles =
@@ -420,28 +429,27 @@ public class Player : MonoBehaviour
     }
 
 
-    void SURINUKE( Vector3 origin, float radius, float ray_length)
+    void SURINUKE(Vector3 origin, float radius, float ray_length)
     {
         Debug.DrawRay(origin, -diff.normalized * diff.sqrMagnitude, Color.red);
         RaycastHit raycastHit;
         if (Physics.Raycast(origin, -diff.normalized, out raycastHit, diff.sqrMagnitude))
         {
-            if (raycastHit.collider.gameObject.CompareTag("ground"))
+
+            bool is_foward_obj = 0 < Vector3.Dot(raycastHit.point - beforePosition, diff.normalized);
+            if (is_foward_obj)
             {
-                bool is_foward_obj = 0 < Vector3.Dot(raycastHit.point - beforePosition, diff.normalized);
-                if (is_foward_obj)
-                {
-                    transform.position =
-                        raycastHit.point - diff.normalized * (ray_length + radius);
-                    beforePosition = transform.position;
-                }
+                Debug.Log(raycastHit.collider.name);
+                transform.position =
+                    raycastHit.point - diff.normalized * (ray_length + radius);
+                beforePosition = transform.position;
             }
         }
-        
     }
+}
 
     
-}
+
 
 class Wait
 {

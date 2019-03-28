@@ -26,11 +26,6 @@ class Damage
         this.gravityScale = gravityScale;
         this.airResistance = airResistance;
         upfukitobiPower = UpFukitobiPower;
-        if(upfukitobiPower > 100)
-        {
-            transform.localEulerAngles = 
-                new Vector3(transform.localEulerAngles.x, transform.localEulerAngles.y, 90);
-        }
         sidefukitobiPower = SideFukitobiPower;
         fukitobiVector = FukitobiVector;
         this.waitTime = WaitTime;
