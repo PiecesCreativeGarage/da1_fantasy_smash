@@ -68,34 +68,31 @@ public class Player : MonoBehaviour
 
         GetStatus();
 
-
+        float sphere_length = 0.1f;
         if (GetGrounded(transform.position + transform.up * coll_radius
-            , coll_radius, new Vector3(0, -1), 0.5f))
+            , coll_radius, -Vector3.up, sphere_length))
         {
             
             if (!isGrounded)
             {
+                
                 if (player_status == Status.idle)
                 {
-
                     isGrounded = true;
                     wait.Set(20, 0); //着地硬直
                     
                     player_status = Status.waiting;
-
                 }
 
             }
-            
+            isGrounded = true;
         }
         else
         {
             isGrounded = false;
         }
-
-        Debug.Log(isGrounded);
         //isGroundedの方向と同じだとガタガタなるので　同じなら判定しない
-        /*
+        
         if (transform.forward != -Vector3.up)
            isHit_against_theWall[0] = GetGrounded(coll_origin, coll_radius, transform.forward, 0.1f);
         if (-transform.forward != -Vector3.up)
@@ -104,7 +101,7 @@ public class Player : MonoBehaviour
             isHit_against_theWall[2] = GetGrounded(coll_origin, coll_radius, -transform.right, 0.1f);
         if (transform.right != -Vector3.up)
             isHit_against_theWall[3] = GetGrounded(coll_origin, coll_radius, transform.right, 0.1f);
-        */
+        
         if (Input.GetKey(playerData.baseData.InputKeys[0]))
         {
             Input_dir = new Vector3(Input_dir.x, 0, 1);
@@ -135,7 +132,7 @@ public class Player : MonoBehaviour
 
         diff = transform.position - beforePosition;
         
-        if (diff.sqrMagnitude > 0.5 + coll_radius) //spherecastの長さより大きいなら
+        if (diff.sqrMagnitude > sphere_length + coll_radius) //spherecastの長さより大きいなら
         {
           SURINUKE(coll_origin, coll_radius, 0.1f);
         }
@@ -229,15 +226,32 @@ public class Player : MonoBehaviour
                         GetStatus(Status.waiting);
                     }
 
+                    if (isGrounded && damage.UPFukitobi(isHit_against_theWall))
+                    {
+                        wait.Set(40, 0);
+                        wait.Waiting();
+                       Debug.Log(wait.waitFrameProperty);
+                        if(wait.Waiting() == true)
+                        {
+                            transform.localEulerAngles = new Vector3
+                            (transform.localEulerAngles.x,
+                            transform.localEulerAngles.y, 0);
+
+                            GetStatus(Status.idle);
+                        }
+                    }
+
                 }
                 damage.UPFukitobi(isHit_against_theWall);
                 if (damage.UPFukitobi(isHit_against_theWall))
                 {
-                    gravity.Update(isGrounded, playerData.baseData.gravityScale);                    
+                    gravity.Update(isGrounded, playerData.baseData.gravityScale);
+
                 }
 
                 damage.SIDEFukitobi(isHit_against_theWall);
 
+            
 
 
                 break;
@@ -247,7 +261,6 @@ public class Player : MonoBehaviour
                 {
                     GetStatus(Status.idle);
                 }
-                Debug.Log(isGrounded);
                 break;
             case Status.Down:
                 this.gameObject.SetActive(false);
@@ -346,9 +359,8 @@ public class Player : MonoBehaviour
             if (raycastHit.collider.gameObject.CompareTag(ground_tag))
             {
                 is_hit_ground = true;
-                if (Physics.Raycast(origin, ray_dir, out raycastHit, radius))
+                if(Physics.Raycast(origin, ray_dir, out raycastHit, radius))
                 {
-                    Debug.Log(raycastHit.distance);
                     hit_dist = ray_length - raycastHit.distance;
                     transform.position += hit_dist * -ray_dir;
                 }
@@ -435,7 +447,6 @@ public class Player : MonoBehaviour
         RaycastHit raycastHit;
         if (Physics.Raycast(origin, -diff.normalized, out raycastHit, diff.sqrMagnitude))
         {
-
             bool is_foward_obj = 0 < Vector3.Dot(raycastHit.point - beforePosition, diff.normalized);
             if (is_foward_obj)
             {
@@ -462,11 +473,11 @@ class Wait
 
     public void Set(float waitFrame, float addValue)
     {
-        if (isSet && addValue != 0)
+        if (addValue != 0)
         {
             this.waitFrame += addValue;
         }
-        else
+        else if(!isSet)
         {
             if (waitFrame > 0)
             {

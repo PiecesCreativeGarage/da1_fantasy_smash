@@ -10,15 +10,13 @@ class Gravity
     public Gravity(Transform transform)
     {
         this.transform = transform;
-
     }
     public void Update(bool isGounded, float gravityScale)
     {
         this.gravityScale = gravityScale;
         if (isGounded)
         {
-            value = 0;
-           
+            value = 0;        
         }
         else
         {
