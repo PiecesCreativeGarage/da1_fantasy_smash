@@ -38,7 +38,7 @@ public class Player : MonoBehaviour
         rotation = new Rotation(transform, playerData.baseData.cam);
         move = new Move(transform, playerData);
         jump = new Jump();
-        gravity = new Gravity(transform);
+        gravity = new Gravity(transform, playerData);
         guard = new Guard(transform, playerData.guardData);
         attack = new Attack(playerData.usedAttacks, playerData.baseData.animator, transform);
         damage = new Damage(transform, playerData);
@@ -51,7 +51,6 @@ public class Player : MonoBehaviour
         move.Start(playerData.baseData.animationNames[1]);
         jump.Start(playerData.baseData.gravityScale,
                    playerData.jumpData.jumpPower, false);
-        gravity.gravityScale = playerData.baseData.gravityScale;
 
     }
 
@@ -132,7 +131,7 @@ public class Player : MonoBehaviour
 
         diff = transform.position - beforePosition;
         
-        if (diff.sqrMagnitude > sphere_length + coll_radius) //spherecastの長さより大きいなら
+        //if (diff.sqrMagnitude > sphere_length) //spherecastの長さより大きいなら
         {
           SURINUKE(coll_origin, coll_radius, 0.1f);
         }
@@ -161,7 +160,7 @@ public class Player : MonoBehaviour
             case Status.idle:
                 rotation.Update(Input_dir);
                 move.Update(Input_dir, isGrounded, isHit_against_theWall);
-                gravity.Update(isGrounded, playerData.baseData.gravityScale);
+                gravity.Update(isGrounded);
                 break;
             case Status.jumpping:
                 jump.Jumpping(this.transform);
@@ -186,7 +185,7 @@ public class Player : MonoBehaviour
                     }
                 }
                 guard.Guarding();
-                gravity.Update(isGrounded, playerData.baseData.gravityScale);
+                gravity.Update(isGrounded);
                 if (guard.isGuarding == false)
                 {
                     GetStatus(Status.idle);
@@ -195,6 +194,7 @@ public class Player : MonoBehaviour
             case Status.attacking:
 
                 attack.Attacking();
+                attack.isGrounded = isGrounded;
                 if (attack.isAttacking == false)
                 {
                     GetStatus(Status.idle);
@@ -245,15 +245,13 @@ public class Player : MonoBehaviour
                 damage.UPFukitobi(isHit_against_theWall);
                 if (damage.UPFukitobi(isHit_against_theWall))
                 {
-                    gravity.Update(isGrounded, playerData.baseData.gravityScale);
+                    gravity.Update(isGrounded);
 
                 }
 
                 damage.SIDEFukitobi(isHit_against_theWall);
 
-            
-
-
+   
                 break;
             case Status.waiting:
                 wait.Waiting();
@@ -305,15 +303,17 @@ public class Player : MonoBehaviour
                     {
                         if (Input.GetKeyDown(playerData.usedAttacks[i].KeyCode))
                         {
+                            attack.isGrounded = isGrounded;
                             attack.Start(i);
-                            GetStatus(Status.attacking);
+
+                            if (attack.isAttacking)
+                                GetStatus(Status.attacking);
                             if (target != null)
                             {
                                 this.transform.LookAt(target.transform.position);
                             }
                         }
                     }
-
                 }
             }
             else
@@ -328,6 +328,21 @@ public class Player : MonoBehaviour
                             jump.Start(playerData.baseData.gravityScale,
                                        playerData.jumpData.jumpPower, true);
                             GetStatus(Status.jumpping);
+                        }
+                    }
+
+                    for (int i = 0; i < playerData.usedAttacks.Length; i++)
+                    {
+                        if (Input.GetKeyDown(playerData.usedAttacks[i].KeyCode))
+                        {
+                            attack.isGrounded = isGrounded;
+                            attack.Start(i);
+
+                            if (attack.isAttacking)
+                            {
+                                GetStatus(Status.attacking);
+                               
+                            }
                         }
                     }
                 }
@@ -355,16 +370,17 @@ public class Player : MonoBehaviour
         Debug.DrawRay(origin, ray_dir * radius, Color.black);
         if (Physics.SphereCast(origin + offset, radius, ray_dir, out raycastHit, ray_length))
         {
-            
+
             if (raycastHit.collider.gameObject.CompareTag(ground_tag))
             {
                 is_hit_ground = true;
-                if(Physics.Raycast(origin, ray_dir, out raycastHit, radius))
-                {
-                    hit_dist = ray_length - raycastHit.distance;
-                    transform.position += hit_dist * -ray_dir;
-                }
             }
+            if (Physics.Raycast(origin, ray_dir, out raycastHit, ray_length))
+            {
+                hit_dist = ray_length - raycastHit.distance;
+                transform.position += hit_dist * -ray_dir;
+            }
+            
         }
         
         return is_hit_ground;
@@ -447,13 +463,23 @@ public class Player : MonoBehaviour
         RaycastHit raycastHit;
         if (Physics.Raycast(origin, -diff.normalized, out raycastHit, diff.sqrMagnitude))
         {
-            bool is_foward_obj = 0 < Vector3.Dot(raycastHit.point - beforePosition, diff.normalized);
+            
+            bool is_foward_obj = 0 < 
+                Vector3.Dot(raycastHit.point - beforePosition, diff.normalized);
             if (is_foward_obj)
             {
                 Debug.Log(raycastHit.collider.name);
+                
                 transform.position =
                     raycastHit.point - diff.normalized * (ray_length + radius);
+                
+               
                 beforePosition = transform.position;
+            }
+            else
+            {
+                Debug.Log(0 < Vector3.Dot(raycastHit.point - beforePosition, diff.normalized));
+                Debug.Log(Vector3.Dot(raycastHit.point - beforePosition, diff.normalized));
             }
         }
     }

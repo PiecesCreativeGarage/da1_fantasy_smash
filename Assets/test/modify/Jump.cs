@@ -21,7 +21,7 @@ class Jump
     public void Jumpping(Transform transform)
     {
         velocity -= gravityScale;
-        dist = velocity / 15;
+        dist = velocity;
         transform.position += new Vector3(0, dist * Time.fixedDeltaTime);
         if (velocity < 0)
         {

@@ -12,6 +12,7 @@ public static class AttackDictionary {
         { 3, typeof(RemoteAttack) },
         { 4, typeof(GuardBreakAttack) },
         { 5, typeof(AssaultAttack) },
+        { 6, typeof(JumpAttack) },
     };
 
     public static AttackBace CreateAttack(int id)

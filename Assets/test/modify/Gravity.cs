@@ -4,23 +4,23 @@ using UnityEngine;
 
 class Gravity
 {
-    public float gravityScale;
     float value;
     Transform transform;
-    public Gravity(Transform transform)
+    PlayerData playerData;
+    public Gravity(Transform transform, PlayerData playerData)
     {
         this.transform = transform;
+        this.playerData = playerData;
     }
-    public void Update(bool isGounded, float gravityScale)
+    public void Update(bool isGounded)
     {
-        this.gravityScale = gravityScale;
         if (isGounded)
         {
             value = 0;        
         }
         else
         {
-            value -= gravityScale / 15;
+            value -= playerData.baseData.gravityScale;
             transform.position += new Vector3(0, value * Time.fixedDeltaTime);
         }
     }

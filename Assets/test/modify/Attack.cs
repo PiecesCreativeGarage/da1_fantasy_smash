@@ -9,7 +9,7 @@ using UnityEngine;
 class Attack
 {
     public bool isAttacking;
-
+    public bool isGrounded;
     public Animator animator;
 
     Transform transform;
@@ -37,14 +37,21 @@ class Attack
     {
         SetAttack(Attacks[number].AttackNumver);
         attackBace.FukitobasiVector += transform.forward;
-        attackBace.animator = this.animator;
         attackBace.weapon = Attacks[number].Weapon;
         attackBace.player = transform.gameObject;
         attackBace.Start();
 
         if (!(attackBace == null))
         {
-            isAttacking = true;
+            
+            isAttacking = attackBace.isGroundAttack == isGrounded;
+            if (isAttacking)
+            {
+                if (attackBace.animationName != string.Empty)
+                {
+                    animator.SetTrigger(attackBace.animationName);
+                }
+            }
         }
     }
     void SetAttack(int Numver)
@@ -56,6 +63,7 @@ class Attack
 
         if (attackBace.isAttacking)
         {
+            attackBace.isGrounded = isGrounded;
             attackBace.Update();
 
         }

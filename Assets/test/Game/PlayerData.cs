@@ -12,7 +12,6 @@ public class PlayerData : MonoBehaviour
         public float guardPoint;
         public float gravityScale;
         public float airResistance;
-        public float timeSpeed;
 
         public string[] InputKeys = new string[4]; //0 Up 1 Down, 2Left, 3 Right
         public Animator animator;

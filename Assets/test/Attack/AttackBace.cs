@@ -5,9 +5,11 @@ using UnityEngine;
 public abstract class AttackBace{
     public GameObject weapon;
     public GameObject player;
-    public Animator animator;
+    public bool isGrounded;
+    public string animationName = "Attack1";
 
     public bool isAttacking;
+    public bool isGroundAttack = true;
     public bool is_UnableTo_Guard;
     public float AttackPoint;
 
@@ -86,7 +88,6 @@ class Attack_A : AttackBace
         SideFukitobsiPower = 200;
         is_UnableTo_Guard = true;
         isAttacking = true;
-        animator.SetTrigger("Attack1");
     }
     protected override void Attacking()
     {
@@ -146,7 +147,7 @@ class Attack_B : AttackBace
         PreventTime = 3;
         is_UnableTo_Guard = false;
         isAttacking = true;
-        animator.SetTrigger("Attack1");
+        
     }
     protected override void Attacking()
     {
@@ -205,7 +206,6 @@ class RemoteAttack:AttackBace
         PreventTime = 3;
         is_UnableTo_Guard = false;
         isAttacking = true;
-        animator.SetTrigger("Attack1");
     }
     protected override void Attacking()
     {
@@ -266,7 +266,6 @@ class GuardBreakAttack:AttackBace
         PreventTime = 60;
         isAttacking = true;
         is_UnableTo_Guard = true;
-        animator.SetTrigger("Attack1");
     }
     protected override void Attacking()
     {
@@ -308,6 +307,64 @@ class GuardBreakAttack:AttackBace
         }
     }
 }
+class RemoteAttack_B : AttackBace
+{
+    AssistanceAttack assistance = new AssistanceAttack();
+    Damager damager;
+    protected override void SetAttack()
+    {
+        assistance.GetDamager(ref damager, base.weapon);
+        AttackPoint = 10;
+        starFrame = 3;
+        AttackingFrame = 50;
+        endFrame = 40;
+        UpFukitobasiPower = 300;
+        SideFukitobsiPower = 200;
+        PreventTime = 3;
+        is_UnableTo_Guard = false;
+        isAttacking = true;
+    }
+    protected override void Attacking()
+    {
+        switch (transition)
+        {
+            case Transition.Start:
+                starFrame--;
+                if (starFrame <= 0)
+                {
+                    if (weapon.GetComponent<Damager>() == null)
+                    {
+                        weapon.AddComponent<Damager>();
+                    }
+                    damager.DamagePoint = AttackPoint;
+                    damager.FukitobasiVector = FukitobasiVector;
+                    damager.UpFukitobasiPower = UpFukitobasiPower;
+                    damager.SideFukitobsiPower = SideFukitobsiPower;
+                    damager.PreventTime = PreventTime;
+                    GameObject bullet = Object.Instantiate(weapon, player.transform, true);
+                    bullet.transform.position = player.transform.position;
+                    bullet.transform.rotation = player.transform.rotation;
+                    transition = Transition.Attacking;
+                }
+                break;
+            case Transition.Attacking:
+                AttackingFrame--;
+
+                if (AttackingFrame <= 0)
+                {
+                    transition = Transition.End;
+                }
+                break;
+            case Transition.End:
+                endFrame--;
+                if (endFrame <= 0)
+                {
+                    isAttacking = false;
+                }
+                break;
+        }
+    }
+}
 class AssaultAttack:AttackBace
 {
     AssistanceAttack assistance = new AssistanceAttack();
@@ -325,7 +382,6 @@ class AssaultAttack:AttackBace
         PreventTime = 3;
         is_UnableTo_Guard = false;
         isAttacking = true;
-        animator.SetTrigger("Attack1");
     }
     protected override void Attacking()
     {
@@ -348,6 +404,67 @@ class AssaultAttack:AttackBace
                 AttackingFrame--;
                 player.transform.position += player.transform.forward * 10 * Time.fixedDeltaTime;
                 if (AttackingFrame <= 0)
+                {
+                    damager.DamagePoint = 0;
+                    damager.FukitobasiVector = Vector3.zero;
+                    damager.UpFukitobasiPower = 0;
+                    damager.SideFukitobsiPower = 0;
+                    damager.PreventTime = 0;
+
+                    transition = Transition.End;
+                }
+                break;
+            case Transition.End:
+                endFrame--;
+                if (endFrame <= 0)
+                {
+                    isAttacking = false;
+                }
+                break;
+        }
+    }
+}
+class JumpAttack : AttackBace
+{
+    AssistanceAttack assistance = new AssistanceAttack();
+    Damager damager;
+
+    protected override void SetAttack()
+    {
+        assistance.GetDamager(ref damager, base.weapon);
+        AttackPoint = 10;
+        starFrame = 3;
+        AttackingFrame = 50;
+        endFrame = 40;
+        UpFukitobasiPower = 300;
+        SideFukitobsiPower = 200;
+        PreventTime = 3;
+        is_UnableTo_Guard = false;
+        isGroundAttack = false;
+        isGroundAttack = false;
+        isAttacking = true;
+    }
+    protected override void Attacking()
+    {
+        switch (transition)
+        {
+            case Transition.Start:
+                starFrame--;
+                if (starFrame <= 0)
+                {
+                    damager.DamagePoint = AttackPoint;
+                    damager.FukitobasiVector = FukitobasiVector;
+                    damager.UpFukitobasiPower = UpFukitobasiPower;
+                    damager.SideFukitobsiPower = SideFukitobsiPower;
+                    damager.PreventTime = PreventTime;
+
+                    transition = Transition.Attacking;
+                }
+                break;
+            case Transition.Attacking:
+                player.transform.position += new Vector3(0, -3 * Time.fixedDeltaTime);
+
+                if (isGrounded)
                 {
                     damager.DamagePoint = 0;
                     damager.FukitobasiVector = Vector3.zero;

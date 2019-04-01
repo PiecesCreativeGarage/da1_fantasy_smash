@@ -51,8 +51,13 @@ public class SURINUKE : MonoBehaviour {
             {
                 // ヒットした場所と物体表面が接するように座標を正す
                 transform.position = raycastHit.point - surfaceOffset;
-                
+
+            }
+            else
+            {
+                Debug.Log("aaa");
             }
         }
+
     }
 }
