@@ -149,7 +149,7 @@ public class Player : MonoBehaviour
         GUI.color = Color.red;
         if (name == "Knight")
         {
-            GUILayout.BeginArea(new Rect(0, 0, Screen.width, Screen.height));
+            GUILayout.BeginArea(new Rect(0, Screen.height / 2, Screen.width, Screen.height));
             GUILayout.BeginVertical();
             GUILayout.Label(name);
             GUILayout.Label("isGrounded:" + isGrounded);
@@ -159,7 +159,7 @@ public class Player : MonoBehaviour
         }
         else
         {
-            GUILayout.BeginArea(new Rect(0, Screen.height / 2, Screen.width, Screen.height));
+            GUILayout.BeginArea(new Rect(0, 0, Screen.width, Screen.height));
             GUILayout.BeginVertical();
             GUILayout.Label(name);
             GUILayout.Label("isGrounded:" + isGrounded);
