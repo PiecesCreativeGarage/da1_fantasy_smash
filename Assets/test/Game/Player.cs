@@ -146,11 +146,28 @@ public class Player : MonoBehaviour
 
     private void OnGUI()
     {
-        GUILayout.BeginVertical();
-        GUILayout.Label("isGrounded:" + isGrounded);
-        GUILayout.Label("isHit_against_theWall:" + isHit_against_theWall);
-        GUILayout.Label("state:" + player_status);
-        GUILayout.EndVertical();
+        GUI.color = Color.red;
+        if (name == "Knight")
+        {
+            GUILayout.BeginArea(new Rect(0, Screen.height / 2, Screen.width, Screen.height));
+            GUILayout.BeginVertical();
+            GUILayout.Label(name);
+            GUILayout.Label("isGrounded:" + isGrounded);
+            GUILayout.Label("state:" + player_status);
+            GUILayout.EndVertical();
+            GUILayout.EndArea();
+        }
+        else
+        {
+            GUILayout.BeginArea(new Rect(0, 0, Screen.width, Screen.height));
+            GUILayout.BeginVertical();
+            GUILayout.Label(name);
+            GUILayout.Label("isGrounded:" + isGrounded);
+            GUILayout.Label("state:" + player_status);
+            GUILayout.EndVertical();
+            GUILayout.EndArea();
+
+        }
     }
 
     void Action()
