@@ -394,6 +394,7 @@ public class Player : MonoBehaviour
             }
             if (Physics.Raycast(origin, ray_dir, out raycastHit, ray_length))
             {
+                if(!raycastHit.collider.CompareTag("Weapon"))
                 hit_dist = ray_length - raycastHit.distance;
                 transform.position += hit_dist * -ray_dir;
             }
