@@ -80,10 +80,10 @@ class Attack_A : AttackBace
     {
         assistance.GetDamager(ref damager, base.weapon);
         AttackPoint = 40;
-        starFrame = 30;
-        AttackingFrame = 10;
-        endFrame = 40;
-        PreventTime = 20;
+        starFrame = 10;
+        AttackingFrame = 7;
+        endFrame = 8;
+        PreventTime = 5;
         UpFukitobasiPower = 250;
         SideFukitobsiPower = 200;
         is_UnableTo_Guard = false;
@@ -139,9 +139,9 @@ class Attack_B : AttackBace
     {
         assistance.GetDamager(ref damager, base.weapon);
         AttackPoint = 20;
-        starFrame = 15;
-        AttackingFrame = 10;
-        endFrame = 20;
+        starFrame = 5;
+        AttackingFrame = 6;
+        endFrame = 6;
         UpFukitobasiPower = 150;
         SideFukitobsiPower = 50;
         PreventTime = 15;
@@ -198,9 +198,9 @@ class RemoteAttack_A:AttackBace
     {
         assistance.GetDamager(ref damager, base.weapon);
         AttackPoint = 10;
-        starFrame = 50;
+        starFrame = 30;
         AttackingFrame = 0;
-        endFrame = 30;
+        endFrame = 15;
         UpFukitobasiPower = 110;
         SideFukitobsiPower = 50;
         PreventTime = 10;
@@ -258,9 +258,9 @@ class GuardBreakAttack:AttackBace
     {
         assistance.GetDamager(ref damager, base.weapon);
         AttackPoint = 10;
-        starFrame = 10;
-        AttackingFrame = 6;
-        endFrame = 30;
+        starFrame = 3;
+        AttackingFrame = 5;
+        endFrame = 10;
         UpFukitobasiPower = 0;
         SideFukitobsiPower = 0;
         PreventTime = 40;
@@ -315,7 +315,7 @@ class RemoteAttack_B : AttackBace
     {
         assistance.GetDamager(ref damager, base.weapon);
         AttackPoint = 10;
-        starFrame = 50;
+        starFrame = 15;
         AttackingFrame = 0;
         endFrame = 30;
         UpFukitobasiPower = 150;
@@ -374,9 +374,9 @@ class AssaultAttack:AttackBace
     {
         assistance.GetDamager(ref damager, base.weapon);
         AttackPoint = 25;
-        starFrame = 10;
+        starFrame = 7;
         AttackingFrame = 50;
-        endFrame = 40;
+        endFrame = 30;
         UpFukitobasiPower = 130;
         SideFukitobsiPower = 190;
         PreventTime = 25;
@@ -435,7 +435,7 @@ class JumpAttack : AttackBace
         AttackPoint = 30;
         starFrame = 5;
         
-        endFrame = 40;
+        endFrame = 20;
         UpFukitobasiPower = 170;
         SideFukitobsiPower = 40;
         PreventTime = 28;

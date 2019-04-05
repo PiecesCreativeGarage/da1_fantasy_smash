@@ -47,7 +47,7 @@ class Damage
             if (upfukitobiPower > 0)
             {
                 upfukitobiPower -= gravityScale;
-                dist = upfukitobiPower / 15;
+                dist = upfukitobiPower;
                 transform.position += new Vector3(0, dist * Time.fixedDeltaTime);
                 return false;
             }
@@ -73,7 +73,7 @@ class Damage
             if (sidefukitobiPower > 0)
             {
                 sidefukitobiPower -= airResistance;
-                dist = sidefukitobiPower / 15;
+                dist = sidefukitobiPower;
                 transform.position += fukitobiVector * dist * Time.fixedDeltaTime;
                 return false;
             }
