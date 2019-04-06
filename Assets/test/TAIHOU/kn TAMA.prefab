@@ -39,7 +39,7 @@ Transform:
   m_GameObject: {fileID: 1528730889661992}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -3.65, z: 0}
-  m_LocalScale: {x: 0.5, y: 1.5, z: 0.1}
+  m_LocalScale: {x: 0.5, y: 3, z: 0.3}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -107,10 +107,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DamagePoint: 10
-  UpFukitobasiPower: 300
-  SideFukitobsiPower: 200
+  UpFukitobasiPower: 150
+  SideFukitobsiPower: 80
   FukitobasiVector: {x: 0, y: 0, z: 1}
-  PreventTime: 3
+  PreventTime: 15
   is_UnableTo_Guard: 0
 --- !u!114 &114930086382151160
 MonoBehaviour:
@@ -123,5 +123,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ceeccf8b68449e04c9381d20d4938e1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 5
-  time: 5
+  movePow_hori: 15
+  movePow_ver: 0
+  useGravity: 0
+  gravityScale: 0
+  lifeTime: 2

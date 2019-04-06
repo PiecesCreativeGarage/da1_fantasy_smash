@@ -342,7 +342,7 @@ class RemoteAttack_B : AttackBace
                     damager.UpFukitobasiPower = UpFukitobasiPower;
                     damager.SideFukitobsiPower = SideFukitobsiPower;
                     damager.PreventTime = PreventTime;
-                    GameObject bullet = Object.Instantiate(weapon, player.transform, true);
+                    GameObject bullet = Object.Instantiate(weapon, player.transform);
                     bullet.transform.position = player.transform.position
                         + new Vector3(0, bullet.transform.localScale.y / 2);
                     bullet.transform.rotation = player.transform.rotation;

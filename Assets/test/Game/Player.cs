@@ -406,7 +406,7 @@ public class Player : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-
+       
         for (int i = 0; i < playerData.usedAttacks.Length; i++)
         {
 
@@ -487,10 +487,11 @@ public class Player : MonoBehaviour
             if (is_foward_obj)
             {
                 Debug.Log(raycastHit.collider.name);
-                
-                transform.position =
-                    raycastHit.point - diff.normalized * (ray_length + radius);
-                
+                if (!raycastHit.collider.CompareTag("Weapon"))
+                {
+                    transform.position =
+                        raycastHit.point - diff.normalized * (ray_length + radius);
+                }
                
                 beforePosition = transform.position;
             }

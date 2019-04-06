@@ -328,7 +328,6 @@ GameObject:
   - component: {fileID: 31938142}
   - component: {fileID: 31938141}
   - component: {fileID: 31938140}
-  - component: {fileID: 31938139}
   - component: {fileID: 31938144}
   m_Layer: 0
   m_Name: 2h Camera
@@ -337,13 +336,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!81 &31938139
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 31938138}
-  m_Enabled: 1
 --- !u!124 &31938140
 Behaviour:
   m_ObjectHideFlags: 0
@@ -1141,10 +1133,10 @@ MonoBehaviour:
     - 
     - Run
   moveData:
-    moveSpeed: 1000
+    moveSpeed: 10
   jumpData:
     keyCode: space
-    jumpPower: 200
+    jumpPower: 100
     airJumpLimit: 2
   guardData:
     keyCode: g
@@ -1153,18 +1145,18 @@ MonoBehaviour:
     plusGuardPosi: {x: 0, y: 1.25, z: 0}
     guardScale: {x: 3.5, y: 3.5, z: 3.5}
     transitionFrames:
+    - 4
+    - 6
     - 5
-    - 10
-    - 4
-    justGuardFrame: 3
+    justGuardFrame: 1
   stepData:
-    moveSpeed: 20
+    moveSpeed: 30
     moveDistance: 7
-    invincibleFrame: 2
+    invincibleFrame: 3
     transitionFrames:
-    - 3
-    - 4
     - 2
+    - 5
+    - 4
   usedAttacks:
   - AttackNumver: 1
     KeyCode: z
@@ -1174,10 +1166,10 @@ MonoBehaviour:
     Weapon: {fileID: 1528730889661992, guid: d15aa09d72895b5479d8e302f32fd151, type: 2}
   - AttackNumver: 4
     KeyCode: c
-    Weapon: {fileID: 425837495}
-  - AttackNumver: 6
+    Weapon: {fileID: 1528730889661992, guid: f8fc9103cbdd4d841a731f8640f55d07, type: 2}
+  - AttackNumver: 4
     KeyCode: v
-    Weapon: {fileID: 425837495}
+    Weapon: {fileID: 1528730889661992, guid: 69b0913825bda6645873a8b974895cc7, type: 2}
 --- !u!65 &274725770
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2550,7 +2542,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerData: {fileID: 274725769}
-  target: {fileID: 1055123530}
+  target: {fileID: 0}
   diff: {x: 0, y: 0, z: 0}
   beforePosition: {x: 0, y: 0, z: 0}
   player_status: 0
@@ -2830,7 +2822,7 @@ MonoBehaviour:
     moveSpeed: 20
   jumpData:
     keyCode: o
-    jumpPower: 200
+    jumpPower: 50
     airJumpLimit: 1
   guardData:
     keyCode: h
@@ -2839,27 +2831,30 @@ MonoBehaviour:
     plusGuardPosi: {x: 0, y: 1.25, z: 0}
     guardScale: {x: 3.5, y: 3.5, z: 3.5}
     transitionFrames:
-    - 3
     - 4
-    - 3
+    - 6
+    - 5
     justGuardFrame: 1
   stepData:
-    moveSpeed: 5
-    moveDistance: 5
+    moveSpeed: 30
+    moveDistance: 7
     invincibleFrame: 3
     transitionFrames:
-    - 6
-    - 3
+    - 2
+    - 5
     - 4
   usedAttacks:
   - AttackNumver: 2
     KeyCode: b
     Weapon: {fileID: 1169873218}
-  - AttackNumver: 3
+  - AttackNumver: 5
     KeyCode: n
-    Weapon: {fileID: 1528730889661992, guid: f8fc9103cbdd4d841a731f8640f55d07, type: 2}
-  - AttackNumver: 4
+    Weapon: {fileID: 1169873218}
+  - AttackNumver: 6
     KeyCode: m
+    Weapon: {fileID: 1169873218}
+  - AttackNumver: 7
+    KeyCode: ','
     Weapon: {fileID: 1169873218}
 --- !u!4 &1055123536
 Transform:

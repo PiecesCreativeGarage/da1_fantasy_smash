@@ -22,6 +22,8 @@ GameObject:
   - component: {fileID: 33019832882844264}
   - component: {fileID: 135861860200428684}
   - component: {fileID: 23462607535846424}
+  - component: {fileID: 114431225890987652}
+  - component: {fileID: 114331496884920010}
   m_Layer: 0
   m_Name: TAMA
   m_TagString: Weapon
@@ -37,7 +39,7 @@ Transform:
   m_GameObject: {fileID: 1528730889661992}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -3.65, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 3, y: 3, z: 3}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -81,6 +83,39 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1528730889661992}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &114331496884920010
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1528730889661992}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92966b8528ab81947838640267d7fcaf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DamagePoint: 10
+  UpFukitobasiPower: 150
+  SideFukitobsiPower: 80
+  FukitobasiVector: {x: 0, y: 0, z: 1}
+  PreventTime: 15
+  is_UnableTo_Guard: 0
+--- !u!114 &114431225890987652
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1528730889661992}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceeccf8b68449e04c9381d20d4938e1d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  movePow_hori: 5
+  movePow_ver: 20
+  useGravity: 1
+  gravityScale: -9.8
+  lifeTime: 5
 --- !u!135 &135861860200428684
 SphereCollider:
   m_ObjectHideFlags: 1
@@ -92,4 +127,4 @@ SphereCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 1.31
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 1, y: 1, z: 1}
