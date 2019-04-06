@@ -39,7 +39,7 @@ Transform:
   m_GameObject: {fileID: 1528730889661992}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -3.65, z: 0}
-  m_LocalScale: {x: 3, y: 3, z: 3}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -94,10 +94,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92966b8528ab81947838640267d7fcaf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerInstanceID: 10158
   DamagePoint: 10
-  UpFukitobasiPower: 150
-  SideFukitobsiPower: 80
-  FukitobasiVector: {x: 0, y: 0, z: 1}
+  UpFukitobasiPower: 500
+  SideFukitobsiPower: 300
+  FukitobasiVector: {x: 0.00000008742278, y: 0, z: -1}
   PreventTime: 15
   is_UnableTo_Guard: 0
 --- !u!114 &114431225890987652
@@ -112,7 +113,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movePow_hori: 5
-  movePow_ver: 20
+  movePow_ver: 200
   useGravity: 1
   gravityScale: -9.8
   lifeTime: 5
@@ -123,7 +124,7 @@ SphereCollider:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1528730889661992}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 1.31

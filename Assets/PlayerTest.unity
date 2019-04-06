@@ -517,7 +517,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &127325202
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -529,6 +529,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92966b8528ab81947838640267d7fcaf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerInstanceID: 0
   DamagePoint: 1000
   UpFukitobasiPower: 0
   SideFukitobsiPower: 0
@@ -1100,7 +1101,7 @@ GameObject:
   - component: {fileID: 274725772}
   m_Layer: 0
   m_Name: 2HandedWarrior
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1224,7 +1225,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 274725768}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 100, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 935344159}
@@ -1434,6 +1435,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92966b8528ab81947838640267d7fcaf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerInstanceID: 0
   DamagePoint: 0
   UpFukitobasiPower: 0
   SideFukitobsiPower: 0
@@ -1752,6 +1754,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92966b8528ab81947838640267d7fcaf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerInstanceID: 0
   DamagePoint: 10
   UpFukitobasiPower: 200
   SideFukitobsiPower: 200
@@ -2722,11 +2725,11 @@ GameObject:
   - component: {fileID: 1055123535}
   m_Layer: 0
   m_Name: Knight
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!65 &1055123531
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3244,6 +3247,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92966b8528ab81947838640267d7fcaf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerInstanceID: 0
   DamagePoint: 0
   UpFukitobasiPower: 0
   SideFukitobsiPower: 0

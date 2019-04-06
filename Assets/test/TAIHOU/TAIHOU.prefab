@@ -22,7 +22,6 @@ GameObject:
   - component: {fileID: 33378400141864030}
   - component: {fileID: 65798478490874670}
   - component: {fileID: 23443240129794524}
-  - component: {fileID: 114556380381735640}
   m_Layer: 0
   m_Name: TAIHOU
   m_TagString: Untagged
@@ -94,16 +93,3 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &114556380381735640
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1717296385499398}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6f378eb4e76d5994bbcbb85bb047d553, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TAMA: {fileID: 1528730889661992, guid: 69b0913825bda6645873a8b974895cc7, type: 2}
-  Fire: 0

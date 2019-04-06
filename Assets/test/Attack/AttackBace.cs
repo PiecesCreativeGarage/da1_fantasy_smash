@@ -65,9 +65,10 @@ public abstract class AttackBace{
 
 class AssistanceAttack : MonoBehaviour
 {
-    public void GetDamager(ref Damager storedObject, GameObject gameObject)
+    public void GetDamager(ref Damager storedObject, GameObject gameObject, GameObject player)
     {
         storedObject = gameObject.GetComponent<Damager>();
+        storedObject.playerInstanceID = player.GetInstanceID();
     }
 
 }
@@ -78,7 +79,7 @@ class Attack_A : AttackBace
 
     protected override void SetAttack()
     {
-        assistance.GetDamager(ref damager, base.weapon);
+        assistance.GetDamager(ref damager, base.weapon, player);
         AttackPoint = 40;
         starFrame = 10;
         AttackingFrame = 7;
@@ -137,7 +138,7 @@ class Attack_B : AttackBace
 
     protected override void SetAttack()
     {
-        assistance.GetDamager(ref damager, base.weapon);
+        assistance.GetDamager(ref damager, base.weapon, player);
         AttackPoint = 20;
         starFrame = 5;
         AttackingFrame = 6;
@@ -196,7 +197,7 @@ class RemoteAttack_A:AttackBace
     Damager damager;
     protected override void SetAttack()
     {
-        assistance.GetDamager(ref damager, base.weapon);
+        assistance.GetDamager(ref damager, base.weapon, player);
         AttackPoint = 10;
         starFrame = 30;
         AttackingFrame = 0;
@@ -224,7 +225,7 @@ class RemoteAttack_A:AttackBace
                     damager.UpFukitobasiPower = UpFukitobasiPower;
                     damager.SideFukitobsiPower = SideFukitobsiPower;
                     damager.PreventTime = PreventTime;
-                    GameObject bullet = Object.Instantiate(weapon, player.transform, true);
+                    GameObject bullet = Object.Instantiate(weapon);
                     bullet.transform.position = player.transform.position
                         + new Vector3(0, bullet.transform.localScale.y / 2);
                     bullet.transform.rotation = player.transform.rotation;
@@ -257,7 +258,7 @@ class GuardBreakAttack:AttackBace
 
     protected override void SetAttack()
     {
-        assistance.GetDamager(ref damager, base.weapon);
+        assistance.GetDamager(ref damager, base.weapon, player);
         AttackPoint = 10;
         starFrame = 3;
         AttackingFrame = 5;
@@ -314,13 +315,13 @@ class RemoteAttack_B : AttackBace
     Damager damager;
     protected override void SetAttack()
     {
-        assistance.GetDamager(ref damager, base.weapon);
+        assistance.GetDamager(ref damager, base.weapon, player);
         AttackPoint = 10;
         starFrame = 15;
         AttackingFrame = 0;
         endFrame = 30;
-        UpFukitobasiPower = 150;
-        SideFukitobsiPower = 80;
+        UpFukitobasiPower = 500;
+        SideFukitobsiPower = 300;
         PreventTime = 15;
         is_UnableTo_Guard = false;
         isAttacking = true;
@@ -342,7 +343,7 @@ class RemoteAttack_B : AttackBace
                     damager.UpFukitobasiPower = UpFukitobasiPower;
                     damager.SideFukitobsiPower = SideFukitobsiPower;
                     damager.PreventTime = PreventTime;
-                    GameObject bullet = Object.Instantiate(weapon, player.transform);
+                    GameObject bullet = Object.Instantiate(weapon);
                     bullet.transform.position = player.transform.position
                         + new Vector3(0, bullet.transform.localScale.y / 2);
                     bullet.transform.rotation = player.transform.rotation;
@@ -374,7 +375,7 @@ class AssaultAttack:AttackBace
 
     protected override void SetAttack()
     {
-        assistance.GetDamager(ref damager, base.weapon);
+        assistance.GetDamager(ref damager, base.weapon,player);
         AttackPoint = 25;
         starFrame = 7;
         AttackingFrame = 50;
@@ -433,7 +434,7 @@ class JumpAttack : AttackBace
 
     protected override void SetAttack()
     {
-        assistance.GetDamager(ref damager, base.weapon);
+        assistance.GetDamager(ref damager, base.weapon,player);
         AttackPoint = 30;
         starFrame = 5;
         

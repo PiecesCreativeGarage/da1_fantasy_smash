@@ -65,7 +65,9 @@ public class Player : MonoBehaviour
 
         GetStatus();
 
+        
         float sphere_length = 0.1f;
+
         if (GetGrounded(transform.position + transform.up * coll_radius
             , coll_radius, -Vector3.up, sphere_length))
         {
@@ -89,7 +91,8 @@ public class Player : MonoBehaviour
             isGrounded = false;
         }
         //isGroundedの方向と同じだとガタガタなるので　同じなら判定しない
-        
+
+
         if (transform.forward != -Vector3.up)
            isHit_against_theWall[0] = GetGrounded(coll_origin, coll_radius, transform.forward, 0.1f);
         if (-transform.forward != -Vector3.up)
@@ -126,16 +129,13 @@ public class Player : MonoBehaviour
 
         Action();
 
-
         coll_origin = transform.position + Vector3.up * coll_radius;
 
         diff = transform.position - beforePosition;
-        
-        //if (diff.sqrMagnitude > sphere_length) //spherecastの長さより大きいなら
-        {
-          SURINUKE(coll_origin, coll_radius, 0.1f);
-        }
-        
+
+
+        SURINUKE(coll_origin, coll_radius, 0.1f);
+
     }
 
     private void OnDrawGizmos()
@@ -180,6 +180,7 @@ public class Player : MonoBehaviour
                 gravity.Update(isGrounded);
                 break;
             case Status.jumpping:
+                gravity.Update(true);
                 jump.Jumpping(this.transform);
                 move.Update(Input_dir, false, isHit_against_theWall);
                 rotation.Update(Input_dir);
@@ -394,9 +395,12 @@ public class Player : MonoBehaviour
             }
             if (Physics.Raycast(origin, ray_dir, out raycastHit, ray_length))
             {
-                if(!raycastHit.collider.CompareTag("Weapon"))
-                hit_dist = ray_length - raycastHit.distance;
-                transform.position += hit_dist * -ray_dir;
+                Debug.Log("aaa"+gameObject.name);
+                if (!raycastHit.collider.CompareTag("Weapon"))
+                {
+                    hit_dist = ray_length - raycastHit.distance;
+                    transform.position += hit_dist * -ray_dir;
+                }
             }
             
         }
@@ -406,25 +410,22 @@ public class Player : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-       
-        for (int i = 0; i < playerData.usedAttacks.Length; i++)
+        Damager otherDamager = other.GetComponent<Damager>();
+        if (otherDamager != null)
         {
-
-            if (playerData.usedAttacks[i].Weapon.GetInstanceID() == other.GetInstanceID())
+            for (int i = 0; i < playerData.usedAttacks.Length; i++)
             {
 
-                return;
+                if (gameObject.GetInstanceID() == otherDamager.playerInstanceID)
+                {
+                    return;
+                }
+
             }
 
-        }
-
-        if (!isInvincible) //無敵じゃなかったらダメージ
-        {
-
-            if (other.GetComponent<Damager>() != null && other.gameObject.CompareTag("Weapon"))
+            if (!isInvincible) //無敵じゃなかったらダメージ
             {
 
-                Damager otherDamager = other.GetComponent<Damager>();
 
                 if (otherDamager.PreventTime != 0)
                 {
@@ -470,6 +471,7 @@ public class Player : MonoBehaviour
                         damage.Calcurate_HitPoint(ref playerData.baseData.hitPoint, otherDamager.DamagePoint);
                     }
                 }
+
             }
         }
     }
@@ -477,26 +479,24 @@ public class Player : MonoBehaviour
 
     void SURINUKE(Vector3 origin, float radius, float ray_length)
     {
-        Debug.DrawRay(origin, -diff.normalized * diff.sqrMagnitude, Color.red);
+        Debug.DrawRay(transform.position, -diff.normalized * diff.sqrMagnitude, Color.red);
+
         RaycastHit raycastHit;
-        if (Physics.Raycast(origin, -diff.normalized, out raycastHit, diff.sqrMagnitude))
+        if (Physics.Raycast(transform.position, -diff.normalized, out raycastHit, diff.sqrMagnitude))
         {
-            
-            bool is_foward_obj = 0 < 
+            bool is_foward_obj = 0 <=
                 Vector3.Dot(raycastHit.point - beforePosition, diff.normalized);
             if (is_foward_obj)
             {
                 Debug.Log(raycastHit.collider.name);
-                if (!raycastHit.collider.CompareTag("Weapon"))
-                {
-                    transform.position =
-                        raycastHit.point - diff.normalized * (ray_length + radius);
-                }
-               
+                 transform.position =
+                        raycastHit.point + -diff.normalized * ray_length;
                 beforePosition = transform.position;
+                isGrounded = true;
             }
             else
             {
+                Debug.Log(transform.position);
                 Debug.Log(0 < Vector3.Dot(raycastHit.point - beforePosition, diff.normalized));
                 Debug.Log(Vector3.Dot(raycastHit.point - beforePosition, diff.normalized));
             }

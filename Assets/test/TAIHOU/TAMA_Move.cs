@@ -24,15 +24,23 @@ public class TAMA_Move : MonoBehaviour {
         {
             movePow_ver += gravityScale;
             velo += movePow_ver * Time.fixedDeltaTime;
-            dist += velo * Time.fixedDeltaTime;
-            transform.position += Vector3.up * velo;
+            transform.position += Vector3.up * velo * Time.fixedDeltaTime;
         }
 	}
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.name != "Ground")
+        Damager damager = (Damager)GetComponent("Damager");
+       
+        if (other.CompareTag("Player"))
         {
+            if(damager != null)
+            {
+                if(damager.playerInstanceID == other.gameObject.GetInstanceID())
+                {
+                    return;
+                }
+            }
             GameObject.Destroy(this.gameObject);
         }
         

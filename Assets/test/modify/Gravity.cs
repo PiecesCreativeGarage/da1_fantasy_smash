@@ -5,6 +5,7 @@ using UnityEngine;
 class Gravity
 {
     float value;
+    float velo;
     Transform transform;
     PlayerData playerData;
     public Gravity(Transform transform, PlayerData playerData)
@@ -20,8 +21,10 @@ class Gravity
         }
         else
         {
+            Debug.Log(isGounded);
             value -= playerData.baseData.gravityScale;
-            transform.position += new Vector3(0, value * Time.fixedDeltaTime);
+            velo = value * Time.fixedDeltaTime;
+            transform.position += new Vector3(0, value) * Time.fixedDeltaTime;
         }
     }
 }

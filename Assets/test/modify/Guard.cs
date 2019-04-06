@@ -76,7 +76,7 @@ class Guard : MonoBehaviour
 
                 GuardingFrame--;
                 JustGuardFrame--;
-                if (!Input.GetKey(KeyCode.G) && GuardingFrame <= 0)
+                if (!Input.GetKey(guardData.keyCode) && GuardingFrame <= 0)
                 {
 
                     if (gobj_exist)

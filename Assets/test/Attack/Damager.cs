@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 public class Damager : MonoBehaviour
 {
+    public int playerInstanceID;
     public float DamagePoint;
 
     public float UpFukitobasiPower;
