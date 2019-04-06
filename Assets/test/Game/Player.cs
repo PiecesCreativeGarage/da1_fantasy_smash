@@ -63,8 +63,6 @@ public class Player : MonoBehaviour
 
         beforePosition = transform.position;
 
-        coll_origin = transform.position + Vector3.up * coll_radius;
-
         GetStatus();
 
         float sphere_length = 0.1f;
@@ -128,6 +126,8 @@ public class Player : MonoBehaviour
 
         Action();
 
+
+        coll_origin = transform.position + Vector3.up * coll_radius;
 
         diff = transform.position - beforePosition;
         
