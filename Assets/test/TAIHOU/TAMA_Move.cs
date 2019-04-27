@@ -38,9 +38,12 @@ public class TAMA_Move : MonoBehaviour {
             {
                 if(damager.playerInstanceID == other.gameObject.GetInstanceID())
                 {
+                    
                     return;
                 }
             }
+
+
             GameObject.Destroy(this.gameObject);
         }
         

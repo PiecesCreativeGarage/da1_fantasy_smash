@@ -106,9 +106,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92966b8528ab81947838640267d7fcaf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerInstanceID: 0
   DamagePoint: 10
-  UpFukitobasiPower: 110
-  SideFukitobsiPower: 50
+  UpFukitobasiPower: 400
+  SideFukitobsiPower: 200
   FukitobasiVector: {x: 0, y: 0, z: 1}
   PreventTime: 10
   is_UnableTo_Guard: 0

@@ -42,13 +42,14 @@ class Damage
     /// <returns></returns>
     public bool UPFukitobi(bool[] ishit_against_theWall)
     {
-        if (!(ishit_against_theWall[0] && ishit_against_theWall[1]))
+        //if (!(ishit_against_theWall[0] && ishit_against_theWall[1]))
         {
             if (upfukitobiPower > 0)
             {
                 upfukitobiPower -= gravityScale;
                 dist = upfukitobiPower * Time.fixedDeltaTime;
                 transform.position += new Vector3(0, dist * Time.fixedDeltaTime);
+
                 return false;
             }
             else
@@ -56,10 +57,7 @@ class Damage
                 return true;
             }
         }
-        else
-        {
-            return false;
-        }
+       
 
     }
     /// <summary>

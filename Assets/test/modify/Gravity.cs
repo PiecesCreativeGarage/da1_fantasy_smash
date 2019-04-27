@@ -21,7 +21,7 @@ class Gravity
         }
         else
         {
-            Debug.Log(isGounded);
+
             value -= playerData.baseData.gravityScale;
             velo = value * Time.fixedDeltaTime;
             transform.position += new Vector3(0, value) * Time.fixedDeltaTime;

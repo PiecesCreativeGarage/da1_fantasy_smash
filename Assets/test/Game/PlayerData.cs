@@ -8,8 +8,6 @@ public class PlayerData : MonoBehaviour
     public class BaseData
     {
         public float hitPoint;
-        public float attackPoint;
-        public float guardPoint;
         public float gravityScale;
         public float airResistance;
 

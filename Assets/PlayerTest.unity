@@ -517,7 +517,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &127325202
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1136,9 +1136,9 @@ MonoBehaviour:
   moveData:
     moveSpeed: 10
   jumpData:
-    keyCode: space
-    jumpPower: 100
-    airJumpLimit: 2
+    keyCode: c
+    jumpPower: 70
+    airJumpLimit: 0
   guardData:
     keyCode: g
     guardObject: {fileID: 1410392178294790, guid: 6af208b4fd93bda44b25a776bebdb00f,
@@ -1160,16 +1160,16 @@ MonoBehaviour:
     - 4
   usedAttacks:
   - AttackNumver: 1
-    KeyCode: z
-    Weapon: {fileID: 425837495}
+    KeyCode: r
+    Weapon: {fileID: 1541458055822754, guid: a58baa8543778214c8dfd49708f88590, type: 2}
   - AttackNumver: 3
-    KeyCode: x
+    KeyCode: t
     Weapon: {fileID: 1528730889661992, guid: d15aa09d72895b5479d8e302f32fd151, type: 2}
   - AttackNumver: 4
-    KeyCode: c
+    KeyCode: f
     Weapon: {fileID: 1528730889661992, guid: f8fc9103cbdd4d841a731f8640f55d07, type: 2}
   - AttackNumver: 4
-    KeyCode: v
+    KeyCode: g
     Weapon: {fileID: 1528730889661992, guid: 69b0913825bda6645873a8b974895cc7, type: 2}
 --- !u!65 &274725770
 BoxCollider:
@@ -1199,7 +1199,7 @@ Rigidbody:
   m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!95 &274725772
 Animator:
   serializedVersion: 3
@@ -1224,14 +1224,14 @@ Transform:
     type: 2}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 274725768}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: -1, z: 0, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 935344159}
   m_Father: {fileID: 0}
   m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -180, z: 0}
 --- !u!1 &302049822
 GameObject:
   m_ObjectHideFlags: 0
@@ -1308,7 +1308,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!23 &371553185
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1491,7 +1491,7 @@ BoxCollider:
   m_GameObject: {fileID: 425837495}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 0.8613014, y: 0.20038311, z: 2.750447}
   m_Center: {x: -0.40521428, y: -0.0023583143, z: 0.99628013}
@@ -2545,7 +2545,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerData: {fileID: 274725769}
-  target: {fileID: 0}
+  target: {fileID: 1055123530}
   diff: {x: 0, y: 0, z: 0}
   beforePosition: {x: 0, y: 0, z: 0}
   player_status: 0
@@ -2756,7 +2756,7 @@ Rigidbody:
   m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!114 &1055123533
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2812,10 +2812,10 @@ MonoBehaviour:
     gravityScale: 9
     airResistance: 5
     InputKeys:
-    - i
-    - k
-    - j
-    - l
+    - up
+    - down
+    - left
+    - right
     animator: {fileID: 1055123534}
     cam: {fileID: 1817690615}
     animationNames:
@@ -2824,9 +2824,9 @@ MonoBehaviour:
   moveData:
     moveSpeed: 20
   jumpData:
-    keyCode: o
-    jumpPower: 50
-    airJumpLimit: 1
+    keyCode: ','
+    jumpPower: 60
+    airJumpLimit: 2
   guardData:
     keyCode: h
     guardObject: {fileID: 1410392178294790, guid: 6af208b4fd93bda44b25a776bebdb00f,
@@ -2848,17 +2848,17 @@ MonoBehaviour:
     - 4
   usedAttacks:
   - AttackNumver: 2
-    KeyCode: b
-    Weapon: {fileID: 1169873218}
+    KeyCode: o
+    Weapon: {fileID: 1541458055822754, guid: a58baa8543778214c8dfd49708f88590, type: 2}
   - AttackNumver: 5
-    KeyCode: n
-    Weapon: {fileID: 1169873218}
+    KeyCode: p
+    Weapon: {fileID: 1541458055822754, guid: a58baa8543778214c8dfd49708f88590, type: 2}
   - AttackNumver: 6
-    KeyCode: m
-    Weapon: {fileID: 1169873218}
+    KeyCode: k
+    Weapon: {fileID: 1541458055822754, guid: a58baa8543778214c8dfd49708f88590, type: 2}
   - AttackNumver: 7
-    KeyCode: ','
-    Weapon: {fileID: 1169873218}
+    KeyCode: l
+    Weapon: {fileID: 1541458055822754, guid: a58baa8543778214c8dfd49708f88590, type: 2}
 --- !u!4 &1055123536
 Transform:
   m_ObjectHideFlags: 0
@@ -3565,7 +3565,7 @@ RectTransform:
   - {fileID: 166039980}
   - {fileID: 1022486460}
   m_Father: {fileID: 0}
-  m_RootOrder: 12
+  m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -4536,7 +4536,7 @@ RectTransform:
   - {fileID: 1587808842}
   - {fileID: 212963860}
   m_Father: {fileID: 0}
-  m_RootOrder: 13
+  m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
